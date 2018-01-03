@@ -9,6 +9,15 @@ We use a ResNet with 50 layers to extract features from the visual information, 
 
 Pre-trained models are also provided for the visual, speech and multimodal cases. The pre-trained models were trained using the AVEC 2016 database (RECOLA).
 
+### Citing
+
+`@article{tzirakis2017end,
+  title={End-to-End Multimodal Emotion Recognition using Deep Neural Networks},
+  author={Tzirakis, Panagiotis and Trigeorgis, George and Nicolaou, Mihalis A and Schuller, Bj{\"o}rn and Zafeiriou, Stefanos},
+  journal={arXiv preprint arXiv:1704.08619},
+  year={2017}
+}`
+
 ### Dependencies
 Below are listed the required modules to run the code.
 
