@@ -67,6 +67,24 @@ This repository contains the following scripts:
 
 First, we need to convert the original input data (audio, visual) in a format more suitable for
 TensorFlow using TF Records. Both unimodal and multimodal inputs can be converted. 
+You need to create a csv file that contains the full path of the data (e.g. .wav) and the label file for the data, with `;` as delimiter.
+
+> CSV File example - data_file.csv
+```
+/path/to/first/file1.wav;/path/to/label/file1.csv
+/path/to/second/file2.wav;/path/to/label/file2.csv
+```
+
+The label file should contain a column with the timestep and the later columns with the label(s) of the timestep. Delimiter of the file should be `;`.
+
+> Label File example - file1.csv
+``` 
+0.00;0.24;0.14
+0.04;0.20;0.18
+...
+```
+
+To create the tfrecords you need to specify the flag to be `--option=generate`. An example is depicted below.
 
 > Creating tf records
 ```console
@@ -77,7 +95,7 @@ TensorFlow using TF Records. Both unimodal and multimodal inputs can be converte
 ```
 
 By default the `tfrecords` will be generated in a folder called `tf_records` which 
-contains the files of the `data_file`.
+contains the converted files of the `data_file`. To generate unimodal or multimodal input the `--input_type` need to be defined one of the following: `audio`, `video` or `audiovisual`.
 
 ## Training
 
