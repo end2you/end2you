@@ -11,12 +11,9 @@ Pre-trained models are also provided for the visual, speech and multimodal cases
 
 ### Citing
 
-`@article{tzirakis2017end,
-  title={End-to-End Multimodal Emotion Recognition using Deep Neural Networks},
-  author={Tzirakis, Panagiotis and Trigeorgis, George and Nicolaou, Mihalis A and Schuller, Bj{\"o}rn and Zafeiriou, Stefanos},
-  journal={arXiv preprint arXiv:1704.08619},
-  year={2017}
-}`
+If you are using this toolkit please cite:
+
+`Tzirakis, P., Trigeorgis, G., Nicolaou, M. A., Schuller, B., & Zafeiriou, S. (2017). End-to-End Multimodal Emotion Recognition using Deep Neural Networks. arXiv preprint arXiv:1704.08619.`
 
 ### Dependencies
 Below are listed the required modules to run the code.
