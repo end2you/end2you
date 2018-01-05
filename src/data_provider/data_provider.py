@@ -8,9 +8,7 @@ from pathlib import Path
 class DataProvider(metaclass=ABCMeta):
     
     def __init__(self,
-                 tfrecords_folder: Path, 
-                 frame_shape:list,
-                 label_shape:list,
+                 tfrecords_folder: Path,
                  is_training:bool = True, 
                  split_name:str = 'train', 
                  batch_size:int = 32,
