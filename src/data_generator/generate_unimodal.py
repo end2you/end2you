@@ -31,7 +31,7 @@ class UnimodalGenerator(Generator):
             return clip_list, self.dict_files[data_file]['labels']
         
         frames = []
-        for i in range(len(time) - 1):
+        for i in range(8): #len(time) - 1):
             start_time = time[i]
             end_time = time[i + 1]
             data_frame = np.array(list(clip.subclip(start_time, end_time).iter_frames()))
@@ -42,19 +42,17 @@ class UnimodalGenerator(Generator):
             frames.append(data_frame)
         
         self.shape = data_frame.shape
-
+        
         return frames, self.dict_files[data_file]['labels']
     
     def serialize_sample(self, writer, data_file, subject_id):
         
         for i, (frame, label) in enumerate(zip(*self._get_samples(data_file))):
-            print('frame shape', len(frame))
-            print('label shape', len(label))
             
             example = tf.train.Example(features=tf.train.Features(feature={
                         'sample_id': self._int_feauture(i),
                         'subject_id': self._bytes_feauture(subject_id.encode()),
-                        'label': self._get_tf_label(label),
+                        'label': self._bytes_feauture(label.tobytes()),
                         'frame': self._bytes_feauture(frame.tobytes())
                     }))
             

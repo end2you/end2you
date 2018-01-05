@@ -50,8 +50,8 @@ class Generator(metaclass=ABCMeta):
     
     def _get_tf_label(self, label):
         if 'regression' in self.task.lower():
-            return self._bytes_feauture(label)
-        return self._int_feauture(label)
+            return self._bytes_feauture(label.tobytes())
+        return self._bytes_feauture(label.tobytes())
     
     def _get_input_type(self, input_type):
         correct_types = ['audio','video','audiovisual']
