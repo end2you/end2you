@@ -2,8 +2,6 @@ import csv
 import os
 import numpy as np
 import tensorflow as tf
-import sys
-sys.path.append('../../')
 
 from pathlib import Path
 from io import BytesIO
@@ -15,9 +13,9 @@ class Generator(metaclass=ABCMeta):
     def __init__(self, 
                  data_file:Path,
                  input_type:str,
-                 task:str = 'classification',
+                 task:str = 'regression',
                  delimiter:str = ';'):
-
+        
         self.task = task
         self.data = np.loadtxt(data_file, delimiter=delimiter, dtype=str)
         self.input_type = self._get_input_type(input_type.lower())
@@ -37,8 +35,8 @@ class Generator(metaclass=ABCMeta):
     
     def _get_label_type(self, label):
         if 'regression' in self.task.lower():
-            return list([float(x) for x in label])
-        return list([int(x) for x in label])
+            return list([np.float32(x) for x in label])
+        return list([np.int32(x) for x in label])
     
     def _read_single_label(self, label, data_file, delimiter=None):
         clip = VideoFileClip
@@ -48,18 +46,13 @@ class Generator(metaclass=ABCMeta):
         
         return np.array([0.0, end_time]), np.array([self._get_label_type(label)])
     
-    def _get_tf_label(self, label):
-        if 'regression' in self.task.lower():
-            return self._bytes_feauture(label.tobytes())
-        return self._bytes_feauture(label.tobytes())
-    
     def _get_input_type(self, input_type):
         correct_types = ['audio','video','audiovisual']
         if input_type not in correct_types:
             raise ValueError('input_type should be one of {}. \
                              [{}] found'.format(correct_types, input_type))
         return input_type        
-        
+    
     def _int_feauture(self, value):
         return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
@@ -76,7 +69,7 @@ class Generator(metaclass=ABCMeta):
                     continue
                 
                 time.append(float(row[0]))
-                labels.append([float(x) for x in row[1:]])
+                labels.append(self._get_label_type(row[1:]))
         
         time = np.array(time)
         labels = np.array(labels)
@@ -95,7 +88,7 @@ class Generator(metaclass=ABCMeta):
     @abstractmethod
     def _get_samples(self, data_file):
         pass
-        
+    
     @abstractmethod
     def serialize_sample(self, writer, data_file, subject_id):
         pass

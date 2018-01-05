@@ -20,9 +20,9 @@ class UnimodalProvider(DataProvider):
                 'frame': tf.FixedLenFeature([], tf.string),
             }
         )
-
+        
         frame = tf.decode_raw(features['frame'], tf.float32)
-        label = tf.decode_raw(features['label'], tf.float32)
+        label = tf.decode_raw(features['label'], self._get_tf_type())
         subject_id = features['subject_id']
     
         return frame, label, subject_id

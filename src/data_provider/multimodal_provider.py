@@ -23,9 +23,9 @@ class MultimodalProvider(DataProvider):
 
         frame = tf.decode_raw(features['frame'], tf.float32)
         raw_audio = tf.decode_raw(features['raw_audio'], tf.float32)
-        label = tf.decode_raw(features['label'], tf.float32)
+        label = tf.decode_raw(features['label'], self.get_tf_type)
         subject_id = features['subject_id']
-    
+        
         return frame, raw_audio, label, subject_id
     
     def get_batch(self):

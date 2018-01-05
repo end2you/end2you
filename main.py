@@ -20,14 +20,8 @@ tf.app.flags.DEFINE_string('option', 'evaluate',
                            'One of: train, evaluate, generate.')
 tf.app.flags.DEFINE_string('tfrecords_folder', 'path/to/tfrecords',
                            'The tfrecords directory.')
-tf.app.flags.DEFINE_string('split_name', 'test',
-                           'The split to take for evaluation.')
 tf.app.flags.DEFINE_integer('seq_length', 150, 'Number of batches to run.')
 tf.app.flags.DEFINE_integer('batch_size', 2, '''The batch size to use.''')
-tf.app.flags.DEFINE_string('frame_shape', '32',
-                           'Define the shape of frames as saved in the data_generator')
-tf.app.flags.DEFINE_string('label_shape', '2',
-                           'Define the shape of labels as saved in the data_generator')
 tf.app.flags.DEFINE_string('train_dir', 'ckpt/train',
                            '''Directory where to write event logs '''
                            '''and checkpoint.''')
@@ -49,7 +43,8 @@ tf.app.flags.DEFINE_integer('hidden_units', 128, 'Number of batches to run.')
 tf.app.flags.DEFINE_string('eval_interval_secs', 300, 'The number of examples in the test set')
 tf.app.flags.DEFINE_string('portion', 'test', 'The number of examples in the test set')
 tf.app.flags.DEFINE_string('data_file', '../data_file.csv', 'The files to create tfrecords')
-tf.app.flags.DEFINE_integer('num_examples', 67500, 'The number of examples in the test set')
+tf.app.flags.DEFINE_integer('num_examples', None, 'The number of examples in the test set')
+tf.app.flags.DEFINE_integer('num_outputs', 2, 'The number of examples in the test set')
 tf.app.flags.DEFINE_string('metric', 'ccc',
                            '''Which loss is going to be used: ccc, or mse ''')
 
@@ -58,11 +53,8 @@ class End2You:
     def __init__(self, *args, **kwargs):
         
         self.tfrecords_folder = Path(kwargs['tfrecords_folder'])
-        self.split_name = kwargs['split_name']
         self.seq_length = kwargs['seq_length']
         self.batch_size = kwargs['batch_size']
-        self.frame_shape = kwargs['frame_shape']
-        self.label_shape = kwargs['label_shape']
         
         self.train_dir = Path(kwargs['train_dir'])
         self.log_dir = Path(kwargs['log_dir'])
@@ -79,6 +71,7 @@ class End2You:
         self.num_examples = kwargs['num_examples']
         self.metric = kwargs['metric']
         self.data_file = kwargs['data_file']
+        self.num_outputs = kwargs['num_outputs']
         
     def _reshape_to_rnn(self, frames):
         return tf.reshape(frames, (self.batch_size, 
@@ -101,7 +94,7 @@ class End2You:
         rnn = RNNModel().create_model(output_model)
         rnn = self._reshape_to_conv(rnn)
 
-        outputs = fully_connected(rnn, 2)
+        outputs = fully_connected(rnn, self.num_outputs)
         outputs = self._reshape_to_rnn(outputs)
         
         return outputs
@@ -156,9 +149,6 @@ class End2You:
     def _get_dp_params(self):
         dp_params = {}
         dp_params['tfrecords_folder'] = self.tfrecords_folder
-        dp_params['split_name'] = self.split_name
-        dp_params['frame_shape'] = self.frame_shape
-        dp_params['label_shape'] = self.label_shape
         dp_params['seq_length'] = self.seq_length
         dp_params['batch_size'] = self.batch_size
         
@@ -170,14 +160,12 @@ class End2You:
         eval_params['train_dir'] = self.train_dir
         eval_params['log_dir'] = self.log_dir
         eval_params['tfrecords_folder'] = self.tfrecords_folder
-        eval_params['split_name'] = self.split_name
         eval_params['seq_length'] = self.seq_length
         eval_params['metric'] = [x for x  in self.metric.split(',')]
         eval_params['eval_interval_secs'] = self.eval_interval_secs
         eval_params['portion'] = self.portion
         eval_params['num_examples'] = self.num_examples
-        eval_params['num_outputs'] = self.label_shape
-        eval_params['seq_length'] = self.seq_length
+        eval_params['num_outputs'] = self.num_outputs
         
         return eval_params
     
@@ -199,17 +187,21 @@ class End2You:
         
         return data_provider
     
+def get_num_examples(num_examples):
+    if num_examples == None:
+        root_folder = Path(FLAGS.tfrecords_folder)
+        num_examples = 0
+        for tf_file in root_folder.glob('*.tfrecords'):
+            for record in tf.python_io.tf_record_iterator(str(tf_file)):
+                num_examples += 1
+
+    return num_examples
+
 def flags_to_dict():
-    def _get_shape(shape):
-        return [int(x) for x  in shape.split(',')]
-    
     return {
         'tfrecords_folder': FLAGS.tfrecords_folder,
-        'split_name': FLAGS.split_name,
         'seq_length': FLAGS.seq_length,
         'batch_size': FLAGS.batch_size,
-        'frame_shape': _get_shape(FLAGS.frame_shape),
-        'label_shape': _get_shape(FLAGS.label_shape),
         'train_dir': FLAGS.train_dir,
         'log_dir': FLAGS.log_dir,
         'input_type': FLAGS.input_type,
@@ -219,9 +211,10 @@ def flags_to_dict():
         'loss': FLAGS.loss,
         'eval_interval_secs': FLAGS.eval_interval_secs,
         'portion': FLAGS.portion,
-        'num_examples': FLAGS.num_examples,
+        'num_examples': get_num_examples(FLAGS.num_examples),
         'metric': FLAGS.metric,
-        'data_file': FLAGS.data_file        
+        'data_file': FLAGS.data_file,
+        'num_outputs': FLAGS.num_outputs
     }
 
 def main(_):

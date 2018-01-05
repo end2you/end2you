@@ -48,7 +48,7 @@ class MultimodalGenerator(Generator):
             example = tf.train.Example(features=tf.train.Features(feature={
                         'sample_id': self._int_feauture(i),
                         'subject_id': self._bytes_feauture(subject_id.encode()),
-                        'label': self._get_tf_label(label),
+                        'label': self._bytes_feauture(label.tobytes()),
                         'raw_audio': self._bytes_feauture(audio.tobytes()),
                         'frame': self._bytes_feauture(frame.tobytes())
                     }))

@@ -31,7 +31,7 @@ class Train:
         self.loss = loss.lower()
         self.pretrained_model_checkpoint_path = \
                             str(pretrained_model_checkpoint_path)
-        
+    
     def _flatten(self, output, i):
         if self.data_provider.seq_length != None:
             return tf.reshape(output[:, :, i], (-1,))
@@ -69,9 +69,6 @@ class Train:
         frames, labels, sids = self.data_provider.get_batch()
         
         predictions = self.predictions
-        print('predictions : ', predictions)
-        print('labels : ', labels)
-        
         loss = self.set_train_loss(predictions, labels)
         total_loss = tf.losses.get_total_loss()
         tf.summary.scalar('losses/total loss', total_loss)
@@ -86,7 +83,8 @@ class Train:
                                                      optimizer,
                                                      summarize_gradients=True)
             
-            max_steps = self.num_epochs #* self.batch_size * self.seq_length
+            seq_length = 1 if self.seq_length == None else self.seq_length
+            max_steps = self.num_epochs * self.batch_size * 
             logging.set_verbosity(1)
             slim.learning.train(train_op,
                                 self.train_dir,
