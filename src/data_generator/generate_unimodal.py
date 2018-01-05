@@ -10,7 +10,6 @@ from pathlib import Path
 class UnimodalGenerator(Generator):
     
     def __init__(self, *args, **kwargs):
-        self.input_type = 'unimodal'
         super().__init__(*args,
                          **kwargs)
     
@@ -25,11 +24,14 @@ class UnimodalGenerator(Generator):
         elif 'video' in self.input_type.lower():
             clip = VideoFileClip(str(data_file))
         
-        if len(time) == 1:
-            return list(clip.iter_frames()), self.dict_files[data_file]['labels']
+        if self.dict_files[data_file]['labels'].shape[0] == 1:
+            clip_list = np.reshape(np.array(list(clip.iter_frames())).mean(1), 
+                                   (1, -1))
+            
+            return clip_list, self.dict_files[data_file]['labels']
         
         frames = []
-        for i in range(8): #len(time) - 1):
+        for i in range(len(time) - 1):
             start_time = time[i]
             end_time = time[i + 1]
             data_frame = np.array(list(clip.subclip(start_time, end_time).iter_frames()))
@@ -46,11 +48,13 @@ class UnimodalGenerator(Generator):
     def serialize_sample(self, writer, data_file, subject_id):
         
         for i, (frame, label) in enumerate(zip(*self._get_samples(data_file))):
+            print('frame shape', len(frame))
+            print('label shape', len(label))
             
             example = tf.train.Example(features=tf.train.Features(feature={
                         'sample_id': self._int_feauture(i),
                         'subject_id': self._bytes_feauture(subject_id.encode()),
-                        'label': self._bytes_feauture(label.astype(np.float32).tobytes()),
+                        'label': self._get_tf_label(label),
                         'frame': self._bytes_feauture(frame.tobytes())
                     }))
             

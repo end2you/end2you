@@ -10,7 +10,7 @@ from pathlib import Path
 class MultimodalGenerator(Generator):
     
     def __init__(self, *args, **kwargs):
-        self.input_type = 'multimodal'
+        self.input_type = 'audiovisual'
         super().__init__(*args,
                          **kwargs)
     
@@ -26,7 +26,7 @@ class MultimodalGenerator(Generator):
         audio_frames = []
         video_frames = []
 
-        for i in range(8): #len(time) - 1):
+        for i in range(len(time) - 1):
             start_time = time[i]
             end_time = time[i + 1]
             audio = np.array(list(subsampled_audio.subclip(start_time, end_time).iter_frames()))
@@ -48,7 +48,7 @@ class MultimodalGenerator(Generator):
             example = tf.train.Example(features=tf.train.Features(feature={
                         'sample_id': self._int_feauture(i),
                         'subject_id': self._bytes_feauture(subject_id.encode()),
-                        'label': self._bytes_feauture(label.tobytes()),
+                        'label': self._get_tf_label(label),
                         'raw_audio': self._bytes_feauture(audio.tobytes()),
                         'frame': self._bytes_feauture(frame.tobytes())
                     }))
