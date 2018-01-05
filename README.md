@@ -1,4 +1,4 @@
-# End2You - The Imperial toolkit
+# End2You - The Imperial Toolkit for Multimodal Profiling
 
 We introduce End2You the Imperial toolkit for multimodal profiling. This repository provides easy-to-use scripts to train and evaluate either uni-modal or multi-modal models in an end-to-end manner for either regression or classification output. The input to the model can be one of the following:
 - Visual Information : Face of a subject
