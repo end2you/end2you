@@ -31,7 +31,7 @@ class UnimodalGenerator(Generator):
             return clip_list, self.dict_files[data_file]['labels']
         
         frames = []
-        for i in range(8): #len(time) - 1):
+        for i in range(len(time) - 1):
             start_time = time[i]
             end_time = time[i + 1]
             data_frame = np.array(list(clip.subclip(start_time, end_time).iter_frames()))
