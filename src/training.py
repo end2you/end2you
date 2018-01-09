@@ -1,6 +1,6 @@
 import tensorflow as tf
-import src.losses as Losses
 
+from src.losses import Losses
 from src.models.model import Model
 from src.data_provider.data_provider import DataProvider
 from tensorflow.python.platform import tf_logging as logging
@@ -28,7 +28,7 @@ class Train:
         self.data_provider = data_provider
         self.initial_learning_rate = initial_learning_rate
         self.num_epochs = num_epochs
-        self.loss = loss.lower()
+        self.loss = Losses.__dict__[loss.lower()]
         self.pretrained_model_checkpoint_path = \
                             str(pretrained_model_checkpoint_path)
     
@@ -39,26 +39,26 @@ class Train:
     
     def set_train_loss(self, prediction, label):
         
-        train_loss = Losses.get_loss(self.loss)
+        train_loss = self.loss
         num_outputs = label.get_shape().as_list()[2] if self.data_provider.seq_length != None \
                 else label.get_shape().as_list()[1]
         
-        name_pred = ['pred_'.format(i) for i in range(num_outputs)]
+        name_out = ['out'.format(i) for i in range(num_outputs)]
         
-        for i, name in enumerate(name_pred):
+        for i, name in enumerate(name_out):
             pred_single = self._flatten(prediction, i)
             lb_single = self._flatten(label, i)
             
-            loss = train_loss(pred_single, lb_single)
+            loss = train_loss(lb_single, pred_single)
             tf.summary.scalar('losses/{}_loss'.format(name), loss)
             
             tf.losses.add_loss(loss / float(num_outputs))
     
-    def restore_variables(self):
+    def restore_variables(self, scope=None):
         
         init_fn = None
         if self.pretrained_model_checkpoint_path:
-            variables_to_restore = slim.get_model_variables()
+            variables_to_restore = slim.get_model_variables(scope=scope)
             init_fn = slim.assign_from_checkpoint_fn(
                     self.pretrained_model_checkpoint_path, variables_to_restore)
         
@@ -83,7 +83,8 @@ class Train:
                                                      optimizer,
                                                      summarize_gradients=True)
             
-            seq_length = 1 if self.data_provider.seq_length == None else self.data_provider.seq_length
+            seq_length = 1 if self.data_provider.seq_length == None \
+                           else self.data_provider.seq_length
             max_steps = self.num_epochs * self.data_provider.batch_size * seq_length
             logging.set_verbosity(1)
             slim.learning.train(train_op,

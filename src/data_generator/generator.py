@@ -33,6 +33,13 @@ class Generator(metaclass=ABCMeta):
                                           'labels': labels
                                          }
     
+    def add_arguments(self, parser):
+        parser.add_argument('--data_file', type=str,
+                    help='Contains the file paths to convert to tf records'
+                         'along with their labels, separated with `;`.')
+        
+        return parser
+    
     def _get_label_type(self, label):
         if 'regression' in self.task.lower():
             return list([np.float32(x) for x in label])

@@ -4,7 +4,7 @@ from .model import Model
 
 slim = tf.contrib.slim
 
-
+@Model.register
 class AudioModel(Model):
     
     def __init__(self,

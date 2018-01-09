@@ -2,26 +2,39 @@ import tensorflow as tf
 import src.metrics as metrics
 
 from tensorflow.python.platform import tf_logging as logging
+from src.models.model import Model
+from src.data_provider.data_provider import DataProvider
+from pathlib import Path
 
 slim = tf.contrib.slim
 
 class Eval:
     
-    def __init__(self, *args, **kwargs):
-        self.eval_interval_secs = kwargs['eval_interval_secs']
-        self.portion = kwargs['portion']
-        self.num_examples = kwargs['num_examples']
-        self.predictions = kwargs['predictions']
-        self.data_provider = kwargs['data_provider']
-        self.num_outputs = kwargs['num_outputs']
-        self.train_dir = str(kwargs['train_dir'])
-        self.log_dir = str(kwargs['log_dir'])
-        self.predictions = kwargs['predictions']
-        self.data_provider = kwargs['data_provider']
-        self.metric = kwargs['metric']
-        self.seq_length = kwargs['seq_length']
+    def __init__(self, 
+                 train_dir:Path,
+                 log_dir:Path,
+                 predictions:Model,
+                 data_provider:DataProvider,
+                 num_examples:int,
+                 seq_length:int = None,
+                 metric:str = 'ccc',
+                 eval_interval_secs:int = 300
+                ):
         
-        self.name_pred = ['pred_{}'.format(i) for i in range(self.num_outputs)]
+        
+        self.eval_interval_secs = eval_interval_secs
+        self.predictions = predictions
+        self.data_provider = data_provider
+        self.train_dir = str(train_dir)
+        self.log_dir = str(log_dir)
+        self.predictions = predictions
+        self.metric = [metric] #[x for x in kwargs['metric'].split(',')]
+        self.seq_length = seq_length
+        
+        self.name_pred = ['pred_{}'.format(i) for i in range(self.data_provider.label_shape)]
+        
+        self.num_examples = num_examples
+        self.num_outputs = data_provider.label_shape
         
     def _create_summary(self, name, value):
         op = tf.summary.scalar(name, value)
@@ -41,7 +54,7 @@ class Eval:
         
         # Computing MSE and Concordance values, and adding them to summary
         names_to_values, names_to_updates = slim.metrics.aggregate_metric_map(metric)
-        for i, name in enumerate(name_pred):
+        for i, name in enumerate(self.name_pred):
             key = 'eval/{}'.format(name)
             op = self._create_summary(key, names_to_values[key])
             summary_ops.append(op)
@@ -101,8 +114,11 @@ class Eval:
             names_to_values.update(values)
             names_to_updates.update(updates)
             summary_ops.extend(s_ops)
+        
+        seq_length = 1 if self.data_provider.seq_length == None \
+                       else self.data_provider.seq_length
             
-        num_batches = int(self.num_examples / (1 * self.seq_length))
+        num_batches = int(self.num_examples / (1 * seq_length))
         logging.set_verbosity(1)
 
         # Setup the global step.

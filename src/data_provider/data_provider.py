@@ -14,17 +14,14 @@ class DataProvider(metaclass=ABCMeta):
                  batch_size:int = 32,
                  seq_length:int = None):
         
-        tf_records = [str(x) for x in tfrecords_folder.glob('*.tfrecords')][0]
+        paths = [str(x) for x in tfrecords_folder.glob('*.tfrecords')]
         
         self.task = self._get_task(task)
-        self.frame_shape = self.get_shape(tf_records, 'frame')
-        self.label_shape = self.get_shape(tf_records, 'label')
+        self.frame_shape = self.get_shape(paths[0], 'frame')
+        self.label_shape = self.get_shape(paths[0], 'label')
         self.seq_length = seq_length
         self.batch_size = batch_size
         self.is_training = is_training
-        
-        self.root_path = Path(tfrecords_folder)
-        paths = [str(x) for x in self.root_path.glob('*.tfrecords')]
         
         filename_queue = tf.train.string_input_producer(paths, shuffle=is_training)
         
@@ -34,14 +31,18 @@ class DataProvider(metaclass=ABCMeta):
         
     @abstractmethod
     def parse_and_decode_example(self):
-        pass
+        raise NotImplementedError("Calling an abstract method.")
+    
+    @abstractmethod
+    def get_batch(self):
+        raise NotImplementedError("Calling an abstract method.")
     
     def _get_task(self, task):
         correct_types = ['classification','regression']
         task = task.lower()
         if not task in correct_types:
-            raise ValueError('task should be one of {}. \
-                             [{}] found'.format(correct_types, input_type))
+            raise ValueError('task should be one of {}.'
+                             '[{}] found'.format(correct_types, input_type))
         return task
     
     def _get_tf_type(self):
@@ -64,8 +65,25 @@ class DataProvider(metaclass=ABCMeta):
         return input_shape.shape[0]
     
     def augment_data(self):
-        raise NotImplementedError()
+        raise NotImplementedError('Currently no data augmentation method exists')
     
-    @abstractmethod
-    def get_batch(self):
-        pass
+    def _get_single_example_batch(self, nexamples, *args):
+        print(*args)
+        args = tf.train.batch(*args, nexamples,
+                              capacity=1000, dynamic_pad=True)
+        
+        return args
+    
+    def _get_seq_examples_batch(self, *args):
+        # Number of threads should always be one, in order to load samples
+        # sequentially.
+        args = self._get_single_example_batch(self.seq_length, args)
+        
+        if self.is_training:
+            args = tf.train.shuffle_batch(
+                args, self.batch_size, 1000, 50, num_threads=1)
+        else:
+            args = tf.train.batch(
+                args, self.batch_size, num_threads=1, capacity=1000)
+        
+        return [x for x in args]

@@ -10,8 +10,7 @@ from pathlib import Path
 class UnimodalGenerator(Generator):
     
     def __init__(self, *args, **kwargs):
-        super().__init__(*args,
-                         **kwargs)
+        super().__init__(*args, **kwargs)
     
     def _get_samples(self, data_file):
         

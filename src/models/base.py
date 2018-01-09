@@ -8,6 +8,6 @@ def fully_connected(inputs:tf.Tensor,
     return slim.layers.linear(inputs, number_of_outputs)
 
 
-def combined_model(*args):
+def combine_models(*args):
     return tf.concat((*args), 2, name='concat')
 
