@@ -45,8 +45,8 @@ training_subparser = add_train_args(training_subparser)
 evaluation_subparser = subparsers.add_parser('evaluate', help='Evaluation argument options')
 evaluation_subparser = add_eval_args(evaluation_subparser)
 
-#generation_subparser = parser.add_subparsers(help='Generation arguments')
-#generation_subparser = Eval.add_arguments(generation_subparser)
+generation_subparser = subparsers.add_parser('generate', help='Generation arguments')
+generation_subparser = add_gen_args(generation_subparser)
 
 
 class End2You:
@@ -82,6 +82,12 @@ class End2You:
         return outputs
     
     def start_process(self):
+        if 'generate' in self.kwargs['which'].lower():
+            generator_params = self._get_gen_params()
+            g = UnimodalGenerator(**generator_params)
+            g.write_tfrecords(self.kwargs['tfrecords_folder'])
+            return
+            
         self.data_provider = self.get_data_provider()
         frames, labels, sids = self.data_provider.get_batch()
         frames_shape = frames.get_shape().as_list()
@@ -102,10 +108,8 @@ class End2You:
             eval_params['data_provider'] = self.data_provider
             
             Eval(**eval_params).start_evaluation()
-        else:
-            generator_params = self._get_gen_params()
-            g = UnimodalGenerator(**generator_params)
-            g.write_tfrecords(self.tfrecords_folder)
+            eval_params = self._get_eval_params()
+
     
     def _get_train_params(self):
         train_params = {}
@@ -144,8 +148,8 @@ class End2You:
     
     def _get_gen_params(self):
         generator_params = {}
-        generator_params['input_type'] = self.input_type
-        generator_params['data_file'] = self.data_file
+        generator_params['input_type'] = self.kwargs['input_type']
+        generator_params['data_file'] = self.kwargs['data_file']
         
         return generator_params
     
