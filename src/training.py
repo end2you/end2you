@@ -83,8 +83,8 @@ class Train:
                                                      optimizer,
                                                      summarize_gradients=True)
             
-            seq_length = 1 if self.seq_length == None else self.seq_length
-            max_steps = self.num_epochs * self.batch_size * 
+            seq_length = 1 if self.data_provider.seq_length == None else self.data_provider.seq_length
+            max_steps = self.num_epochs * self.batch_size * seq_length
             logging.set_verbosity(1)
             slim.learning.train(train_op,
                                 self.train_dir,
