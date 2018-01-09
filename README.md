@@ -94,10 +94,10 @@ To create the tfrecords you need to specify the flag to be `--option=generate`. 
 
 > Creating tf records
 ```console
-(end2you)$ python main.py --option=generate  \
-                          --tfrecords_folder=/where/to/save/tfrecords   \
-                          --data_file=test.csv \
+(end2you)$ python main.py --tfrecords_folder=/where/to/save/tfrecords  \
                           --input_type=audio
+                            generate  \
+                          --data_file=test.csv \
 ```
 
 By default the `tfrecords` will be generated in a folder called `tf_records` which 
@@ -145,9 +145,10 @@ For training the following list of arguments can be defined.
 
 > Example
 ```console
-(end2you)$ python main.py --option=train \
+(end2you)$ python main.py --tfrecords_folder=path/to/tfrecords \
+                          --input_type=audio \
+                          train \
                           --train_dir=ckpt/train \
-                          --tfrecords_folder=path/to/tfrecords
 ```
 
 The most important flag is the `--tfrecords_folder` which specifies the directory where the tfrecords are saved. If a flag is not specified during execution, it will be initialised with the default value.
@@ -195,10 +196,11 @@ The script accepts the following list of arguments.
 
 > Example
 ```console
-(end2you)$ python main.py --option=evaluate \
+(end2you)$ python main.py --tfrecords_folder=path/to/tfrecords \
+                          --input_type=audio \
+                            evaluate \
                           --train_dir=ckpt/train \
-                          --log_dir=ckpt/log \
-                          --tfrecords_folder=path/to/tfrecords
+                          --log_dir=ckpt/log                          
 ```
 
 The most important flags are the `--tfrecords_folder`, which specifies the directory where the tfrecords are saved, and the `--train_dir` which specifies where the training script saves checkpoints (this flag should be equal to the `--train_dir` flag specified when the training process started).  In addition, it is good practice to set the `--log_dir` flag to be saved in the same folder as in the train one. For example, if `--train_dir=ckpt/train` (set when executing the training script), then you can set `--log_dir=ckpt/log` (set when the evaluation script is executed).
@@ -225,12 +227,12 @@ To start training the model the `main.py` script needs to be executed with the f
 
 > Example - start training
 ```console
-(end2you)$ python main.py --option=train \
-                          --tfrecords_folder=path/to/tfrecords \
-                          --train_dir=ckpt/train \
-                          --model=video \
+(end2you)$ python main.py --tfrecords_folder=path/to/tfrecords \
+                          --input_type=video
                           --batch_size=2 \
-                          --seq_length=150         
+                          --seq_length=150                           
+                            train \
+                          --train_dir=ckpt/train \
 ```
 
 To start evaluation of the model the `main.py` script needs to be executed with the flag `--option=evaluate`. Important flags are the following:
@@ -243,13 +245,13 @@ You need also to be certain that the flags to create the model, like `--num_gru_
 
 > Example - start evaluation
 ```console
-(end2you)$ python main.py --option=evaluate \
-                          --tfrecords_folder=path/to/tfrecords \
-                          --train_dir=ckpt/train \
-                          --log_dir=ckpt/log \
-                          --model=video \
+(end2you)$ python main.py --tfrecords_folder=path/to/tfrecords \
                           --batch_size=1 \
-                          --seq_length=150     
+                          --seq_length=150 
+                          --input_type=video \
+                            evaluate\
+                          --train_dir=ckpt/train \
+                          --log_dir=ckpt/log \    
 ```
 
 If a flag is not specified, the default value is used.
@@ -260,12 +262,12 @@ If we want to start the training from a pre-trained model, like the one provided
 
 > Example - start training using pre-trained model
 ```console
-(end2you)$ python main.py --option=train \
-                          --tfrecords_folder=path/to/tfrecords \
-                          --train_dir=ckpt/train \
-                          --model=video \
+(end2you)$ python main.py --tfrecords_folder=path/to/tfrecords \
+                          --input_type=audio \
                           --batch_size=2 \
                           --seq_length=150 \
+                            train
+                          --train_dir=ckpt/train \
                           --pretrained_model_checkpoint_path=path/to/model.ckpt-XXXX    
 ```
 
