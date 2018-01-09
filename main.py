@@ -20,9 +20,6 @@ slim = tf.contrib.slim
 
 parser = argparse.ArgumentParser(description='End2You flags.')
 
-parser.add_argument('--option', type=str,
-                    help='One of: train, evaluate, generate.',
-                    choices=['train', 'evaluate', 'generate'])
 parser.add_argument('--tfrecords_folder', type=Path,
                     help='The tfrecords directory.')
 parser.add_argument('--batch_size', type=int, default=2,
