@@ -45,8 +45,8 @@ training_subparser = add_train_args(training_subparser)
 evaluation_subparser = subparsers.add_parser('evaluate', help='Evaluation argument options')
 evaluation_subparser = add_eval_args(evaluation_subparser)
 
-#generation_subparser = parser.add_subparsers('generate', help='Generation arguments')
-#generation_subparser = add_gen_arguments(generation_subparser)
+#generation_subparser = parser.add_subparsers(help='Generation arguments')
+#generation_subparser = Eval.add_arguments(generation_subparser)
 
 
 class End2You:
@@ -172,9 +172,9 @@ def get_num_examples(tfrecords_folder):
 def main(_):
     
     flags = vars(parser.parse_args())
-    # with tf.Graph().as_default():
-    e2u = End2You(**flags)
-    e2u.start_process()
+    with tf.Graph().as_default():
+        e2u = End2You(**flags)
+        e2u.start_process()
 
 if __name__ == '__main__':
     tf.app.run()
