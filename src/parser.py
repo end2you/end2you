@@ -34,3 +34,9 @@ def add_train_args(parser):
                         help='The number of epochs to run training (default 10).')
 
     return parser
+
+def add_gen_args(parser):
+    parser.add_argument('--data_file', type=str,
+                        help='The files to convert to tfrecords')
+    
+    return parser
