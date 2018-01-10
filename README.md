@@ -249,7 +249,7 @@ You need also to be certain that the flags to create the model, like `--num_gru_
                           --batch_size=1 \
                           --seq_length=150 
                           --input_type=video \
-                            evaluate\
+                            evaluate \
                           --train_dir=ckpt/train \
                           --log_dir=ckpt/log \    
 ```
