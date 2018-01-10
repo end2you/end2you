@@ -155,8 +155,8 @@ The most important flag is the `--tfrecords_folder` which specifies the director
 
 ## Evaluation
 
-Responsible for the evaluation of the checkpoints saved by the training script is the `e2u_eval.py` script.
-The script accepts the following list of arguments.
+To start the evaluation of the model the parameter to be defined is `evaluate`.
+The following list of arguments can be used for evaluation.
 
 ```
   --batch_size BATCH_SIZE
