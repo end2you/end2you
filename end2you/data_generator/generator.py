@@ -16,7 +16,7 @@ class Generator(metaclass=ABCMeta):
                  task:str = 'regression',
                  delimiter:str = ';'):
         
-        self.task = task
+        self.task = task.lower()
         self.data = np.loadtxt(data_file, delimiter=delimiter, dtype=str)
         self.input_type = self._get_input_type(input_type.lower())
         
@@ -41,7 +41,7 @@ class Generator(metaclass=ABCMeta):
         return parser
     
     def _get_label_type(self, label):
-        if 'regression' in self.task.lower():
+        if 'regression' in self.task:
             return list([np.float32(x) for x in label])
         return list([np.int32(x) for x in label])
     
@@ -56,8 +56,8 @@ class Generator(metaclass=ABCMeta):
     def _get_input_type(self, input_type):
         correct_types = ['audio','video','audiovisual']
         if input_type not in correct_types:
-            raise ValueError('input_type should be one of {}. \
-                             [{}] found'.format(correct_types, input_type))
+            raise ValueError('input_type should be one of {}.'format(correct_types),
+                             '[{}] found'.format(input_type))
         return input_type        
     
     def _int_feauture(self, value):

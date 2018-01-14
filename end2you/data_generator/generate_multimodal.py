@@ -10,7 +10,6 @@ from pathlib import Path
 class MultimodalGenerator(Generator):
     
     def __init__(self, *args, **kwargs):
-        self.input_type = 'audiovisual'
         super().__init__(*args,
                          **kwargs)
     

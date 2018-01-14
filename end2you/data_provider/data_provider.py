@@ -75,8 +75,6 @@ class DataProvider(metaclass=ABCMeta):
         return args
     
     def _get_seq_examples_batch(self, *args):
-        # Number of threads should always be one, in order to load samples
-        # sequentially.
         args = self._get_single_example_batch(self.seq_length, args)
         
         if self.is_training:
