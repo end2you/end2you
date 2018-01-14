@@ -43,7 +43,7 @@ class Train:
         num_outputs = label.get_shape().as_list()[2] if self.data_provider.seq_length != None \
                 else label.get_shape().as_list()[1]
         
-        name_out = ['out'.format(i) for i in range(num_outputs)]
+        name_out = ['out_{}'.format(i) for i in range(num_outputs)]
         
         for i, name in enumerate(name_out):
             pred_single = self._flatten(prediction, i)
