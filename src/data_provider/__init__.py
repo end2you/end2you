@@ -1,1 +1,0 @@
-# Data provider package
