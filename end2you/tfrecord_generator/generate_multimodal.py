@@ -2,7 +2,7 @@ import os
 import tensorflow as tf
 import numpy as np
 
-from src.data_generator.generator import Generator
+from .generator import Generator
 from moviepy.editor import VideoFileClip, AudioFileClip
 from pathlib import Path
 
@@ -10,15 +10,15 @@ from pathlib import Path
 class MultimodalGenerator(Generator):
     
     def __init__(self, *args, **kwargs):
-        super().__init__(*args,
-                         **kwargs)
+        super().__init__(*args, **kwargs)
     
     def _get_samples(self, data_file):
         
         time = self.dict_files[data_file]['time']
 
         clip = VideoFileClip(str(data_file))
-
+        
+        time = time[1:10,:]
         subsampled_audio = clip.audio.set_fps(16000)
         num_samples = int(subsampled_audio.fps * (time[1] - time[0]))
         
@@ -33,23 +33,27 @@ class MultimodalGenerator(Generator):
                 
             audio_frames.append(audio.astype(np.float32))
             
-            image = np.array(list(clip.subclip(start_time, end_time).iter_frames()))
+            image = np.array(list(clip.subclip(start_time, end_time).iter_frames()))[0]
             video_frames.append(image.astype(np.float32))
             
-        self.shape = (audio.shape, image.shape)
-        
         return video_frames, audio_frames, self.dict_files[data_file]['labels']
 
     def serialize_sample(self, writer, data_file, subject_id):
         
         for i, (frame, audio, label) in enumerate(zip(*self._get_samples(data_file))):
-
+            frame_shape = np.array(frame.shape)
+            label_shape = np.array(label.shape)
+            raw_audio_shape = np.array(audio.shape)
+            
             example = tf.train.Example(features=tf.train.Features(feature={
                         'sample_id': self._int_feauture(i),
                         'subject_id': self._bytes_feauture(subject_id.encode()),
                         'label': self._bytes_feauture(label.tobytes()),
+                        'label_shape': self._bytes_feauture(label_shape.tobytes()),
                         'raw_audio': self._bytes_feauture(audio.tobytes()),
-                        'frame': self._bytes_feauture(frame.tobytes())
+                        'raw_audio_shape': self._bytes_feauture(raw_audio_shape.tobytes()),
+                        'frame': self._bytes_feauture(frame.tobytes()),
+                        'frame_shape': self._bytes_feauture(frame_shape.tobytes())
                     }))
 
             writer.write(example.SerializeToString())

@@ -21,10 +21,12 @@ class UnimodalProvider(DataProvider):
             }
         )
         
-        frame = tf.decode_raw(features['frame'], tf.float32)
+        frame = tf.decode_raw(features['frame'], tf.float32) / 255.
         label = tf.decode_raw(features['label'], self._get_tf_type())
         subject_id = features['subject_id']
-    
+        
+        frame = tf.reshape(frame, self.frame_shape)
+        
         return frame, label, subject_id
     
     def get_batch(self):

@@ -2,18 +2,18 @@ import argparse
 
 import tensorflow as tf
 
-from src.models.audio_model import AudioModel
-from src.models.video_model import VideoModel
-from src.models.rnn_model import RNNModel
-from src.models.base import fully_connected
-
-from src.data_provider.unimodal_provider import UnimodalProvider 
+from end2you.models.audio_model import AudioModel
+from end2you.models.video_model import VideoModel
+from end2you.models.rnn_model import RNNModel
+from end2you.models.base import fully_connected
+from end2you.rw.file_reader import FileReader
+from end2you.data_provider.unimodal_provider import UnimodalProvider 
 from pathlib import Path
-from src.training import Train
-from src.evaluation import Eval
-from src.data_generator.generate_unimodal import UnimodalGenerator
-from src.data_generator.generate_multimodal import MultimodalGenerator
-from src.parser import *
+from end2you.training import Train
+from end2you.evaluation import Eval
+from end2you.tfrecord_generator.generate_unimodal import UnimodalGenerator
+from end2you.tfrecord_generator.generate_multimodal import MultimodalGenerator
+from end2you.parser import *
 
 slim = tf.contrib.slim
 
@@ -73,7 +73,7 @@ class End2You:
         
         rnn = self._reshape_to_conv(rnn)
 
-        outputs = fully_connected(rnn, self.data_provider.label_shape)
+        outputs = fully_connected(rnn, int(self.data_provider.label_shape[0]))
         outputs = self._reshape_to_rnn(outputs)
         
         return outputs
@@ -89,8 +89,8 @@ class End2You:
         frames, labels, sids = self.data_provider.get_batch()
         frames_shape = frames.get_shape().as_list()
 
-        if len(frames_shape) == 3:
-            frames = tf.reshape(frames, (-1, frames_shape[2]))
+        if self.kwargs['seq_length'] is not None:
+            frames = tf.reshape(frames, (frames_shape[0]*frames_shape[1], *frames_shape[2:]))
         
         predictions = self.get_model(frames)
         if 'train' in self.kwargs['which'].lower():
@@ -110,7 +110,7 @@ class End2You:
     
     def _get_train_params(self):
         train_params = {}
-        train_params['input_type'] = self.kwargs['input_type']
+        # train_params['input_type'] = self.kwargs['input_type']
         train_params['train_dir'] = self.kwargs['train_dir']
         train_params['initial_learning_rate'] = self.kwargs['initial_learning_rate']
         train_params['num_epochs'] = self.kwargs['num_epochs']
@@ -145,8 +145,10 @@ class End2You:
     
     def _get_gen_params(self):
         generator_params = {}
+        file_reader = FileReader(self.kwargs['data_file'], delimiter=';')
+        
         generator_params['input_type'] = self.kwargs['input_type']
-        generator_params['data_file'] = self.kwargs['data_file']
+        generator_params['reader'] = file_reader
         
         return generator_params
     

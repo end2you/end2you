@@ -1,11 +1,13 @@
 import tensorflow as tf
+import sys
+sys.path.append("..")
 
-from src.losses import Losses
-from src.models.model import Model
-from src.data_provider.data_provider import DataProvider
+from .losses import Losses
+from ..models.model import Model
+from ..data_provider.data_provider import DataProvider
 from tensorflow.python.platform import tf_logging as logging
 from pathlib import Path
-from src.models.base import *
+from ..models.base import *
 
 slim = tf.contrib.slim
 
@@ -15,8 +17,7 @@ class Train:
     def __init__(self,
                  predictions: tf.Tensor,
                  data_provider:DataProvider,
-                 input_type:str,
-                 train_dir: Path,
+                 train_dir: Path = 'ckpt/train',
                  initial_learning_rate:float = 0.0001,
                  num_epochs:int = 100,
                  loss:str = 'ccc',
@@ -24,7 +25,6 @@ class Train:
         
         self.train_dir = str(train_dir)
         self.predictions = predictions
-        self.input_type = input_type
         self.data_provider = data_provider
         self.initial_learning_rate = initial_learning_rate
         self.num_epochs = num_epochs
@@ -57,7 +57,9 @@ class Train:
     def restore_variables(self, scope=None):
         
         init_fn = None
-        if self.pretrained_model_checkpoint_path:
+        print('Pretrain : ', type(self.pretrained_model_checkpoint_path))
+        if self.pretrained_model_checkpoint_path != 'None':
+            print('Pretrain : ', self.pretrained_model_checkpoint_path)
             variables_to_restore = slim.get_model_variables(scope=scope)
             init_fn = slim.assign_from_checkpoint_fn(
                     self.pretrained_model_checkpoint_path, variables_to_restore)

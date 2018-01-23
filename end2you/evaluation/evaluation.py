@@ -1,9 +1,11 @@
 import tensorflow as tf
-import src.metrics as metrics
+import sys
+sys.path.append("..")
 
+from .metrics import concordance_cc2 as m_concordance_cc2
+from ..models.model import Model
+from ..data_provider.data_provider import DataProvider
 from tensorflow.python.platform import tf_logging as logging
-from src.models.model import Model
-from src.data_provider.data_provider import DataProvider
 from pathlib import Path
 
 slim = tf.contrib.slim
@@ -31,7 +33,7 @@ class Eval:
         self.metric = [metric] #[x for x in kwargs['metric'].split(',')]
         self.seq_length = seq_length
         
-        self.name_pred = ['pred_{}'.format(i) for i in range(self.data_provider.label_shape)]
+        self.name_pred = ['pred_{}'.format(i) for i in range(self.data_provider.label_shape[0])]
         
         self.num_examples = num_examples
         self.num_outputs = data_provider.label_shape
@@ -75,7 +77,7 @@ class Eval:
         conc_total = 0
         for i, name in enumerate(self.name_pred):
             with tf.name_scope(name) as scope:
-                concordance_cc2, values, updates = metrics.concordance_cc2(
+                concordance_cc2, values, updates = m_concordance_cc2(
                             tf.reshape(predictions[:,:,i], [-1]),
                             tf.reshape(labels[:,:,i], [-1]))
             

@@ -2,7 +2,7 @@ import os
 import tensorflow as tf
 import numpy as np
 
-from src.data_generator.generator import Generator
+from .generator import Generator
 from moviepy.editor import VideoFileClip, AudioFileClip
 from pathlib import Path
 
@@ -15,7 +15,7 @@ class UnimodalGenerator(Generator):
     def _get_samples(self, data_file):
         
         time = self.dict_files[data_file]['time']
-        
+        time = time[1:10,:]
         if 'audio' in self.input_type.lower():
             audio_clip = AudioFileClip(str(data_file))
             clip = audio_clip.set_fps(16000)
@@ -29,16 +29,18 @@ class UnimodalGenerator(Generator):
             
             return clip_list, self.dict_files[data_file]['labels']
         
-        frames = []
+        frames = []        
         for i in range(len(time) - 1):
             start_time = time[i]
             end_time = time[i + 1]
             data_frame = np.array(list(clip.subclip(start_time, end_time).iter_frames()))
             
             if 'audio' in self.input_type.lower():
+                data_frame = np.squeeze(data_frame)
                 data_frame = data_frame.mean(1)[:num_samples]
                 
-            frames.append(data_frame)
+                
+            frames.append(data_frame.astype(np.float32))
         
         self.shape = data_frame.shape
         
@@ -47,12 +49,16 @@ class UnimodalGenerator(Generator):
     def serialize_sample(self, writer, data_file, subject_id):
         
         for i, (frame, label) in enumerate(zip(*self._get_samples(data_file))):
+            frame_shape = np.array(frame.shape)
+            label_shape = np.array(label.shape)
             
             example = tf.train.Example(features=tf.train.Features(feature={
                         'sample_id': self._int_feauture(i),
                         'subject_id': self._bytes_feauture(subject_id.encode()),
                         'label': self._bytes_feauture(label.tobytes()),
-                        'frame': self._bytes_feauture(frame.tobytes())
+                        'label_shape': self._bytes_feauture(label_shape.tobytes()),
+                        'frame': self._bytes_feauture(frame.tobytes()),
+                        'frame_shape': self._bytes_feauture(frame_shape.tobytes())
                     }))
             
             writer.write(example.SerializeToString())

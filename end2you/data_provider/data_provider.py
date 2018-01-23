@@ -17,8 +17,8 @@ class DataProvider(metaclass=ABCMeta):
         paths = [str(x) for x in tfrecords_folder.glob('*.tfrecords')]
         
         self.task = self._get_task(task)
-        self.frame_shape = self.get_shape(paths[0], 'frame')
-        self.label_shape = self.get_shape(paths[0], 'label')
+        self.frame_shape = list(self.get_shape(paths[0], 'frame_shape'))
+        self.label_shape = list(self.get_shape(paths[0], 'label_shape'))  
         self.seq_length = seq_length
         self.batch_size = batch_size
         self.is_training = is_training
@@ -59,23 +59,23 @@ class DataProvider(metaclass=ABCMeta):
             tt = (example.features.feature[tensor_name]
                                          .bytes_list
                                          .value[0])
-            input_shape = np.fromstring(tt, dtype=np.float32)
+            input_shape = np.fromstring(tt, dtype=np.int64)
             break
-        
-        return input_shape.shape[0]
+        print(input_shape)
+        return input_shape#.shape[0]
     
     def augment_data(self):
         raise NotImplementedError('Currently no data augmentation method exists')
     
     def _get_single_example_batch(self, nexamples, *args):
-        print(*args)
-        args = tf.train.batch(*args, nexamples,
+        print(args)
+        args = tf.train.batch(args, nexamples,
                               capacity=1000, dynamic_pad=True)
         
         return args
     
     def _get_seq_examples_batch(self, *args):
-        args = self._get_single_example_batch(self.seq_length, args)
+        args = self._get_single_example_batch(self.seq_length, *args)
         
         if self.is_training:
             args = tf.train.shuffle_batch(
