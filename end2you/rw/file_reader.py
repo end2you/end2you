@@ -23,7 +23,7 @@ class FileReader:
     def read_delimiter_file(cls,
                             file, 
                             delimiter=';'):
-
+        
         with open(file, 'r') as f:
             reader = csv.DictReader(f, delimiter=delimiter)
             data = []

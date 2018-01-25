@@ -15,8 +15,7 @@ class RNNModel(Model):
         self.hidden_units = hidden_units
         self.bidirectional = bidirectional
         
-        if 'gru' not in cell_type.lower() and \
-           'lstm' not in cell_type.lower():
+        if ('gru' and 'lstm') not in cell_type.lower():
             raise ValueError('Cell type should be one of GRU or LSTM. \
                              [{}] found'.format(cell_type))
         

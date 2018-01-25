@@ -58,7 +58,7 @@ class Generator(metaclass=ABCMeta):
                                           'labels': np.reshape(self._get_label_type(data[:, labels_idx], types[1]), 
                                                               (-1, num_labels))
                                          }
-        
+    
     def _get_label_type(self, label, _type):
         if 'float' in _type: 
             return list([np.float32(x) for x in label])
