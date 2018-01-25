@@ -39,7 +39,12 @@ class RNNModel(Model):
                                                        state_is_tuple=True)
             
             outputs, _ = tf.nn.dynamic_rnn(stacked_cells, inputs, dtype=tf.float32)
+
+        if seq_length == None:
+            seq_length = -1
+        # else:
+        #     batch = batch_size * seq_length
         
-        net = tf.reshape(outputs, (batch_size * seq_length, self.hidden_units))
+        net = tf.reshape(outputs, (batch_size, seq_length, self.hidden_units))
         
         return net

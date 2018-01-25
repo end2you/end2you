@@ -3,6 +3,7 @@ import tensorflow as tf
 from pathlib import Path
 from .data_provider import DataProvider
 
+slim = tf.contrib.slim
 
 @DataProvider.register
 class UnimodalProvider(DataProvider):
@@ -21,22 +22,32 @@ class UnimodalProvider(DataProvider):
             }
         )
         
-        frame = tf.decode_raw(features['frame'], tf.float32) / 255.
+        frame = tf.decode_raw(features['frame'], tf.float32) 
         label = tf.decode_raw(features['label'], self._get_tf_type())
         subject_id = features['subject_id']
         
-        frame = tf.reshape(frame, self.frame_shape)
+        if self.seq_length != 0:
+            frame = tf.reshape(frame, self.frame_shape)
         
         return frame, label, subject_id
     
     def get_batch(self):
         frame, label, subject_id = self.parse_and_decode_example()
         
-        frame.set_shape(self.frame_shape)
-        label.set_shape(self.label_shape)
-        
-        if self.seq_length == None:
-            return self._get_single_example_batch(1, frame, label, subject_id)
+        if self.seq_length == 0:
+            frames, labels, subjects_id = \
+                            self._get_single_example_batch(self.batch_size, frame, label, subject_id)
+            if 'classification' in self.task:
+                labels = tf.squeeze(slim.one_hot_encoding(labels, self.num_classes))
+            
+            frames = tf.reshape(frames, (self.batch_size, -1, 640)) # assume audio input
+            
+            return frames, labels, subjects_id
         else:
+            frame.set_shape(self.frame_shape)
+            label.set_shape(self.label_shape)
+            
+            if 'classification' in self.task:
+                labels = slim.one_hot_encoding(labels, self.num_classes)
+                
             return self._get_seq_examples_batch(frame, label, subject_id)
-    

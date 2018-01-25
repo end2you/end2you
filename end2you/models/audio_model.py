@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 
 from .model import Model
@@ -18,9 +19,9 @@ class AudioModel(Model):
                     is_training:bool = True):
         
         with tf.variable_scope("audio_model"):
-            
-            batch_size, num_features = frames.get_shape().as_list()
-            audio_input = tf.reshape(frames, [batch_size, 1, num_features, 1])
+            batch_size, num_features = frames.get_shape().as_list()        
+            shape = ([-1, 1, num_features, 1])
+            audio_input = tf.reshape(frames, shape)
             
             with slim.arg_scope([slim.layers.conv2d], 
                                 padding='SAME'):
@@ -39,7 +40,7 @@ class AudioModel(Model):
                 # but this trains much faster and achieves comparable accuracy.
                 net = slim.layers.conv2d(net, conv_filters, (1, 40))
 
-                net = tf.reshape(net, (batch_size, num_features // 2, conv_filters, 1))
+                net = tf.reshape(net, (-1, num_features // 2, conv_filters, 1))
 
                 # Pooling over the feature maps.
                 net = tf.nn.max_pool(

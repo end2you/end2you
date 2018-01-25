@@ -22,6 +22,7 @@ class Generator(metaclass=ABCMeta):
         
         self.input_type = self._get_input_type(input_type.lower())
         
+        print('--Start reading file')
         self.attributes_name, self.attributes_type, self.data = \
                                                             reader.read()
         
@@ -29,19 +30,25 @@ class Generator(metaclass=ABCMeta):
         file_idx = self.attributes_name.index('file')
         label_type = self.attributes_type[label_idx]
         
-        kwargs = {'delimiter': delimiter}
+        kwargs = {}
         if label_type == 'str':
             read_label_file = FileReader.read_delimiter_file
+            kwargs['delimiter'] = delimiter
         else:
             read_label_file = self._read_single_label
+            kwargs['label_type'] = label_type
         
+        print('---Start reading labels')
         self.dict_files = dict()
+        
+        # self.data = self.data[1:10,:] ##########################################
+        
         for row in self.data[:, [file_idx, label_idx]]:
             data_file = row[0]
             label_file = row[1]
             if label_type != 'str':
                 kwargs['file'] = data_file
-            
+                
             names, types, data = read_label_file(label_file, **kwargs)
             
             time_idx = names.index('time')
@@ -60,16 +67,16 @@ class Generator(metaclass=ABCMeta):
             return list([np.float32(x) for x in label])
         return list([np.int32(x) for x in label])
     
-    def _read_single_label(self, label, file=None, delimiter=None):
+    def _read_single_label(self, label, file=None, label_type=None):
         clip = VideoFileClip
         if 'audio' in self.input_type:
             clip = AudioFileClip
         end_time = clip(str(file)).duration
         
         time = np.vstack([0.0, end_time])
-        label = np.reshape(np.repeat(self._get_label_type(label), 2), (-1, 1))
+        label = np.reshape(np.repeat(self._get_label_type(label, label_type), 2), (-1, 1))
 
-        return 1, 1, np.hstack( [time, label]) 
+        return ['time', 'labels'], ['float', label_type], np.reshape(np.hstack( [time, label]) , (-1, 2))
     
     def _get_input_type(self, input_type):
         correct_types = ['audio','video','audiovisual']

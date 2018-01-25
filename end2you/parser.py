@@ -25,14 +25,14 @@ def add_train_args(parser):
     parser.add_argument('--initial_learning_rate', type=float, default=0.0001,
                         help='Initial learning rate.')
     parser.add_argument('--loss', type=str, default='ccc',
-                        help='Which loss is going to be used: ccc, or mse.',
-                        choices=['ccc', 'mse'])
+                        help='Which loss is going to be used: ccc, mse, or ce.',
+                        choices=['ccc', 'mse', 'ce'])
     parser.add_argument('--pretrained_model_checkpoint_path', type=str,
                         help='If specified, restore this pretrained model'
                              'before beginning any training.')
     parser.add_argument('--num_epochs', type=int, default=10,
                         help='The number of epochs to run training (default 10).')
-
+    
     return parser
 
 def add_gen_args(parser):

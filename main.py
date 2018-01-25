@@ -1,6 +1,7 @@
 import argparse
-
+import numpy as np
 import tensorflow as tf
+import math
 
 from end2you.models.audio_model import AudioModel
 from end2you.models.video_model import VideoModel
@@ -8,12 +9,12 @@ from end2you.models.rnn_model import RNNModel
 from end2you.models.base import fully_connected
 from end2you.rw.file_reader import FileReader
 from end2you.data_provider.unimodal_provider import UnimodalProvider 
-from pathlib import Path
 from end2you.training import Train
 from end2you.evaluation import Eval
 from end2you.tfrecord_generator.generate_unimodal import UnimodalGenerator
 from end2you.tfrecord_generator.generate_multimodal import MultimodalGenerator
 from end2you.parser import *
+from pathlib import Path
 
 slim = tf.contrib.slim
 
@@ -33,6 +34,10 @@ parser.add_argument('--seq_length', type=int, default=150,
                     help='The sequence length to introduce to the RNN.'
                          'if None (default) seq_length will be introduced' 
                          'by the audio model.')
+parser.add_argument('--task', type=str, default='classification',
+                    help='The number of epochs to run training (default 10).')
+parser.add_argument('--num_classes', type=int, default=3,
+                    help='If the task is classification the number of classes to consider.')
 
 subparsers = parser.add_subparsers(help='Depending on --option value', dest='which')
 
@@ -50,31 +55,51 @@ class End2You:
     
     def __init__(self, *args, **kwargs):
         self.kwargs = kwargs
-
+    
     def _reshape_to_rnn(self, frames):
-        return tf.reshape(frames, (self.kwargs['batch_size'], 
-                                   self.kwargs['seq_length'], 
-                                   -1))
+        batch_size, num_features = frames.get_shape().as_list()
+        seq_length = self.kwargs['seq_length'] 
+        if seq_length == 0:
+            seq_length = -1
+        frames = tf.reshape(frames, [self.kwargs['batch_size'], seq_length, num_features])
+        
+        return frames
     
     def _reshape_to_conv(self, frames):
-        return tf.reshape(frames, (self.kwargs['batch_size'] * 
-                                   self.kwargs['seq_length'], 
-                                   -1))
+        frame_shape = frames.get_shape().as_list()
+        num_features = frame_shape[-1]
+        
+        batch = -1
+        seq_length = self.kwargs['seq_length'] 
+        if seq_length == 0 and len(frame_shape) != 3:
+            batch = self.kwargs['batch_size']
+        elif seq_length != 0:
+            batch = seq_length * self.kwargs['batch_size']
+            
+        frames = tf.reshape(frames, (batch, 
+                                     num_features))
+        
+        return frames
     
     def get_model(self, frames):
         if 'audio' in self.kwargs['input_type'].lower():
+            frames = self._reshape_to_conv(frames)
             audio = AudioModel(is_training=True).create_model(frames)
             output_model = self._reshape_to_rnn(audio)
         elif 'video' in self.kwargs['input_type'].lower():
             video = VideoModel(is_training=True).create_model(frames)
             output_model = self._reshape_to_rnn(video)
         
-        rnn = RNNModel().create_model(output_model)
+        rnn = RNNModel(self.kwargs['hidden_units']).create_model(output_model)
         
-        rnn = self._reshape_to_conv(rnn)
-
-        outputs = fully_connected(rnn, int(self.data_provider.label_shape[0]))
-        outputs = self._reshape_to_rnn(outputs)
+        if self.kwargs['seq_length'] == 0:
+            rnn = rnn[:, -1, :]
+        
+        num_outputs = int(self.data_provider.label_shape[0])
+        if self.kwargs['task'] == 'classification':
+            num_outputs = self.data_provider.num_classes
+            
+        outputs = fully_connected(rnn, num_outputs)
         
         return outputs
     
@@ -84,20 +109,15 @@ class End2You:
             g = UnimodalGenerator(**generator_params)
             g.write_tfrecords(self.kwargs['tfrecords_folder'])
             return
-            
-        self.data_provider = self.get_data_provider()
-        frames, labels, sids = self.data_provider.get_batch()
-        frames_shape = frames.get_shape().as_list()
-
-        if self.kwargs['seq_length'] is not None:
-            frames = tf.reshape(frames, (frames_shape[0]*frames_shape[1], *frames_shape[2:]))
         
-        predictions = self.get_model(frames)
+        self.data_provider = self.get_data_provider()
+        predictions = self.get_model
+        
         if 'train' in self.kwargs['which'].lower():
             train_params = self._get_train_params()
             train_params['predictions'] = predictions
             train_params['data_provider'] = self.data_provider
-
+            
             Train(**train_params).start_training()
         elif 'evaluate' in self.kwargs['which'].lower():
             eval_params = self._get_eval_params()
@@ -107,10 +127,8 @@ class End2You:
             Eval(**eval_params).start_evaluation()
             eval_params = self._get_eval_params()
 
-    
     def _get_train_params(self):
         train_params = {}
-        # train_params['input_type'] = self.kwargs['input_type']
         train_params['train_dir'] = self.kwargs['train_dir']
         train_params['initial_learning_rate'] = self.kwargs['initial_learning_rate']
         train_params['num_epochs'] = self.kwargs['num_epochs']
@@ -125,9 +143,12 @@ class End2You:
         dp_params['tfrecords_folder'] = self.kwargs['tfrecords_folder']
         dp_params['seq_length'] = self.kwargs['seq_length']
         dp_params['batch_size'] = self.kwargs['batch_size']
+        dp_params['task'] = self.kwargs['task']
+        if dp_params['task'] == 'classification':
+            dp_params['num_classes'] = self.kwargs['num_classes']
         
         return dp_params
-        
+    
     def _get_eval_params(self):
         eval_params = {}
         eval_params['train_dir'] = self.kwargs['train_dir']
@@ -136,17 +157,11 @@ class End2You:
         eval_params['metric'] = self.kwargs['metric'] #[x for x  in self.metric.split(',')]
         eval_params['eval_interval_secs'] = self.kwargs['eval_interval_secs']
         
-        num_examples = self.kwargs['num_examples']
-        if self.kwargs['num_examples'] == None:
-            num_examples = get_num_examples(self.kwargs['tfrecords_folder'])
-        eval_params['num_examples'] = num_examples
-        
         return eval_params
     
     def _get_gen_params(self):
         generator_params = {}
         file_reader = FileReader(self.kwargs['data_file'], delimiter=';')
-        
         generator_params['input_type'] = self.kwargs['input_type']
         generator_params['reader'] = file_reader
         
@@ -154,23 +169,15 @@ class End2You:
     
     def get_data_provider(self):
         dp_params = self._get_dp_params()
-        if 'audio' in self.kwargs['input_type'] or \
-           'video' in self.kwargs['input_type']:
+        if ('audio' or 'video') in self.kwargs['input_type']:
             provider = UnimodalProvider
+        else:
+            provider = MultimodalProvider
         
         data_provider = \
             provider(**dp_params)
         
         return data_provider
-
-def get_num_examples(tfrecords_folder):
-    root_folder = Path(tfrecords_folder)
-    num_examples = 0
-    for tf_file in root_folder.glob('*.tfrecords'):
-        for record in tf.python_io.tf_record_iterator(str(tf_file)):
-            num_examples += 1
-
-    return num_examples
 
 def main(_):
     

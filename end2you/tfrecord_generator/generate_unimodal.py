@@ -15,7 +15,7 @@ class UnimodalGenerator(Generator):
     def _get_samples(self, data_file):
         
         time = self.dict_files[data_file]['time']
-        time = time[1:10,:]
+        
         if 'audio' in self.input_type.lower():
             audio_clip = AudioFileClip(str(data_file))
             clip = audio_clip.set_fps(16000)
@@ -39,11 +39,16 @@ class UnimodalGenerator(Generator):
                 data_frame = np.squeeze(data_frame)
                 data_frame = data_frame.mean(1)[:num_samples]
                 
-                
             frames.append(data_frame.astype(np.float32))
         
         self.shape = data_frame.shape
         
+        if i == 0:
+            chunk_size = 640 # split audio file to chuncks of 40 ms
+            audio = np.pad(data_frame, (0, chunk_size - data_frame.shape[0] % chunk_size), 'constant')
+            audio = np.reshape(audio, (-1, chunk_size)).astype(np.float32)
+            frames = [audio]
+            
         return frames, self.dict_files[data_file]['labels']
     
     def serialize_sample(self, writer, data_file, subject_id):
