@@ -38,11 +38,8 @@ class Generator(metaclass=ABCMeta):
             read_label_file = self._read_single_label
             kwargs['label_type'] = label_type
         
-        print('---Start reading labels')
         self.dict_files = dict()
-        
-        # self.data = self.data[1:10,:] ##########################################
-        
+
         for row in self.data[:, [file_idx, label_idx]]:
             data_file = row[0]
             label_file = row[1]
@@ -61,7 +58,7 @@ class Generator(metaclass=ABCMeta):
                                           'labels': np.reshape(self._get_label_type(data[:, labels_idx], types[1]), 
                                                               (-1, num_labels))
                                          }
-    
+        
     def _get_label_type(self, label, _type):
         if 'float' in _type: 
             return list([np.float32(x) for x in label])
@@ -93,6 +90,8 @@ class Generator(metaclass=ABCMeta):
     
     def write_tfrecords(self, tfrecords_folder):
         for data_file in self.dict_files.keys():
+            print('Writing file : {}'.format(data_file))
+                
             basename = os.path.basename(os.path.splitext(data_file)[0])
             writer = tf.python_io.TFRecordWriter(
                 (Path(tfrecords_folder) / '{}.tfrecords'.format(basename)

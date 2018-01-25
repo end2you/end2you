@@ -42,8 +42,6 @@ class RNNModel(Model):
 
         if seq_length == None:
             seq_length = -1
-        # else:
-        #     batch = batch_size * seq_length
         
         net = tf.reshape(outputs, (batch_size, seq_length, self.hidden_units))
         
