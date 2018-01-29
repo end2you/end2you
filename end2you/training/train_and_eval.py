@@ -26,12 +26,15 @@ class TrainEval(Train):
         if 'ce' == self.metric:
             self.metric = 'uar'
         
-        if Path(self.save_dir).exists():
-            r = list(csv.reader(open(str(self.save_dir / "models_performance.txt"), "r"), delimiter=':'))
+        old_perf_models = str(self.save_dir / "models_performance.txt")
+        if Path(old_perf_models).exists():
+            r = list(csv.reader(open(old_perf_models, "r"), delimiter=':'))
             self.best_perfs = {x[0]:float(x[1]) for x in r}
         else:
-            self.best_perfs = {str(x):float('-inf') for x in np.arange(save_top_k)}
+            self.best_perfs = {str(x):float('-inf') for x in np.arange(self.save_top_k)}
             os.system('mkdir -p {}'.format(self.save_dir))
+        
+        self.tfrecords_eval_folder = kwargs['tfrecords_eval_folder']
     
     def _restore_variables(self, sess, saver):
         model_path = tf.train.latest_checkpoint(self.train_dir)
@@ -100,7 +103,7 @@ class TrainEval(Train):
             frames_shape = frames.get_shape().as_list()
             batch = self.data_provider.seq_length * self.data_provider.batch_size
             frames = tf.reshape(frames, [batch, *frames_shape[2:]] )
-                         
+        
         predictions = self.predictions(frames)
         loss = self.set_train_loss(predictions, labels)
         total_loss = tf.losses.get_total_loss()
@@ -126,7 +129,7 @@ class TrainEval(Train):
             merged_summaries = tf.summary.merge_all()
             
             get_eval_once = EvalOnce.get_eval_tensors(sess, self.predictions, self.data_provider, 
-                                                  'ckpt/log')
+                                                  self.tfrecords_eval_folder)
             eval_pred, eval_labs, eval_batches = get_eval_once
             
             saver = tf.train.Saver()
@@ -140,9 +143,9 @@ class TrainEval(Train):
             save_model_path = Path(self.train_dir) / 'model.ckpt'
             
             # Start training of the model
-            for epoch in range(7):#self.num_epochs):
+            for epoch in range(self.num_epochs):
                 print('\n Start Training for epoch {}\n'.format(epoch + 1))
-                for batch in range(3):#num_batches):
+                for batch in range(num_batches):
                     start_time = time.time()
                     
                     _, step_loss, step_summary = sess.run([train_op, total_loss, merged_summaries])

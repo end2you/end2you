@@ -32,7 +32,9 @@ def add_train_args(parser):
                              'before beginning any training.')
     parser.add_argument('--num_epochs', type=int, default=10,
                         help='The number of epochs to run training (default 10).')
-    
+    parser.add_argument('--eval_folder', type=str, default=None,
+                        help='During training evaluate model after each epoch (True).')
+
     return parser
 
 def add_gen_args(parser):

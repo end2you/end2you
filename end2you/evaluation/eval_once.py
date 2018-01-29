@@ -42,7 +42,8 @@ class EvalOnce(Eval):
         print('\n Start Evaluation \n')
         evaluated_predictions = []
         evaluated_labels = []
-        for batch in range(1): #num_batches):
+        for batch in range(num_batches):
+            print('Example {}/{}'.format(batch, num_batches))
             preds, labs = sess.run([get_pred, labels])
             evaluated_predictions.append(preds)
             evaluated_labels.append(labs)

@@ -82,7 +82,7 @@ class End2You:
             batch = self.kwargs['batch_size']
         elif seq_length != 0:
             batch = seq_length * self.kwargs['batch_size']
-            
+        
         frames = tf.reshape(frames, (batch, num_features))
         
         return frames
@@ -135,7 +135,12 @@ class End2You:
             train_params['predictions'] = predictions
             train_params['data_provider'] = self.data_provider
             
-            TrainEval(**train_params).start_training()
+            if train_params['eval_folder']:
+                TrainClass = TrainEval
+            else:
+                TrainClass = SlimTraining
+            
+            TrainClass(**train_params).start_training()
         elif 'evaluate' in self.kwargs['which'].lower():
             eval_params = self._get_eval_params()
             eval_params['predictions'] = predictions
@@ -145,7 +150,7 @@ class End2You:
         else:
             raise ValueError('''Should indicate which operation to perform.'''
                 ''' Valid one of [generate, train, evaluate, test].''')
-                             
+    
     def _get_train_params(self):
         train_params = {}
         train_params['train_dir'] = self.kwargs['train_dir']
@@ -154,6 +159,8 @@ class End2You:
         train_params ['loss'] = self.kwargs['loss']
         train_params['pretrained_model_checkpoint_path'] = \
             self.kwargs['pretrained_model_checkpoint_path']
+        
+        train_params['eval_folder'] = self.kwargs['eval_folder']
         
         return train_params
     
