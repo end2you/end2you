@@ -26,7 +26,11 @@ class DataProvider(metaclass=ABCMeta):
         
         self.task = self._get_task(task)
         if 'classification' == self.task:
-            self.num_classes = kwargs['num_classes']
+            try:
+                self.num_classes = kwargs['num_classes']
+            except KeyError:
+                raise KeyError('''You need to specify the number of classes'''
+                               '''to use for the classification task.''')
         
         self.frame_shape = list(self.get_shape(paths[0], 'frame_shape'))
         self.label_shape = list(self.get_shape(paths[0], 'label_shape'))  
@@ -52,8 +56,8 @@ class DataProvider(metaclass=ABCMeta):
         correct_types = ['classification','regression']
         task = task.lower()
         if not task in correct_types:
-            raise ValueError('task should be one of {}.'
-                             '[{}] found'.format(correct_types, input_type))
+            raise ValueError('''task should be one of {}.'''.format(correct_types),
+                             '''[{}] found'''.format(input_type))
         return task
     
     def _get_tf_type(self):
@@ -80,7 +84,7 @@ class DataProvider(metaclass=ABCMeta):
     
     def _get_single_example_batch(self, nexamples, *args):
         args = tf.train.batch(args, nexamples,
-                              capacity=1000, dynamic_pad=True, num_threads=1)
+            capacity=1000, dynamic_pad=True, num_threads=1)
         
         return args
     

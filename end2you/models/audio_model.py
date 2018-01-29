@@ -18,7 +18,7 @@ class AudioModel(Model):
                     conv_filters:int = 40,
                     is_training:bool = True):
         
-        with tf.variable_scope("audio_model"):
+        with tf.variable_scope("audio_model", reuse=tf.AUTO_REUSE):
             batch_size, num_features = frames.get_shape().as_list()        
             shape = ([-1, 1, num_features, 1])
             audio_input = tf.reshape(frames, shape)
@@ -49,7 +49,7 @@ class AudioModel(Model):
                     strides=[1, 1, 10, 1],
                     padding='SAME',
                     name='pool2')
-            
+                
             net = tf.reshape(net, (-1, num_features // 2 * 4 ))
 
         return net

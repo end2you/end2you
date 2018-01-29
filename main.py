@@ -9,7 +9,7 @@ from end2you.models.rnn_model import RNNModel
 from end2you.models.base import fully_connected
 from end2you.rw.file_reader import FileReader
 from end2you.data_provider.unimodal_provider import UnimodalProvider 
-from end2you.training import Train
+from end2you.training import *
 from end2you.evaluation import Eval
 from end2you.tfrecord_generator.generate_unimodal import UnimodalGenerator
 from end2you.tfrecord_generator.generate_multimodal import MultimodalGenerator
@@ -32,7 +32,7 @@ parser.add_argument('--hidden_units', type=int, default=128,
                     help='The number of hidden units in the RNN model.')
 parser.add_argument('--seq_length', type=int, default=150,
                     help='The sequence length to introduce to the RNN.'
-                         'if None (default) seq_length will be introduced' 
+                         'if 0 seq_length will be introduced' 
                          'by the audio model.')
 parser.add_argument('--task', type=str, default='classification',
                     help='The number of epochs to run training (default 10).')
@@ -76,12 +76,12 @@ class End2You:
         elif seq_length != 0:
             batch = seq_length * self.kwargs['batch_size']
             
-        frames = tf.reshape(frames, (batch, 
-                                     num_features))
+        frames = tf.reshape(frames, (batch, num_features))
         
         return frames
     
     def get_model(self, frames):
+        
         if 'audio' in self.kwargs['input_type'].lower():
             frames = self._reshape_to_conv(frames)
             audio = AudioModel(is_training=True).create_model(frames)
@@ -98,7 +98,7 @@ class End2You:
         num_outputs = int(self.data_provider.label_shape[0])
         if self.kwargs['task'] == 'classification':
             num_outputs = self.data_provider.num_classes
-            
+        
         outputs = fully_connected(rnn, num_outputs)
         
         return outputs
@@ -118,13 +118,13 @@ class End2You:
             train_params['predictions'] = predictions
             train_params['data_provider'] = self.data_provider
             
-            Train(**train_params).start_training()
+            TrainEval(**train_params).start_training()
         elif 'evaluate' in self.kwargs['which'].lower():
             eval_params = self._get_eval_params()
             eval_params['predictions'] = predictions
             eval_params['data_provider'] = self.data_provider
             
-            Eval(**eval_params).start_evaluation()
+            SlimEvaluation(**eval_params).start_evaluation()
             eval_params = self._get_eval_params()
 
     def _get_train_params(self):

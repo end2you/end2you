@@ -15,7 +15,7 @@ class RNNModel(Model):
         self.hidden_units = hidden_units
         self.bidirectional = bidirectional
         
-        if ('gru' and 'lstm') not in cell_type.lower():
+        if ('gru' or 'lstm') not in cell_type.lower():
             raise ValueError('Cell type should be one of GRU or LSTM. \
                              [{}] found'.format(cell_type))
         
@@ -23,7 +23,7 @@ class RNNModel(Model):
         
     def create_model(self, inputs):
         
-        with tf.variable_scope("recurrent"):
+        with tf.variable_scope("recurrent", reuse=tf.AUTO_REUSE):
             batch_size, seq_length, num_features = inputs.get_shape().as_list()
             
             if 'gru' in self.cell_type:
@@ -38,7 +38,7 @@ class RNNModel(Model):
                                                        state_is_tuple=True)
             
             outputs, _ = tf.nn.dynamic_rnn(stacked_cells, inputs, dtype=tf.float32)
-
+            
         if seq_length == None:
             seq_length = -1
         

@@ -34,13 +34,15 @@ class UnimodalProvider(DataProvider):
     def get_batch(self):
         frame, label, subject_id = self.parse_and_decode_example()
         
-        if self.seq_length == 0:
+        if self.seq_length == 0: # assume for audio input only
             frames, labels, subjects_id = \
-                            self._get_single_example_batch(self.batch_size, frame, label, subject_id)
-            if 'classification' in self.task:
-                labels = tf.squeeze(slim.one_hot_encoding(labels, self.num_classes))
+                self._get_single_example_batch(self.batch_size, frame, label, subject_id)
             
-            frames = tf.reshape(frames, (self.batch_size, -1, 640)) # assume audio input
+            if 'classification' in self.task:
+                labels = tf.squeeze(labels, axis=1)
+                labels = slim.one_hot_encoding(labels, self.num_classes)
+            
+            frames = tf.reshape(frames, (self.batch_size, -1, 640)) 
             
             return frames, labels, subjects_id
         else:

@@ -10,8 +10,8 @@ def add_eval_args(parser):
     parser.add_argument('--num_outputs', type=int,
                         help='The number of outputs to be predicted by the model.')
     parser.add_argument('--metric', type=str, default='ccc',
-                        help='Which loss is going to be used: ccc or mse.',
-                        choices=['ccc', 'mse'])
+                        help='Which loss is going to be used: ccc, mse or uar.',
+                        choices=['ccc', 'mse', 'uar'])
     parser.add_argument('--eval_interval_secs', type=int, default=300,
                         help='How often to run the evaluation (in sec).')
     parser.add_argument('--train_dir', type=str, default='ckpt/train',
