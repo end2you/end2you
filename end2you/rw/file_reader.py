@@ -9,6 +9,8 @@ class FileReader:
     def __init__(self, 
                  file:Path,
                  **kwargs):
+        if not file:
+            raise ValueError('Need to define a data file.')
         
         self.file = str(file)
         self.type = self.file.split('.')[-1][-2:]

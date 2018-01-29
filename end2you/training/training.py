@@ -5,9 +5,9 @@ sys.path.append("..")
 from .losses import Losses
 from ..models.model import Model
 from ..data_provider.data_provider import DataProvider
+from ..models.base import *
 from tensorflow.python.platform import tf_logging as logging
 from pathlib import Path
-from ..models.base import *
 
 slim = tf.contrib.slim
 
