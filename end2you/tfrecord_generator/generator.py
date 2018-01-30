@@ -22,7 +22,6 @@ class Generator(metaclass=ABCMeta):
         
         self.input_type = self._get_input_type(input_type.lower())
         
-        print('--Start reading file')
         self.attributes_name, self.attributes_type, self.data = \
                                                             reader.read()
         
@@ -89,6 +88,9 @@ class Generator(metaclass=ABCMeta):
         return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
     
     def write_tfrecords(self, tfrecords_folder):
+        
+        print('\n Start generating tf records \n')
+        
         for data_file in self.dict_files.keys():
             print('Writing file : {}'.format(data_file))
                 

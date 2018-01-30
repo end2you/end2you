@@ -68,7 +68,7 @@ class TestRaw:
         audio = audio.reshape(-1, chunk_size)
         
         return audio.astype(np.float32)
-
+    
     def start_testing(self):
         
         predictions = self.predictions(self.frames)
@@ -102,7 +102,7 @@ class TestRaw:
             coord.request_stop()
 
             predictions = np.reshape(evaluated_predictions, (-1, pr.shape[-1]))
-            test_files = np.reshape(np.array(test_files_name), (-1,1))
+            test_files = np.reshape(np.array(test_files_name), (-1, 1))
             
             if self.task == 'classification':
                 predictions = np.reshape(np.argmax(predictions, axis=1), (-1, 1))

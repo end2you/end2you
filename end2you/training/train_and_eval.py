@@ -27,7 +27,7 @@ class TrainEval(Train):
         self.save_dir = Path(self.train_dir) / 'top_saved_models'
         
         self.metric = kwargs['loss'].lower()
-        if 'ce' == self.metric:
+        if ('sce' or 'ce') in self.metric:
             self.metric = 'uar'
         
         old_perf_models = str(self.save_dir / "models_performance.txt")

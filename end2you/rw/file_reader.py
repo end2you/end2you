@@ -1,5 +1,7 @@
 import csv
 import numpy as np
+import copy
+import os
 
 from pathlib import Path
 
@@ -15,7 +17,7 @@ class FileReader:
         self.file = str(file)
         self.type = self.file.split('.')[-1][-2:]
         self.kwargs = kwargs
-    
+        
     def read(self):
         return {'ff': self.read_arff_file,
                 'sv': self.read_delimiter_file}[self.type](self.file, 
@@ -24,18 +26,42 @@ class FileReader:
     @classmethod
     def read_delimiter_file(cls,
                             file, 
+                            exclude_cols:list = [],
                             delimiter=';'):
         
+        print('\nStart reading file [{}]\n'.format(file))
         with open(file, 'r') as f:
             reader = csv.DictReader(f, delimiter=delimiter)
+            
+            ncols = np.arange(len(reader.fieldnames))
+            include_cols = np.delete(ncols, exclude_cols)
+            reader.fieldnames = [reader.fieldnames[x] for x in include_cols]
+            
             data = []
             for row in reader:
-                data.append(list(row.values()))
+                d = [row[x] for x in reader.fieldnames]#list(row.values())
+                data.append(d)
 
-        keys = list(row.keys())
-        attributes = [keys[x].split('@') for x in range(len(keys))]
-        attributes_name = [x[0] for x in attributes]
-        attributes_type = [x[1] for x in attributes]
+        keys = list(reader.fieldnames)
+        attributes_name = copy.deepcopy(keys)
+        file_idx = attributes_name.index('file')
+        
+        attributes_type = ['str']
+        if not os.path.isfile(keys[0]):    
+            attributes_type = []
+            for i, k in enumerate(keys):
+                if i == file_idx:
+                    continue
+                try:
+                    int(data[0][i])
+                    attributes_type.append('int')
+                except ValueError:
+                    try:
+                        float(keys[i])
+                        attributes_type.append('float')
+                    except ValueError:
+                        raise ValueError('Only integers and floats are supported for the label.')
+            attributes_type.insert(file_idx, 'str')
         
         return attributes_name, attributes_type, np.array(data)
     
