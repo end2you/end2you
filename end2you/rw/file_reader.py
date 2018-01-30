@@ -39,7 +39,7 @@ class FileReader:
             
             data = []
             for row in reader:
-                d = [row[x] for x in reader.fieldnames]#list(row.values())
+                d = [row[x] for x in reader.fieldnames]
                 data.append(d)
 
         keys = list(reader.fieldnames)
@@ -47,7 +47,7 @@ class FileReader:
         file_idx = attributes_name.index('file')
         
         attributes_type = ['str']
-        if not os.path.isfile(keys[0]):    
+        if not os.path.isfile(keys[0]):
             attributes_type = []
             for i, k in enumerate(keys):
                 if i == file_idx:
