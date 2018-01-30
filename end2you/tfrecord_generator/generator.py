@@ -89,7 +89,10 @@ class Generator(metaclass=ABCMeta):
     
     def write_tfrecords(self, tfrecords_folder):
         
-        print('\n Start generating tf records \n')
+        if not os.path.exists(str(tfrecords_folder)):
+            os.system('mkdir -p {}'.format(tfrecords_folder))
+        
+        print('\n Start generating tfrecords \n')
         
         for data_file in self.dict_files.keys():
             print('Writing file : {}'.format(data_file))

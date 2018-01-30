@@ -37,6 +37,7 @@ class DataProvider(metaclass=ABCMeta):
         self.seq_length = seq_length
         self.batch_size = batch_size
         self.is_training = is_training
+        self.noise = kwargs['noise']
         
         filename_queue = tf.train.string_input_producer(paths, shuffle=is_training)
         
@@ -77,7 +78,7 @@ class DataProvider(metaclass=ABCMeta):
             input_shape = np.fromstring(tt, dtype=np.int64)
             break
         
-        return input_shape#.shape[0]
+        return input_shape
     
     def augment_data(self):
         raise NotImplementedError('Currently no data augmentation method exists')
@@ -90,7 +91,7 @@ class DataProvider(metaclass=ABCMeta):
     
     def _get_seq_examples_batch(self, *args):
         args = self._get_single_example_batch(self.seq_length, *args)
-        print('Arguments after first train batch : ', args)
+        
         if self.is_training:
             args = tf.train.shuffle_batch(
                 args, self.batch_size, 1000, 50, num_threads=1)

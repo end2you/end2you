@@ -19,6 +19,12 @@ class Losses(Enum):
     def mse(ground_truth, predictions):
         return tf.reduce_mean(tf.square(predictions - ground_truth))
     
+    def cross_entropy_with_logits(labels, predictions):
+        loss = tf.nn.weighted_cross_entropy_with_logits(labels, predictions,
+                                                                pos_weight=1)
+        return slim.losses.compute_weighted_loss(loss)
+
     ccc = concordance_cc
     mse = mse
-    ce = tf.losses.softmax_cross_entropy
+    sce = tf.losses.softmax_cross_entropy
+    cewl = cross_entropy_with_logits

@@ -27,9 +27,9 @@ class FileReader:
     def read_delimiter_file(cls,
                             file, 
                             exclude_cols:list = [],
-                            delimiter=';'):
+                            delimiter='\t'):
         
-        print('\nStart reading file [{}]\n'.format(file))
+        print('\n Start reading file [{}]\n'.format(file))
         with open(file, 'r') as f:
             reader = csv.DictReader(f, delimiter=delimiter)
             
@@ -41,7 +41,7 @@ class FileReader:
             for row in reader:
                 d = [row[x] for x in reader.fieldnames]
                 data.append(d)
-
+        
         keys = list(reader.fieldnames)
         attributes_name = copy.deepcopy(keys)
         file_idx = attributes_name.index('file')

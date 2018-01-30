@@ -27,7 +27,7 @@ class TrainEval(Train):
         self.save_dir = Path(self.train_dir) / 'top_saved_models'
         
         self.metric = kwargs['loss'].lower()
-        if ('sce' or 'ce') in self.metric:
+        if 'sce' in self.metric or 'ce' in self.metric:
             self.metric = 'uar'
         
         old_perf_models = str(self.save_dir / "models_performance.txt")
@@ -164,7 +164,7 @@ class TrainEval(Train):
                 
                 # Start evaluation in the end of each epoch
                 total_eval = self._eval_and_sum(
-                    sess, eval_pred, eval_labs, eval_batches, eval_summary_writer, epoch)
+                    sess, eval_pred, eval_labs, eval_batches, eval_summary_writer, step)
                 
                 # Save model
                 saver.save(sess, str(save_model_path), global_step=step)
@@ -184,4 +184,3 @@ class TrainEval(Train):
             coord.join(threads)
             summary_writer.close()
             eval_summary_writer.close()
-            

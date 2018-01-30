@@ -29,6 +29,9 @@ class UnimodalProvider(DataProvider):
         if self.seq_length != 0:
             frame = tf.reshape(frame, self.frame_shape)
         
+        if self.is_training and self.noise:
+            frame += tf.random_normal(tf.shape(frame), stddev=self.noise)
+            
         return frame, label, subject_id
     
     def get_batch(self):

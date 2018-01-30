@@ -37,6 +37,9 @@ class MultimodalProvider(DataProvider):
         frame = tf.reshape(frame, self.frame_shape)
         raw_audio = tf.reshape(raw_audio, self.raw_audio_shape)
         
+        if self.is_training and self.noise:
+            raw_audio += tf.random_normal(tf.shape(raw_audio), stddev=self.noise)
+        
         return frame, raw_audio, label, subject_id
     
     def get_batch(self):

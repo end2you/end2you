@@ -27,13 +27,10 @@ subparsers = parser.add_subparsers(help='Should be one of [generate, train, eval
 parser.add_argument('--input_type', type=str,
                     help='Which model is going to be used: audio, video, or both.',
                     choices=['audio', 'video', 'both'])
-
 parser.add_argument('--task', type=str, default='classification',
                     help='The number of epochs to run training (default 10).')
-
 parser.add_argument('--num_classes', type=int, default=3,
                     help='If the task is classification the number of classes to consider.')
-
 parser.add_argument('--hidden_units', type=int, default=128,
                     help='The number of hidden units in the RNN model.')
 parser.add_argument('--seq_length', type=int, default=150,
@@ -42,9 +39,10 @@ parser.add_argument('--seq_length', type=int, default=150,
                          'by the audio model.')
 parser.add_argument('--batch_size', type=int, default=2,
                     help='The batch size to use.')
-
 parser.add_argument('--tfrecords_folder', type=Path,
                     help='The tfrecords directory.')
+parser.add_argument('--delimiter', type=str, default='\t',
+                    help='The delimiter to read the files. (default \t)')
 
 testing_subparser = subparsers.add_parser('test', help='Test arguments.')
 testing_subparser = add_test_args(testing_subparser)
@@ -138,6 +136,7 @@ class End2You:
             if train_params['tfrecords_eval_folder']:
                 TrainClass = TrainEval
             else:
+                train_params.pop('tfrecords_eval_folder')
                 TrainClass = SlimTraining
             
             TrainClass(**train_params).start_training()
@@ -170,6 +169,8 @@ class End2You:
         dp_params['seq_length'] = self.kwargs['seq_length']
         dp_params['batch_size'] = self.kwargs['batch_size']
         dp_params['task'] = self.kwargs['task']
+        dp_params['noise'] = self.kwargs['noise']
+        
         if dp_params['task'] == 'classification':
             dp_params['num_classes'] = self.kwargs['num_classes']
         
@@ -187,7 +188,7 @@ class End2You:
     
     def _get_gen_params(self):
         generator_params = {}
-        file_reader = FileReader(self.kwargs['data_file'], delimiter=';')
+        file_reader = FileReader(self.kwargs['data_file'], delimiter=self.kwargs['delimiter'])
         generator_params['input_type'] = self.kwargs['input_type']
         generator_params['reader'] = file_reader
         

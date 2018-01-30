@@ -25,15 +25,18 @@ def add_train_args(parser):
     parser.add_argument('--initial_learning_rate', type=float, default=0.0001,
                         help='Initial learning rate.')
     parser.add_argument('--loss', type=str, default='ccc',
-                        help='Which loss is going to be used: ccc(Concordance Correlation Coefficient), \
-                              mse (Mean Squared Error), or ce (Softmax Cross Entropy). (default ccc)',
-                        choices=['ccc', 'mse', 'ce'])
+                        help='Which loss is going to be used: ccc (Concordance Correlation Coefficient), '
+                             'mse (Mean Squared Error), sce (Softmax Cross Entropy), or '
+                             'cewl (Cross Entropy With Logits). (default ccc)',
+                        choices=['ccc', 'mse', 'sce', 'cewl'])
     parser.add_argument('--pretrained_model_checkpoint_path', type=str,
                         help='If specified, restore this pretrained model'
                              'before beginning any training.')
     parser.add_argument('--num_epochs', type=int, default=10,
                         help='The number of epochs to run training (default 10).')
     parser.add_argument('--tfrecords_eval_folder', type=str, default=None,
+                        help='During training evaluate model after each epoch (default None).')
+    parser.add_argument('--noise', type=float, default=None,
                         help='During training evaluate model after each epoch (default None).')
 
     return parser
