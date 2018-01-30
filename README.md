@@ -76,7 +76,7 @@ You need to create a csv file that contains the full path of the raw data (e.g. 
 
 > CSV File example - data_file.csv
 ```
-file@str;label@str
+file;label
 /path/to/data/file1.wav;/path/to/labels/file1.csv
 /path/to/data/file2.wav;/path/to/labels/file2.csv
 ```
@@ -85,7 +85,7 @@ The label file should contain a column with the timestep and the later columns w
 
 > Label File example - file1.csv
 ``` 
-time@float;label1@float;label2@float;
+time;label1;label2
 0.00;0.24;0.14
 0.04;0.20;0.18
 ...
@@ -99,7 +99,7 @@ To create the tfrecords you need to specify the flag to be `--option=generate`. 
 (end2you)$ python main.py --tfrecords_folder=/where/to/save/tfrecords  \
                           --input_type=audio
                             generate  \
-                          --data_file=test.csv \
+                          --data_file=data_file.csv \
 ```
 
 By default the `tfrecords` will be generated in a folder called `tf_records` which 
