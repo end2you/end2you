@@ -33,6 +33,8 @@ parser.add_argument('--num_classes', type=int, default=3,
                     help='If the task is classification the number of classes to consider.')
 parser.add_argument('--hidden_units', type=int, default=128,
                     help='The number of hidden units in the RNN model.')
+parser.add_argument('--num_rnn_layers', type=int, default=2,
+                    help='The number of hidden units in the RNN model.')
 parser.add_argument('--seq_length', type=int, default=150,
                     help='The sequence length to introduce to the RNN.'
                          'if 0 seq_length will be introduced' 
@@ -95,7 +97,8 @@ class End2You:
             video = VideoModel(is_training=True).create_model(frames)
             output_model = self._reshape_to_rnn(video)
         
-        rnn = RNNModel(self.kwargs['hidden_units']).create_model(output_model)
+        rnn = RNNModel(hidden_units=self.kwargs['hidden_units'], 
+                       num_layers=self.kwargs['num_rnn_layers']).create_model(output_model)
         
         if self.kwargs['seq_length'] == 0:
             rnn = rnn[:, -1, :]
@@ -181,7 +184,7 @@ class End2You:
         eval_params['train_dir'] = self.kwargs['train_dir']
         eval_params['log_dir'] = self.kwargs['log_dir']
         eval_params['seq_length'] = self.kwargs['seq_length']
-        eval_params['metric'] = self.kwargs['metric'] #[x for x  in self.metric.split(',')]
+        eval_params['metric'] = self.kwargs['metric'] 
         eval_params['eval_interval_secs'] = self.kwargs['eval_interval_secs']
         
         return eval_params
@@ -197,7 +200,7 @@ class End2You:
     def _get_test_params(self):
         self.kwargs['batch_size'] = 1
         test_params = {}
-        file_reader = FileReader(self.kwargs['data_file'], delimiter=';')
+        file_reader = FileReader(self.kwargs['data_file'], delimiter=self.kwargs['delimiter'])
         test_params['input_type'] = self.kwargs['input_type']
         test_params['reader'] = file_reader
         test_params['model_path'] = self.kwargs['model_path']

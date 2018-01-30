@@ -71,7 +71,7 @@ class Generator(metaclass=ABCMeta):
         
         time = np.vstack([0.0, end_time])
         label = np.reshape(np.repeat(self._get_label_type(label, label_type), 2), (-1, 1))
-
+        
         return ['time', 'labels'], ['float', label_type], np.reshape(np.hstack( [time, label]) , (-1, 2))
     
     def _get_input_type(self, input_type):

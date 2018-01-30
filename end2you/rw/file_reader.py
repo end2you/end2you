@@ -26,7 +26,7 @@ class FileReader:
     @classmethod
     def read_delimiter_file(cls,
                             file, 
-                            exclude_cols:list = [],
+                            exclude_cols:list = [1],
                             delimiter='\t'):
         
         print('\n Start reading file [{}]\n'.format(file))
@@ -35,14 +35,14 @@ class FileReader:
             
             ncols = np.arange(len(reader.fieldnames))
             include_cols = np.delete(ncols, exclude_cols)
-            reader.fieldnames = [reader.fieldnames[x] for x in include_cols]
+            reader_keys = [reader.fieldnames[x] for x in include_cols]
             
             data = []
             for row in reader:
-                d = [row[x] for x in reader.fieldnames]
+                d = [row[x] for x in reader_keys]
                 data.append(d)
         
-        keys = list(reader.fieldnames)
+        keys = list(reader_keys)
         attributes_name = copy.deepcopy(keys)
         file_idx = attributes_name.index('file')
         

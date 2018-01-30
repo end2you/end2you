@@ -92,6 +92,8 @@ class TrainEval(Train):
 
         eval_summary_writer.add_summary(eval_sum, global_step=epoch)
         
+        print('\n End of evaluation. Result: UAR {}'.format(eval_sum))
+        
         return total_eval
     
     def start_training(self):

@@ -27,15 +27,17 @@ class RNNModel(Model):
             batch_size, seq_length, num_features = inputs.get_shape().as_list()
             
             if 'gru' in self.cell_type:
-                rnn_cell = tf.contrib.rnn.GRUCell(self.hidden_units)
+                def _get_cell():
+                    return tf.contrib.rnn.GRUCell(self.hidden_units)
             else:
-                rnn_cell = tf.contrib.rnn.LSTMCell(self.hidden_units,
-                                                  use_peepholes=True,
-                                                  cell_clip=100,
-                                                  state_is_tuple=True)
+                def _get_cell():
+                    return tf.contrib.rnn.LSTMCell(self.hidden_units,
+                                                   use_peepholes=True,
+                                                   cell_clip=100,
+                                                   state_is_tuple=True)
         
-            stacked_cells = tf.contrib.rnn.MultiRNNCell([rnn_cell], #  * self.num_layers 
-                                                       state_is_tuple=True)
+            stacked_cells = tf.contrib.rnn.MultiRNNCell(
+                [_get_cell() for _ in range(self.num_layers)], state_is_tuple=True)
             
             outputs, _ = tf.nn.dynamic_rnn(stacked_cells, inputs, dtype=tf.float32)
             
