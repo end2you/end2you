@@ -18,7 +18,11 @@ slim = tf.contrib.slim
 class TrainEval(Train):
     
     def __init__(self, *args, **kwargs):
+        self.tfrecords_eval_folder = kwargs['tfrecords_eval_folder']
+        kwargs.pop('tfrecords_eval_folder')
+        
         super().__init__(*args, **kwargs)
+        
         self.save_top_k = 5 #kwargs['save_top_k']
         self.save_dir = Path(self.train_dir) / 'top_saved_models'
         
@@ -34,8 +38,6 @@ class TrainEval(Train):
             self.best_perfs = {str(x):float('-inf') for x in np.arange(self.save_top_k)}
             os.system('mkdir -p {}'.format(self.save_dir))
         
-        self.tfrecords_eval_folder = kwargs['tfrecords_eval_folder']
-    
     def _restore_variables(self, sess, saver):
         model_path = tf.train.latest_checkpoint(self.train_dir)
         if model_path != None:

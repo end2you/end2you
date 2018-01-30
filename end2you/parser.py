@@ -25,15 +25,16 @@ def add_train_args(parser):
     parser.add_argument('--initial_learning_rate', type=float, default=0.0001,
                         help='Initial learning rate.')
     parser.add_argument('--loss', type=str, default='ccc',
-                        help='Which loss is going to be used: ccc, mse, or ce.',
+                        help='Which loss is going to be used: ccc(Concordance Correlation Coefficient), \
+                              mse (Mean Squared Error), or ce (Softmax Cross Entropy). (default ccc)',
                         choices=['ccc', 'mse', 'ce'])
     parser.add_argument('--pretrained_model_checkpoint_path', type=str,
                         help='If specified, restore this pretrained model'
                              'before beginning any training.')
     parser.add_argument('--num_epochs', type=int, default=10,
                         help='The number of epochs to run training (default 10).')
-    parser.add_argument('--eval_folder', type=str, default=None,
-                        help='During training evaluate model after each epoch (True).')
+    parser.add_argument('--tfrecords_eval_folder', type=str, default=None,
+                        help='During training evaluate model after each epoch (default None).')
 
     return parser
 
@@ -48,7 +49,7 @@ def add_test_args(parser):
                         help='Includes the path of files to test.')
     parser.add_argument('--model_path', type=str,
                         help='The full path of the model to test.')
-    parser.add_argument('--prediction_file', type=str,
+    parser.add_argument('--prediction_file', type=str, default='predictions.csv',
                         help='The full path of the model to test.')
     
     return parser

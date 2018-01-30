@@ -20,13 +20,15 @@ class TestRaw:
                  predictions:Model,
                  input_type:str = 'audio',
                  task:str = 'classification',
-                 prediction_file:Path = Path(''),
+                 prediction_file:Path = Path('predictions.csv'),
                  frame_shape:list = [1, None, 640]):
         
         self.model_path = str(model_path)
         self.attributes_name, self.attributes_type, self.data_files = reader.read()
         self.task = task
-        self.prediction_file = prediction_file
+        self.prediction_file = str(prediction_file)
+        file_idx = self.attributes_name.index('file')
+        self.data_files = np.array(self.data_files[:, [file_idx]])
         
         if input_type == 'audio':
             self.reader = self.read_single_wav
@@ -64,7 +66,7 @@ class TestRaw:
         audio = np.array(list(subsampled_audio.iter_frames())).mean(1)
         audio = np.pad(audio, (0, chunk_size - audio.shape[0] % chunk_size), 'constant')
         audio = audio.reshape(-1, chunk_size)
-
+        
         return audio.astype(np.float32)
 
     def start_testing(self):
@@ -82,15 +84,17 @@ class TestRaw:
             print('\nLoading model [{}]\n'.format(self.model_path))
             saver.restore(sess, self.model_path)
             tf.train.start_queue_runners(sess=sess)
-
+            
             print('Start getting predictions.\n')
             for data, name in self.get_data(self.data_files, self.reader):
                 print('Getting prediction for file : {}'.format(name))
+                
                 data = np.expand_dims(data, 0)
                 pr = sess.run(predictions, feed_dict={self.frames:data})
+                
                 evaluated_predictions.append(pr)
                 test_files_name.append(name)
-
+                
                 if coord.should_stop():
                     break
             
@@ -105,8 +109,7 @@ class TestRaw:
             
             output = np.hstack((test_files, predictions))
             
-            if str(self.prediction_file) != '.':
-                print('\nWriting predictions to file : {}'.format(self.prediction_file))
-                np.savetxt(str(self.prediction_file), output, delimiter=",", fmt='%s' )
-            
+            print('\nWriting predictions to file : {}'.format(self.prediction_file))
+            np.savetxt(str(self.prediction_file), output, delimiter=",", fmt='%s' )
+
             return output

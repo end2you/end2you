@@ -14,7 +14,7 @@ from functools import partial
 
 
 class Generator(metaclass=ABCMeta):
-        
+    
     def __init__(self, 
                  reader: FileReader,
                  input_type:str,

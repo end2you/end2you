@@ -43,11 +43,11 @@ parser.add_argument('--seq_length', type=int, default=150,
 parser.add_argument('--batch_size', type=int, default=2,
                     help='The batch size to use.')
 
-testing_subparser = subparsers.add_parser('test', help='Test arguments.')
-testing_subparser = add_test_args(testing_subparser)
-
 parser.add_argument('--tfrecords_folder', type=Path,
                     help='The tfrecords directory.')
+
+testing_subparser = subparsers.add_parser('test', help='Test arguments.')
+testing_subparser = add_test_args(testing_subparser)
 
 generation_subparser = subparsers.add_parser('generate', help='Generation arguments.')
 generation_subparser = add_gen_args(generation_subparser)
@@ -135,7 +135,7 @@ class End2You:
             train_params['predictions'] = predictions
             train_params['data_provider'] = self.data_provider
             
-            if train_params['eval_folder']:
+            if train_params['tfrecords_eval_folder']:
                 TrainClass = TrainEval
             else:
                 TrainClass = SlimTraining
@@ -160,7 +160,7 @@ class End2You:
         train_params['pretrained_model_checkpoint_path'] = \
             self.kwargs['pretrained_model_checkpoint_path']
         
-        train_params['eval_folder'] = self.kwargs['eval_folder']
+        train_params['tfrecords_eval_folder'] = self.kwargs['tfrecords_eval_folder']
         
         return train_params
     
@@ -194,6 +194,7 @@ class End2You:
         return generator_params
     
     def _get_test_params(self):
+        self.kwargs['batch_size'] = 1
         test_params = {}
         file_reader = FileReader(self.kwargs['data_file'], delimiter=';')
         test_params['input_type'] = self.kwargs['input_type']
