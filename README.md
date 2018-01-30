@@ -27,11 +27,10 @@ Below are listed the required modules to run the code.
 ### Contents
 
 1. [Installation](#installation)<br>
-2. [Scripts Description](#scripts-description)<br>
-3. [Generating Data](#generating-data)<br>
-4. [Training](#training)<br>
-5. [Evaluation](#evaluation)<br>
-6. [Tutorial](#tutorial)<br>
+2. [Generating Data](#generating-data)<br>
+3. [Training](#training)<br>
+4. [Evaluation](#evaluation)<br>
+5. [Tutorial](#tutorial)<br>
 
 ## Installation
 We highly recommended to use [conda](http://conda.pydata.org/miniconda.html) as your Python distribution.
