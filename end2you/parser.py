@@ -4,13 +4,9 @@ import argparse
 def add_eval_args(parser):
     parser.add_argument('--log_dir', type=str, default='ckpt/log',
                         help='Directory where to write event logs (for evaluation).')
-    parser.add_argument('--num_examples', type=int,
-                        help='The number of examples in the set that is evaluated;'
-                             'if None program will find this value.')
-    parser.add_argument('--num_outputs', type=int,
-                        help='The number of outputs to be predicted by the model.')
-    parser.add_argument('--metric', type=str, default='ccc',
-                        help='Which loss is going to be used: ccc, mse or uar.',
+    parser.add_argument('--metric', type=str, default='uar',
+                        help='Which metric to use for evaluation: ccc (Concordance Correlation Coefficient), '
+                             'mse (Mean Squared Error), or uar (Unweighted Average Recall).'
                         choices=['ccc', 'mse', 'uar'])
     parser.add_argument('--eval_interval_secs', type=int, default=300,
                         help='How often to run the evaluation (in sec).')
