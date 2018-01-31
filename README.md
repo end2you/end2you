@@ -7,7 +7,7 @@ We introduce End2You the Imperial toolkit for multimodal profiling. This reposit
 
 We use a ResNet with 50 layers to extract features from the visual information, while from the speech a 2-layer Convolutional Neural Network (CNN) is used. For the multimodal cases, we introduce a fully connected layer to map the features extracted from the different modalities to the same space. Afterwards, we have a 2-layer recurrent neural network and more particularly we utilise a Gated Recurrent Unit (GRU) to take into account the contextual information in the data.
 
-Pre-trained models are also provided for the visual, speech and multimodal cases. The pre-trained models were trained using the AVEC 2016 database (RECOLA).
+<!--Pre-trained models are also provided for the visual, speech and multimodal cases. The pre-trained models were trained using the AVEC 2016 database (RECOLA).-->
 
 ### Citing
 
