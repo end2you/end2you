@@ -70,7 +70,7 @@ To run End2You, certain number of flags needs to be set. These are the following
 | --batch_size | The batch size to use. | int | 2 |
 | --tfrecords_folder | The directory of the tfrecords files. | string | - |
 | --delimiter | The delimiter to use to read the files. | string | \t |
-| <b>generate<br>train<br>evaluate<br>test</b> | What functionality to perform. | string | \t |
+| <b>generate<br>train<br>evaluate<br>test</b> | What functionality to perform. | string | - |
 
 ## Generating Data
 
@@ -106,47 +106,32 @@ To create the tfrecords you need to specify the flag to be `generate`. An exampl
 ```
 
 By default the `tfrecords` will be generated in a folder called `tf_records` which 
-contains the converted files of the `data_file`. To generate unimodal or multimodal input the `--input_type` need to be defined one of the following: `audio`, `video` or `audiovisual`.
+contains the converted files of the `data_file`. To generate unimodal or multimodal input the `--input_type` need to be defined one of the following: `audio`, `video` or `audiovisual`. This operation takes one additional flag.
+
+| Flag | Description | Values | Default |
+| :---: | :---: | :---: | :---: |
+| --data_file | The path to the data file. | string | - |
 
 ## Training
 
-To start training the model the `option` parameter of the main script needs to be set to `train`. The script also saves periodically checkpoints of the model.
+To start training the model the `train` flag needs to be set. The script also saves periodically checkpoints of the model.
 For training the following list of arguments can be defined.
 
-```
-  --tfrecords_folder TFRECORDS_FOLDER
-                        The tfrecords directory.
-                        (default 'path/to/tfrecords')
-  --initial_learning_rate INITIAL_LEARNING_RATE
-                        Initial learning rate. 
-                        (default 0.0001)
-  --batch_size BATCH_SIZE
-                        The batch size to use. 
-                        (default 2)
-  --seq_length SEQ_LENGTH     
-                        The sequence length to unfold the recurrent model. 
-                        (default 150)                    
-  --hidden_units HIDDEN_UNITS
-                        The number of hidden units in the recurrent model. 
-                        (default 128)
-  --train_dir TRAIN_DIR
-                        Directory where to write event logs and checkpoint. 
-                        (default 'ckpt/train')
-  --pretrained_model_checkpoint_path PRETRAINED_MODEL_CHECKPOINT_PATH
-                        If specified, restore this pretrained model before
-                        beginning any training. 
-                        (default None)
-  --num_epochs NUM_EPOCHS
-                        Number of epochs to train model. 
-                        (default 1)
-  --loss LOSS
-                        Loss to train model.
-                        (default 'CCC')
-  --input_type INPUT_TYPE         
-                        Which model is going to be used: audio, video, audiovisual or all. 
-                        (default 'video')
+| Flag | Description | Values | Default |
+| :---: | :---: | :---: | :---: |
+| --train_dir | Directory where to write checkpoints and event logs. | string | ckpt/train |
+| --initial_learning_rate | Initial learning rate. | float | 0.0001 |
+| --loss | Which loss is going to be used. | ccc (Concordance Correlation Coefficient) <br>
+                             'mse (Mean Squared Error) <br> sce (Softmax Cross Entropy) <br>
+                             'cewl (Cross Entropy With Logits) <br> | 'ccc' |
+| --pretrained_model_checkpoint_path | If specified, restore this pretrained model before beginning any training. | string | - |
+| --num_epochs | The number of epochs to run training. | int | 50 |
+| --seq_length | The sequence length to introduce to the RNN.<br> If set to 0 indicates the whole raw file has a single label | int | 150 |
+| --batch_size | The batch size to use. | int | 2 |
+| --tfrecords_folder | The directory of the tfrecords files. | string | - |
+| --tfrecords_eval_folder | If specified, after each epoch evaluation of the model is performed during training. | string | - |
+| --noise | Only for --input_type=audio. The random gaussian noise to introduce to the signal. | float | - |
 
-```
 
 > Example
 ```console
