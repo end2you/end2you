@@ -62,11 +62,11 @@ To run End2You, certain number of flags needs to be set. These are the following
 
 | Flag | Description | Values | Default |
 | :---: | :---: | :---: | :---: |
+| --tfrecords_folder | The directory of the tfrecords files. | string | - |
 | --input_type | Which model to consider. | audio, video, or both | - |
 | --task | The task of the experiment. | classification<br />regression | classification |
 | --num_classes | Only when task is classification. | int | 3 |
 | --batch_size | The batch size to use. | int | 2 |
-| --tfrecords_folder | The directory of the tfrecords files. | string | - |
 | --delimiter | The delimiter to use to read the files. | string | \t |
 | --hidden_units | The number of hidden units in the RNN. | int | 128 |
 | --num_rnn_layers | The number of layers in the RNN model. | int | 2 |
