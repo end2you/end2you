@@ -121,9 +121,7 @@ For training the following list of arguments can be defined.
 | :---: | :---: | :---: | :---: |
 | --train_dir | Directory where to write checkpoints and event logs. | string | ckpt/train |
 | --initial_learning_rate | Initial learning rate. | float | 0.0001 |
-| --loss | Which loss is going to be used. | ccc (Concordance Correlation Coefficient) <br>
-                             'mse (Mean Squared Error) <br> sce (Softmax Cross Entropy) <br>
-                             'cewl (Cross Entropy With Logits) <br> | 'ccc' |
+| --loss | Which loss is going to be used. | 'ccc' (Concordance Correlation Coefficient) <br>'mse' (Mean Squared Error) <br> 'sce' (Softmax Cross Entropy) <br> 'cewl' (Cross Entropy With Logits) <br> | 'ccc' |
 | --pretrained_model_checkpoint_path | If specified, restore this pretrained model before beginning any training. | string | - |
 | --num_epochs | The number of epochs to run training. | int | 50 |
 | --seq_length | The sequence length to introduce to the RNN.<br> If set to 0 indicates the whole raw file has a single label | int | 150 |
