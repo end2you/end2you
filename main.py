@@ -28,7 +28,7 @@ parser.add_argument('--input_type', type=str,
                     help='Which model is going to be used: audio, video, or both.',
                     choices=['audio', 'video', 'both'])
 parser.add_argument('--task', type=str, default='classification',
-                    help='The number of epochs to run training (default 10).')
+                    help='The task to run. (default classification).')
 parser.add_argument('--num_classes', type=int, default=3,
                     help='If the task is classification the number of classes to consider.')
 parser.add_argument('--hidden_units', type=int, default=128,
