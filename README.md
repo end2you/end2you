@@ -139,8 +139,6 @@ For training the following list of arguments can be defined.
                           --train_dir=ckpt/train \
 ```
 
-The most important flag is the `--tfrecords_folder` which specifies the directory where the tfrecords are saved. If a flag is not specified during execution, it will be initialised with the default value.
-
 ## Evaluation
 
 To start the evaluation of the model the parameter to be defined is `evaluate`.
