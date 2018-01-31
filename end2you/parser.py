@@ -24,20 +24,22 @@ def add_train_args(parser):
                         help='Directory where to write checkpoints and event logs.')
     parser.add_argument('--initial_learning_rate', type=float, default=0.0001,
                         help='Initial learning rate.')
-    parser.add_argument('--loss', type=str, default='ccc',
+    parser.add_argument('--loss', type=str, default='cewl',
                         help='Which loss is going to be used: ccc (Concordance Correlation Coefficient), '
                              'mse (Mean Squared Error), sce (Softmax Cross Entropy), or '
-                             'cewl (Cross Entropy With Logits). (default ccc)',
+                             'cewl (Cross Entropy With Logits). (default cewl)',
                         choices=['ccc', 'mse', 'sce', 'cewl'])
     parser.add_argument('--pretrained_model_checkpoint_path', type=str,
                         help='If specified, restore this pretrained model'
                              'before beginning any training.')
-    parser.add_argument('--num_epochs', type=int, default=10,
-                        help='The number of epochs to run training (default 10).')
+    parser.add_argument('--num_epochs', type=int, default=50,
+                        help='The number of epochs to run training (default 50).')
     parser.add_argument('--tfrecords_eval_folder', type=str, default=None,
-                        help='During training evaluate model after each epoch (default None).')
+                        help='If specified, after each epoch evaluation of the model is'
+                             'performed during training. (default None).')
     parser.add_argument('--noise', type=float, default=None,
-                        help='During training evaluate model after each epoch (default None).')
+                        help='Only for --input_type=audio. The random gaussian noise to introduce '
+                              'to the signal. (default None).')
 
     return parser
 
