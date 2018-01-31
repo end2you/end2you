@@ -55,6 +55,12 @@ For example, for 64-bit Linux, the installation of GPU enabled, Python 3.5 Tenso
 (end2you)$ git clone git@github.com:end2you/end2you.git
 ```
 
+## Setting the right flags
+
+| Flag | Description | Type | Default |
+| :---: | :---: | :---: | :---: |
+| input_type | Which model is going to consider: audio, video, or both. | string | - |
+
 ## Generating Data
 
 First, we need to convert the raw input data (audio, visual) in a format more suitable for
