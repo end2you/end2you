@@ -30,7 +30,8 @@ Below are listed the required modules to run the code.
 2. [Generating Data](#generating-data)<br>
 3. [Training](#training)<br>
 4. [Evaluation](#evaluation)<br>
-5. [Tutorial](#tutorial)<br>
+5. [Testing](#testing)<br>
+6. [Tutorial](#tutorial)<br>
 
 ## Installation
 We highly recommended to use [conda](http://conda.pydata.org/miniconda.html) as your Python distribution.
@@ -156,7 +157,7 @@ The following list of arguments can be used for evaluation.
 | :---: | :---: | :---: | :---: |
 | --train_dir | Directory where to write checkpoints and event logs. | string | ckpt/train |
 | --log_dir | Directory where to write event logs. | float | 0.0001 |
-| --metric | Which metric to use for evaluation. | 'ccc' (Concordance Correlation Coefficient) <br>'mse' (Mean Squared Error) <br> uar (Unweighted Average Recall) | 'uar' |
+| --metric | Which metric to use for evaluation. One of: <br> Concordance Correlation Coefficient (ccc) <br> Mean Squared Error (mse) <br> Unweighted Average Recall (uar) | ccc, mse, uar | 'uar' |
 | --eval_interval_secs | How often to run the evaluation (in sec). | int | 300 |
 
 
@@ -176,6 +177,39 @@ The following list of arguments can be used for evaluation.
 ```
 
 This makes it easy to explore the graph, data, loss evolution and performance on the validation set.
+
+## Testing
+
+***Currenntly only for raw audio files can be used. It will be extended for visual and audiovisual data.***
+
+This process finds the predictions of a model on raw data files and saves them to disk.
+To begin with, a file with the path to these files needs to be created, with the header to contain the text `file`. An example is shown below.
+
+> CSV File example - test_file.csv
+```
+file
+/path/to/data/file1.wav
+/path/to/data/file2.wav
+```
+
+Then the following flags needs to be defined.
+
+| Flag | Description | Values | Default |
+| :---: | :---: | :---: | :---: |
+| --data_file | The path of the test file. | string | - |
+| --model_path | The model to test. | string | - |
+| --prediction_file | The file to write predictions (in csv format) | string | predicitons.csv |
+
+>  Get predictions - Example
+```
+python main.py --input_type=audio \ 
+               --seq_length=0 \
+               --task=classification \
+               --num_classes=3 \
+               test 
+               --data_file=test_file.csv 
+               --model_path=/path/to/model.ckpt-XXXX
+```
 
 ## Tutorial
 
