@@ -40,15 +40,15 @@ def add_train_args(parser):
     return parser
 
 def add_gen_args(parser):
-    parser.add_argument('--data_file', type=str,
+    parser.add_argument('--data_file', type=str, required=True,
                         help='The files to convert to tfrecords.')
     
     return parser
 
 def add_test_args(parser):
-    parser.add_argument('--data_file', type=str,
+    parser.add_argument('--data_file', type=str, required=True,
                         help='Includes the path of files to test.')
-    parser.add_argument('--model_path', type=str,
+    parser.add_argument('--model_path', type=str, required=True,
                         help='The full path of the model to test.')
     parser.add_argument('--prediction_file', type=str, default='predictions.csv',
                         help='The file to write predictions (in csv format).')
