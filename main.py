@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser(description='End2You flags.')
 
 subparsers = parser.add_subparsers(help='Should be one of [generate, train, evaluate, test].', dest='which')
 
-parser.add_argument('--input_type', type=str,
+parser.add_argument('--input_type', type=str, required=True,
                     help='Which model is going to be used: audio, video, or both.',
                     choices=['audio', 'video', 'both'])
 parser.add_argument('--task', type=str, default='classification',
@@ -41,7 +41,7 @@ parser.add_argument('--seq_length', type=int, default=150,
                          'by the audio model. (default 150)')
 parser.add_argument('--batch_size', type=int, default=2,
                     help='The batch size to use. (default 2)')
-parser.add_argument('--tfrecords_folder', type=Path,
+parser.add_argument('--tfrecords_folder', type=Path, required=True,
                     help='The directory of the tfrecords files.')
 parser.add_argument('--delimiter', type=str, default='\t',
                     help='The delimiter to use to read the files. (default \t)')
