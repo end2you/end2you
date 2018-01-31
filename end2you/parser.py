@@ -51,6 +51,6 @@ def add_test_args(parser):
     parser.add_argument('--model_path', type=str,
                         help='The full path of the model to test.')
     parser.add_argument('--prediction_file', type=str, default='predictions.csv',
-                        help='The full path of the model to test.')
+                        help='The file to write predictions (in csv format).')
     
     return parser
