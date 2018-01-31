@@ -70,7 +70,7 @@ To run End2You, certain number of flags needs to be set. These are the following
 | --batch_size | The batch size to use. | int | 2 |
 | --tfrecords_folder | The directory of the tfrecords files. | string | - |
 | --delimiter | The delimiter to use to read the files. | string | \t |
-| generate<br \>train<br \>evaluate<br \>test | What functionality to perform. | string | \t |
+| generate<br>train<br>evaluate<br>test | What functionality to perform. | string | \t |
 
 ## Generating Data
 
