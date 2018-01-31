@@ -126,7 +126,7 @@ Both processes save logs and models. The training flags that can be defined are 
 | :---: | :---: | :---: | :---: |
 | --train_dir | Directory where to write checkpoints and event logs. | string | ckpt/train |
 | --initial_learning_rate | Initial learning rate. | float | 0.0001 |
-| --loss | Which loss is going to be used. | 'ccc' (Concordance Correlation Coefficient) <br>'mse' (Mean Squared Error) <br> 'sce' (Softmax Cross Entropy) <br> 'cewl' (Cross Entropy With Logits) <br> | 'ccc' |
+| --loss | Which loss is going to be used: Concordance Correlation Coefficient ('ccc') <br> Mean Squared Error ('mse') <br>  Softmax Cross Entropy ('sce') <br> Cross Entropy With Logits ('cewl') <br> | ccc, mse, sce, cewl | 'ccc' |
 | --pretrained_model_checkpoint_path | If specified, restore this pretrained model before beginning any training. | string | - |
 | --num_epochs | The number of epochs to run training. | int | 50 |
 | --seq_length | The sequence length to introduce to the RNN.<br> If set to 0 indicates the whole raw file has a single label | int | 150 |
