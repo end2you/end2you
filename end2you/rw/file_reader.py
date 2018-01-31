@@ -2,6 +2,7 @@ import csv
 import numpy as np
 import copy
 import os
+import arff
 
 from pathlib import Path
 
