@@ -2,6 +2,7 @@ import argparse
 import numpy as np
 import tensorflow as tf
 import math
+import sys
 
 from end2you.models.audio_model import AudioModel
 from end2you.models.video_model import VideoModel
@@ -23,8 +24,9 @@ slim = tf.contrib.slim
 parser = argparse.ArgumentParser(description='End2You flags.')
 
 subparsers = parser.add_subparsers(help='Should be one of [generate, train, evaluate, test].', dest='which')
+subparsers.required = True
 
-parser.add_argument('--input_type', type=str,
+parser.add_argument('--input_type', type=str, required=True,
                     help='Which model is going to be used: audio, video, or both.',
                     choices=['audio', 'video', 'both'])
 parser.add_argument('--task', type=str, default='classification',
@@ -41,7 +43,7 @@ parser.add_argument('--seq_length', type=int, default=150,
                          'by the audio model. (default 150)')
 parser.add_argument('--batch_size', type=int, default=2,
                     help='The batch size to use. (default 2)')
-parser.add_argument('--tfrecords_folder', type=Path,
+parser.add_argument('--tfrecords_folder', type=Path, required=True,
                     help='The directory of the tfrecords files.')
 parser.add_argument('--delimiter', type=str, default='\t',
                     help='The delimiter to use to read the files. (default \t)')
@@ -220,12 +222,15 @@ class End2You:
         
         return data_provider
 
-def main(_):
-    
-    flags = vars(parser.parse_args())
+def main(flags=None):
+
+    if flags == None:
+        flags=sys.argv[1:]
+    flags = vars(parser.parse_args(flags))
+
     with tf.Graph().as_default():
         e2u = End2You(**flags)
         e2u.start_process()
 
 if __name__ == '__main__':
-    tf.app.run()
+    main()
