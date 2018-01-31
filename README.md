@@ -59,7 +59,8 @@ For example, for 64-bit Linux, the installation of GPU enabled, Python 3.5 Tenso
 
 | Flag | Description | Type | Default |
 | :---: | :---: | :---: | :---: |
-| input_type | Which model is going to consider: audio, video, or both. | string | - |
+| --input_type | Which model to consider: audio, video, or both. | string | - |
+| --task | The task of the experiment. | classification\nregression | classification |
 
 ## Generating Data
 
