@@ -23,6 +23,7 @@ Below are listed the required modules to run the code.
   * TensorFlow >= 1.4 (see ``Installation`` section for installing this module)
   * MoviePy >= 0.2.2.11
   * liac-arff >= 2.0
+  * sklearn >= 0.19
 
 ### Contents
 
