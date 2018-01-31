@@ -32,19 +32,19 @@ parser.add_argument('--task', type=str, default='classification',
 parser.add_argument('--num_classes', type=int, default=3,
                     help='If the task is classification the number of classes to consider.')
 parser.add_argument('--hidden_units', type=int, default=128,
-                    help='The number of hidden units in the RNN model.')
+                    help='The number of hidden units in the RNN model. (default 128)')
 parser.add_argument('--num_rnn_layers', type=int, default=2,
-                    help='The number of hidden units in the RNN model.')
+                    help='The number of layers in the RNN model. (default 2)')
 parser.add_argument('--seq_length', type=int, default=150,
                     help='The sequence length to introduce to the RNN.'
                          'if 0 seq_length will be introduced' 
-                         'by the audio model.')
+                         'by the audio model. (default 150)')
 parser.add_argument('--batch_size', type=int, default=2,
-                    help='The batch size to use.')
+                    help='The batch size to use. (default 2)')
 parser.add_argument('--tfrecords_folder', type=Path,
-                    help='The tfrecords directory.')
+                    help='The directory of the tfrecords files.')
 parser.add_argument('--delimiter', type=str, default='\t',
-                    help='The delimiter to read the files. (default \t)')
+                    help='The delimiter to use to read the files. (default \t)')
 
 testing_subparser = subparsers.add_parser('test', help='Test arguments.')
 testing_subparser = add_test_args(testing_subparser)
