@@ -66,11 +66,11 @@ To run End2You, certain number of flags needs to be set. These are the following
 | --num_classes | Only when task is classification. | int | 3 |
 | --hidden_units | The number of hidden units in the RNN. | int | 128 |
 | --num_rnn_layers | The number of layers in the RNN model. | int | 2 |
-| --seq_length | The sequence length to introduce to the RNN.<br \> If set to 0 indicates the whole raw file has a single label | int | 150 |
+| --seq_length | The sequence length to introduce to the RNN.<br> If set to 0 indicates the whole raw file has a single label | int | 150 |
 | --batch_size | The batch size to use. | int | 2 |
 | --tfrecords_folder | The directory of the tfrecords files. | string | - |
 | --delimiter | The delimiter to use to read the files. | string | \t |
-| generate<br>train<br>evaluate<br>test | What functionality to perform. | string | \t |
+| <b>generate<br>train<br>evaluate<br>test</b> | What functionality to perform. | string | \t |
 
 ## Generating Data
 
