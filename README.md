@@ -21,8 +21,8 @@ Below are listed the required modules to run the code.
   * Python >= 3.4
   * NumPy >= 1.11.1
   * TensorFlow >= 1.4 (see ``Installation`` section for installing this module)
-  * Menpo >= 0.6.2
   * MoviePy >= 0.2.2.11
+  * liac-arff >= 2.0
 
 ### Contents
 
@@ -54,45 +54,31 @@ For example, for 64-bit Linux, the installation of GPU enabled, Python 3.5 Tenso
 ```console
 (end2you)$ git clone git@github.com:end2you/end2you.git
 ```
-<!---
-## Scripts Description
-
-This repository contains the following scripts:
-  * `model.py`: contains the audio and video networks.
-  * `e2u_train.py`: is in charge of training.
-  * `e2u_eval.py`: is in charge of evaluating.
-  * `data_provider.py`: provides the data.
-  * `data_generator.py`: creates the tfrecords.
-  * `metrics.py` : contains the concordance metric used for evaluation.
-  * `losses.py` : contains the loss function of the training.
-  * `inception_processing.py` : provides functions for visual regularization. 
- -->
 
 ## Generating Data
 
-First, we need to convert the original input data (audio, visual) in a format more suitable for
+First, we need to convert the raw input data (audio, visual) in a format more suitable for
 TensorFlow using TF Records. Both unimodal and multimodal inputs can be converted. 
-You need to create a csv file that contains the full path of the raw data (e.g. .wav) and the label file for the data, with `;` as delimiter. The file needs the have a header "file@str;label@X", where X can be either "int" (or "float") depending on whether there is a single label for the whole file or "str" if the file is split into segments with different labels. 
+To do so the user needs to provide a csv file that contains the full path of the raw data (e.g. .wav) and the label file for the data (default delimiter `\t`). The file needs to have the header "file;label". The `label` can be a file or a scalar. The scalar indicates that the whole file has a single label, while the file indicates that the raw data are split into segments with different labels.
 
 > CSV File example - data_file.csv
 ```
-file;label
-/path/to/data/file1.wav;/path/to/labels/file1.csv
-/path/to/data/file2.wav;/path/to/labels/file2.csv
+file,label
+/path/to/data/file1.wav,/path/to/labels/file1.csv
+/path/to/data/file2.wav,/path/to/labels/file2.csv
 ```
 
-The label file should contain a column with the timestep and the later columns with the label(s) of the timestep. Delimiter of the file should be `;`.
+The label file should contain a column with the timestep and the later columns with the label(s) of the timestep. The delimiter of this file should be the same as the delimiter of the `data_file.csv`. 
 
 > Label File example - file1.csv
 ``` 
-time;label1;label2
-0.00;0.24;0.14
-0.04;0.20;0.18
+time,label1,label2
+0.00,0.24,0.14
+0.04,0.20,0.18
 ...
-
 ```
 
-To create the tfrecords you need to specify the flag to be `--option=generate`. An example is depicted below.
+To create the tfrecords you need to specify the flag to be `generate`. An example is depicted below.
 
 > Creating tf records
 ```console
