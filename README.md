@@ -114,8 +114,13 @@ contains the converted files of the `data_file`. To generate unimodal or multimo
 
 ## Training
 
-To start training the model the `train` flag needs to be set. The script also saves periodically checkpoints of the model.
-For training the following list of arguments can be defined.
+To start training the model the `train` flag needs to be set. Two different training processes can start: 
+1. Train with a standard number of epochs. 
+2. Train and evaluate model. The evaluation of the model is performed after each epoch, where also the model is saved in the `--train_dir` folder. Furthermore, the 5 best models are saved in the `--train_dir/top_k_models` along with the performance in the evaluation set in a file named `models_performance.txt`.
+
+To start the second training process the `--tfrecords_eval_folder` flag needs to defined.
+
+Both processes save logs and models. The training flags that can be defined are shown below.
 
 | Flag | Description | Values | Default |
 | :---: | :---: | :---: | :---: |
@@ -130,7 +135,6 @@ For training the following list of arguments can be defined.
 | --tfrecords_eval_folder | If specified, after each epoch evaluation of the model is performed during training. | string | - |
 | --noise | Only for --input_type=audio. The random gaussian noise to introduce to the signal. | float | - |
 
-
 > Example
 ```console
 (end2you)$ python main.py --tfrecords_folder=path/to/tfrecords \
@@ -141,44 +145,20 @@ For training the following list of arguments can be defined.
 
 ## Evaluation
 
-To start the evaluation of the model the parameter to be defined is `evaluate`.
+***This evaluation should start when the `--tfrecords_eval_folder` flag is not set in the training.***
+
+To start the evaluation of the model the parameter to be defined is `evaluate`. This script automatically evaluates a new model that is saved in the folder specified by the `--train_dir`, and it runs until the user manually stops it. The evaluation of the model is performed on the tfrecords files specified by the flag `--tfrecords_folder`. In addition, it is good practice to set the `--log_dir` flag to be saved in the same folder as in the train one. For example, if `--train_dir=ckpt/train` (set when executing the training script), then you can set `--log_dir=ckpt/log` (set when the evaluation script is executed).
+If a flag is not specified in the execution command it will be initialised with the default value.
+
 The following list of arguments can be used for evaluation.
 
-```
-  --batch_size BATCH_SIZE
-                        The batch size to use.
-                        (default 1)
-  --num_gru_modules     
-                        How many GRU modules to use.
-                        (default 2)
-  --dataset_dir DATASET_DIR
-                        The tfrecords directory.
-                        (default 'path/to/tfrecords')
-  --train_dir TRAIN_DIR
-                        The directory that contains the saved model.
-                        (default 'ckpt/train')
-  --log_dir LOG_DIR
-                        The directory to save log files.
-                        (default 'ckpt/log')
-  --num_examples NUM_EXAMPLES
-                        Number of examples in the PORTION set.
-                        (default 1)
-  --model MODEL         
-                        Which model is going to be used: audio,video, or both
-                        (default 1)
-  --hidden_units HIDDEN_UNITS
-                        The number of hidden units in the recurrent model.
-                        (default 128)
-  --portion PORTION     
-                        Dataset portion to use for training (train or devel).
-                        (default 'valid')
-  --seq_length SEQ_LENGTH     
-                        The sequence length to unfold the recurrent model.
-                        (default 150)
-  --eval_interval_secs EVAL_INTERVAL_SECS     
-                        How often to run the evaluation (in sec).
-                        (default 300)
-```
+| Flag | Description | Values | Default |
+| :---: | :---: | :---: | :---: |
+| --train_dir | Directory where to write checkpoints and event logs. | string | ckpt/train |
+| --log_dir | Directory where to write event logs. | float | 0.0001 |
+| --metric | Which metric to use for evaluation. | 'ccc' (Concordance Correlation Coefficient) <br>'mse' (Mean Squared Error) <br> uar (Unweighted Average Recall) | 'uar' |
+| --eval_interval_secs | How often to run the evaluation (in sec). | int | 300 |
+
 
 > Example
 ```console
@@ -189,16 +169,13 @@ The following list of arguments can be used for evaluation.
                           --log_dir=ckpt/log                          
 ```
 
-The most important flags are the `--tfrecords_folder`, which specifies the directory where the tfrecords are saved, and the `--train_dir` which specifies where the training script saves checkpoints (this flag should be equal to the `--train_dir` flag specified when the training process started).  In addition, it is good practice to set the `--log_dir` flag to be saved in the same folder as in the train one. For example, if `--train_dir=ckpt/train` (set when executing the training script), then you can set `--log_dir=ckpt/log` (set when the evaluation script is executed).
-If a flag is not specified in the execution command it will be initialised with the default value.
-
 **TensorBoard**: You can simultaneously run the training and validation. The results can be observed through TensorBoard. Simply run:
 
 ```
 (end2you)$ tensorboard --logdir=ckpt
 ```
 
-This makes it easy to explore the graph, data, loss evolution and accuracy on the validation set. Once you have a models which performs well on the evaluation set you can stop the training process.
+This makes it easy to explore the graph, data, loss evolution and performance on the validation set.
 
 ## Tutorial
 
