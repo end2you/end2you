@@ -6,7 +6,7 @@ def add_eval_args(parser):
                         help='Directory where to write event logs (for evaluation).')
     parser.add_argument('--metric', type=str, default='uar',
                         help='Which metric to use for evaluation: ccc (Concordance Correlation Coefficient), '
-                             'mse (Mean Squared Error), or uar (Unweighted Average Recall).'
+                             'mse (Mean Squared Error), or uar (Unweighted Average Recall).',
                         choices=['ccc', 'mse', 'uar'])
     parser.add_argument('--eval_interval_secs', type=int, default=300,
                         help='How often to run the evaluation (in sec).')
