@@ -1,4 +1,7 @@
-from distutils.core import setup, find_packages
+try:
+  from distutils.core import setup, find_packages
+except:
+  from setuptools import setup, find_packages
 
 config = {
     'author': 'Panagiotis Tzirakis',
@@ -10,7 +13,12 @@ config = {
     'packages': find_packages(),
     'install_requires': ['numpy', 'moviepy', 'liac-arff'],
     'license': 'Modified BSD',
-    scripts=['bin/e2u'],
+    'entry_points':{
+        "console_scripts": [
+            "e2u = end2you.main:main"
+        ]
+    },
+
     'classifiers': [
         'Topic :: Scientific/Engineering',
         'License :: OSI Approved :: BSD License',
