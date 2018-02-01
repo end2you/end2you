@@ -42,7 +42,7 @@ class Generator(metaclass=ABCMeta):
         
         self.dict_files = dict()
 
-        for row in self.data[1:10, [file_idx, label_idx]]:
+        for row in self.data[:, [file_idx, label_idx]]:
             data_file = row[0]
             label_file = row[1]
             if label_type != 'str':
