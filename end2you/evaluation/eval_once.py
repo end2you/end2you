@@ -47,7 +47,7 @@ class EvalOnce(Eval):
             preds, labs = sess.run([get_pred, labels])
             evaluated_predictions.append(preds)
             evaluated_labels.append(labs)
-            
+        
         predictions = np.reshape(evaluated_predictions, (-1, num_outputs))
         labels = np.reshape(evaluated_labels, (-1, num_outputs))
         

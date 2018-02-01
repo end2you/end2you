@@ -83,16 +83,16 @@ class TrainEval(Train):
             rm_files = latest_file.parent / model_file
             os.system('rm {}'.format(str(rm_files) + '*'))
     
-    def _eval_and_sum(self, sess, eval_pred, eval_labs, eval_batches, eval_summary_writer, epoch):
+    def _eval_and_sum(self, sess, eval_pred, eval_labs, eval_batches, eval_summary_writer, step):
         total_eval = EvalOnce.eval_once(
             sess, eval_pred, eval_labs, eval_batches, self.num_outputs, self.metric)
                 
         tf_eval_sum = tf.summary.scalar('eval/total eval', tf.convert_to_tensor(total_eval))
-        eval_sum = sess.run(tf_eval_sum)
+        eval_sum = sess.run([tf_eval_sum])
 
-        eval_summary_writer.add_summary(eval_sum, global_step=epoch)
+        eval_summary_writer.add_summary(eval_sum, global_step=step)
         
-        print('\n End of evaluation. Result: UAR {}'.format(eval_sum))
+        print('\n End of evaluation. Result: UAR {}'.format(total_eval))
         
         return total_eval
     

@@ -22,10 +22,19 @@ class UnimodalProvider(DataProvider):
             }
         )
         
-        frame = tf.decode_raw(features['frame'], tf.float32) 
-        label = tf.decode_raw(features['label'], self._get_tf_type())
+        frame = features['frame']
+        label = features['label']
         subject_id = features['subject_id']
         
+        if self.is_training:
+            frame, label, subject_id = tf.train.shuffle_batch(
+                    [frame, label, subject_id], 1, 1000, 100, 4)
+            frame = frame[0]
+            label = label[0]
+            
+        frame = tf.decode_raw(frame, tf.float32) 
+        label = tf.decode_raw(label, self._get_tf_type())
+
         if self.seq_length != 0:
             frame = tf.reshape(frame, self.frame_shape)
         
@@ -42,9 +51,9 @@ class UnimodalProvider(DataProvider):
                 self._get_single_example_batch(self.batch_size, frame, label, subject_id)
             
             if 'classification' in self.task:
-                labels = tf.squeeze(labels, axis=1)
                 labels = slim.one_hot_encoding(labels, self.num_classes)
-            
+                labels = tf.reshape(labels, (self.batch_size, self.num_classes))
+
             frames = tf.reshape(frames, (self.batch_size, -1, 640)) 
             
             return frames, labels, subjects_id
