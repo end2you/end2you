@@ -42,6 +42,8 @@ def add_train_args(parser):
 def add_gen_args(parser):
     parser.add_argument('--data_file', type=str, required=True,
                         help='The files to convert to tfrecords.')
+    parser.add_argument('--upsample', type=bool, default=False,
+                        help='Whether to upsample data (can be used when number of labels is one).')
     
     return parser
 

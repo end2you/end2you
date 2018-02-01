@@ -2,7 +2,9 @@ import csv
 import os
 import numpy as np
 import tensorflow as tf
+import copy
 import sys
+import re
 sys.path.append("..")
 
 from pathlib import Path
@@ -18,6 +20,7 @@ class Generator(metaclass=ABCMeta):
     def __init__(self, 
                  reader: FileReader,
                  input_type:str,
+                 upsample:bool = True,
                  delimiter:str = ';'):
         
         self.input_type = self._get_input_type(input_type.lower())
@@ -39,7 +42,7 @@ class Generator(metaclass=ABCMeta):
         
         self.dict_files = dict()
 
-        for row in self.data[:, [file_idx, label_idx]]:
+        for row in self.data[1:10, [file_idx, label_idx]]:
             data_file = row[0]
             label_file = row[1]
             if label_type != 'str':
@@ -57,6 +60,32 @@ class Generator(metaclass=ABCMeta):
                                           'labels': np.reshape(self._get_label_type(data[:, labels_idx], types[1]), 
                                                               (-1, num_labels))
                                          }
+        
+        if upsample and num_labels == 1:
+            self.dict_files = self.upsample(self.dict_files)
+    
+    def upsample(self, sample_data):
+        classes = [int(x['labels'][0]) for x in sample_data.values()]
+        class_ids = set(classes)
+        num_samples_per_class = {class_name: sum(x == class_name for x in classes) for class_name in class_ids}
+        
+        max_samples = np.max(list(num_samples_per_class.values()))
+        augmented_data = copy.copy(sample_data)
+        for class_name, n_samples in num_samples_per_class.items():
+            n_samples_to_add = max_samples - n_samples
+            
+            while n_samples_to_add > 0:
+                for key, value in sample_data.items():
+                    label = int(value['labels'][0])
+                    sample = key
+                    if n_samples_to_add <= 0:
+                        break
+                    
+                    if label == class_name:
+                        augmented_data[sample + '_' + str(n_samples_to_add)] = label
+                        n_samples_to_add -= 1
+    
+        return augmented_data
     
     def _get_label_type(self, label, _type):
         if 'float' in _type: 
@@ -96,12 +125,17 @@ class Generator(metaclass=ABCMeta):
         
         for data_file in self.dict_files.keys():
             print('Writing file : {}'.format(data_file))
-                
+            
             basename = os.path.basename(os.path.splitext(data_file)[0])
+            if re.search("_[0-9]+$", data_file): 
+                add = os.path.splitext(data_file)[1].split('_')[1]
+                basename += '_' + add
+                data_file = re.sub(r'_[0-9]+$', '', data_file)
+            
             writer = tf.python_io.TFRecordWriter(
                 (Path(tfrecords_folder) / '{}.tfrecords'.format(basename)
                 ).as_posix())
-            
+    
             self.serialize_sample(writer, data_file, basename)
     
     @abstractmethod

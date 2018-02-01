@@ -196,6 +196,7 @@ class End2You:
         file_reader = FileReader(self.kwargs['data_file'], delimiter=self.kwargs['delimiter'])
         generator_params['input_type'] = self.kwargs['input_type']
         generator_params['reader'] = file_reader
+        generator_params['upsample'] = self.kwargs['upsample']
         
         return generator_params
     
