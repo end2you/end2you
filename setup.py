@@ -11,7 +11,7 @@ config = {
     'version': '0.2.1',
     'url': 'https://github.com/end2you/end2you',
     'packages': find_packages(),
-    'install_requires': ['numpy', 'moviepy', 'liac-arff'],
+    'install_requires': ['numpy', 'moviepy', 'liac-arff', 'sklearn'],
     'license': 'Modified BSD',
     'entry_points':{
         "console_scripts": [
