@@ -16,7 +16,7 @@ def add_eval_args(parser):
     return parser
 
 def add_train_args(parser):
-    parser.add_argument('--train_dir', type=str, default='ckpt/train',
+    parser.add_argument('--train_dir', type=str, default='ckpt/',
                         help='Directory where to write checkpoints and event logs.')
     parser.add_argument('--initial_learning_rate', type=float, default=0.0001,
                         help='Initial learning rate.')
