@@ -23,7 +23,8 @@ class TrainEval(Train):
         
         super().__init__(*args, **kwargs)
         
-        self.train_dir = Path(self.train_dir) / 'ckpt'
+        self.log_dir = Path(self.train_dir) / 'log'
+        self.train_dir = str(Path(self.train_dir) / 'train')
         
         self.save_top_k = 5 #kwargs['save_top_k']
         self.save_dir = Path(self.train_dir) / 'top_saved_models'
@@ -40,7 +41,6 @@ class TrainEval(Train):
             self.best_perfs = {str(x):float('-inf') for x in np.arange(self.save_top_k)}
             os.system('mkdir -p {}'.format(self.save_dir))
         
-        self.log_dir = self.train_dir / 'log'
         
     def _restore_variables(self, sess, saver):
         model_path = tf.train.latest_checkpoint(self.train_dir)
