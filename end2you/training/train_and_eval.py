@@ -90,8 +90,6 @@ class TrainEval(Train):
         tf_eval_sum = tf.summary.scalar('eval/total eval', tf.convert_to_tensor(total_eval))
         eval_sum = sess.run(tf_eval_sum)
 
-        print(total_eval, '-',step)
-        print(eval_sum)
         eval_summary_writer.add_summary(eval_sum, global_step=step)
         
         print('\n End of evaluation. Result: UAR {}'.format(total_eval))
