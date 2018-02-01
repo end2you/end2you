@@ -27,7 +27,7 @@ class FileReader:
     @classmethod
     def read_delimiter_file(cls,
                             file, 
-                            exclude_cols:list = [1],
+                            exclude_cols:list = [],
                             delimiter='\t'):
         
         print('\n Start reading file [{}]\n'.format(file))
