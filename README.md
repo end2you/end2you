@@ -23,6 +23,7 @@ Below are listed the required modules to run the code.
   * TensorFlow >= 1.4 (see ``Installation`` section for installing this module)
   * MoviePy >= 0.2.2.11
   * liac-arff >= 2.0
+  * sklearn >= 0.19
 
 ### Contents
 
@@ -116,7 +117,7 @@ contains the converted files of the `data_file`. To generate unimodal or multimo
 ## Training
 
 To start training the model the `train` flag needs to be set. Two different training processes can start: 
-1. Train with a standard number of epochs. 
+1. Train only. This process will run for a user-defined number of epochs and performs only training. To evaluate a validation set you need to run separatelly the `Evaluation` process.
 2. Train and evaluate model. The evaluation of the model is performed after each epoch, where also the model is saved in the `--train_dir` folder. Furthermore, the 5 best models are saved in the `--train_dir/top_k_models` along with the performance in the evaluation set in a file named `models_performance.txt`.
 
 To start the second training process the `--tfrecords_eval_folder` flag needs to defined.
