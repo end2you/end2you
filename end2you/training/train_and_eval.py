@@ -38,6 +38,8 @@ class TrainEval(Train):
             self.best_perfs = {str(x):float('-inf') for x in np.arange(self.save_top_k)}
             os.system('mkdir -p {}'.format(self.save_dir))
         
+        self.log_dir = kwargs['log_dir']
+        
     def _restore_variables(self, sess, saver):
         model_path = tf.train.latest_checkpoint(self.train_dir)
         if model_path != None:
