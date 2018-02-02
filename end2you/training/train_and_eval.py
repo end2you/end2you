@@ -41,7 +41,6 @@ class TrainEval(Train):
             self.best_perfs = {str(x):float('-inf') for x in np.arange(self.save_top_k)}
             os.system('mkdir -p {}'.format(self.save_dir))
         
-        
     def _restore_variables(self, sess, saver):
         model_path = tf.train.latest_checkpoint(self.train_dir)
         if model_path != None:
@@ -49,6 +48,7 @@ class TrainEval(Train):
             step = int(model_path.split('-')[1])
             print('Variables restored from [{}]'.format(model_path))
             return step
+        
         return 0
     
     def _save_best_model(self, best_perfs, model_perf):
@@ -195,3 +195,5 @@ class TrainEval(Train):
             coord.join(threads)
             summary_writer.close()
             eval_summary_writer.close()
+            
+            print('\n **END OF TRAINING** \n')
