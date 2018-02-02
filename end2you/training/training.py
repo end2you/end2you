@@ -34,7 +34,7 @@ class Train:
         self.loss = Losses.__dict__[loss.lower()]
         self.pretrained_model_checkpoint_path = \
                             str(pretrained_model_checkpoint_path)
-    
+        
     def _flatten(self, output, i):
         if self.data_provider.seq_length != 0:
             return tf.reshape(output[:, :, i], (-1,))

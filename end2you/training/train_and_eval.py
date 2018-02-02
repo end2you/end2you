@@ -87,14 +87,15 @@ class TrainEval(Train):
             rm_files = latest_file.parent / model_file
             os.system('rm {}'.format(str(rm_files) + '*'))
     
-    def _eval_and_sum(self, sess, eval_pred, eval_labs, eval_batches, eval_summary_writer, step):
+    def _eval_and_sum(self, sess, eval_pred, eval_labs, 
+        eval_batches, eval_summary_writer, step, eval_sum, tf_eval_sum):
+        
         total_eval = EvalOnce.eval_once(
             sess, eval_pred, eval_labs, eval_batches, self.num_outputs, self.metric)
-                
-        tf_eval_sum = tf.summary.scalar('eval/total eval', tf.convert_to_tensor(total_eval))
-        eval_sum = sess.run(tf_eval_sum)
-
-        eval_summary_writer.add_summary(eval_sum, global_step=step)
+        
+        w_eval_sum = sess.run(tf_eval_sum, feed_dict={eval_sum:total_eval})
+        
+        eval_summary_writer.add_summary(w_eval_sum, global_step=step)
         
         print('\n End of evaluation. Result: UAR {}'.format(total_eval))
         
@@ -136,6 +137,9 @@ class TrainEval(Train):
             eval_summary_writer = tf.summary.FileWriter(str(self.log_dir), graph=g)
             merged_summaries = tf.summary.merge_all()
             
+            eval_sum = tf.placeholder(tf.float32, ())
+            tf_eval_sum = tf.summary.scalar('eval/total eval', tf.convert_to_tensor(eval_sum))
+            
             get_eval_once = EvalOnce.get_eval_tensors(sess, self.predictions, self.data_provider, 
                                                   self.tfrecords_eval_folder)
             eval_pred, eval_labs, eval_batches = get_eval_once
@@ -170,7 +174,8 @@ class TrainEval(Train):
                 
                 # Start evaluation in the end of each epoch
                 total_eval = self._eval_and_sum(
-                    sess, eval_pred, eval_labs, eval_batches, eval_summary_writer, step)
+                    sess, eval_pred, eval_labs, eval_batches, eval_summary_writer, 
+                    step, eval_sum, tf_eval_sum)
                 
                 # Save model
                 saver.save(sess, str(save_model_path), global_step=step)
