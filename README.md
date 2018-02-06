@@ -13,7 +13,8 @@ We use a ResNet with 50 layers to extract features from the visual information, 
 
 If you are using this toolkit please cite:
 
-`Tzirakis, P., Trigeorgis, G., Nicolaou, M. A., Schuller, B., & Zafeiriou, S. (2017). End-to-End Multimodal Emotion Recognition using Deep Neural Networks. arXiv preprint arXiv:1704.08619.`
+`Tzirakis, P.,Zafeiriou, S., & Schuller, B. (2017). End2You -- The Imperial Toolkit for Multimodal Profiling by End-to-End Learning. arXiv preprint arXiv:1802.01115.`
+
 
 ### Dependencies
 Below are listed the required modules to run the code.
