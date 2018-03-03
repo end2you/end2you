@@ -1,8 +1,10 @@
 import tensorflow as tf
 import numpy as np
+import copy
 
 from . import metrics
 from .evaluation import Eval
+from pathlib import Path
 
 class EvalOnce(Eval):
     
@@ -19,23 +21,29 @@ class EvalOnce(Eval):
     
     @staticmethod
     def get_eval_tensors(sess, predictions, data_provider, evalute_path):
-        
-        data_provider.tfrecords_folder = evalute_path 
-        num_examples = data_provider.get_num_examples(evalute_path)
-        frames, labels, sids = data_provider.get_batch()
-        
+
+        dp_eval = copy.copy(data_provider)
+        paths = [str(x) for x in Path(evalute_path).glob('*.tfrecords')]
+        filename_queue = tf.train.string_input_producer(paths, shuffle=False)
+#        dp_eval.tfrecords_folder = evalute_path
+        dp_eval.num_examples = dp_eval.get_num_examples(evalute_path)
+
+        _, dp_eval.serialized_example = tf.TFRecordReader().read(filename_queue)
+
+        frames, labels, sids = dp_eval.get_batch()
+
         get_pred = predictions(frames)
         
         seq_length = 1 if data_provider.seq_length == 0 \
             else data_provider.seq_length
         
         num_batches = int(np.ceil(
-            data_provider.num_examples / (data_provider.batch_size * seq_length)))
+            dp_eval.num_examples / (dp_eval.batch_size * seq_length)))
 
-        return get_pred, labels, num_batches
+        return get_pred, labels, sids, num_batches
     
     @staticmethod
-    def eval_once(sess, get_pred, labels, num_batches, num_outputs, metric_name):
+    def eval_once(sess, get_pred, labels, sids, num_batches, num_outputs, metric_name):
         
         metric = EvalOnce.get_metric(metric_name)
         
@@ -44,7 +52,7 @@ class EvalOnce(Eval):
         evaluated_labels = []
         for batch in range(num_batches):
             print('Example {}/{}'.format(batch+1, num_batches))
-            preds, labs = sess.run([get_pred, labels])
+            preds, labs, s = sess.run([get_pred, labels, sids])
             evaluated_predictions.append(preds)
             evaluated_labels.append(labs)
         
