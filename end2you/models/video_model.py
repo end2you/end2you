@@ -14,7 +14,7 @@ class VideoModel(Model):
         self.is_training = is_training
         
     def create_model(self, frames):
-        with tf.variable_scope("video_model"):
+        with tf.variable_scope("video_model", reuse=tf.AUTO_REUSE):
             with slim.arg_scope(slim.nets.resnet_utils.resnet_arg_scope()):
                 video_input = tf.cast(frames, tf.float32)
 
