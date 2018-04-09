@@ -16,7 +16,7 @@ class VideoModel(Model):
     def create_model(self, frames):
         with tf.variable_scope("video_model"):
             with slim.arg_scope(slim.nets.resnet_utils.resnet_arg_scope()):
-                video_input = tf.cast(video_input, tf.float32)
+                video_input = tf.cast(frames, tf.float32)
 
                 features, _ = resnet_v1.resnet_v1_50(video_input, None, self.is_training)
                 features = tf.reshape(features, (batch_size, seq_length, int(features.get_shape()[3])))
