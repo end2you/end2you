@@ -4,6 +4,8 @@ from tensorflow.contrib.slim.nets import resnet_v1
 from .model import Model
 
 
+slim = tf.contrib.slim
+
 class VideoModel(Model):
     
     def __init__(self,
