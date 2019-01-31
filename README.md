@@ -28,7 +28,7 @@ Below are listed the required modules to run the code.
 ### Pretrain Model
 
 We provide a pretrained model of the ResNet-50 here:
-https://www.doc.ic.ac.uk/~pt511/pretrain_model/model.ckpt-33604.zip
+https://www.doc.ic.ac.uk/~pt511/pretrain_model/
 
 The model was trained on a non-publicly dataset from the [RealEyes](https://www.realeyesit.com/) Company.
 Some statistics of the dataset can be found below:
