@@ -19,6 +19,7 @@ class TrainEval(Train):
     
     def __init__(self, *args, **kwargs):
         self.tfrecords_eval_folder = kwargs['tfrecords_eval_folder']
+        self.pretrained_model_path = kwargs['pretrained_model_checkpoint_path']
         kwargs.pop('tfrecords_eval_folder')
         
         super().__init__(*args, **kwargs)
@@ -26,7 +27,7 @@ class TrainEval(Train):
         self.log_dir = Path(self.train_dir) / 'log'
         self.train_dir = str(Path(self.train_dir) / 'train')
         
-        self.save_top_k = 5 #kwargs['save_top_k']
+        self.save_top_k = 5
         self.save_dir = Path(self.train_dir) / 'top_saved_models'
         
         self.metric = kwargs['loss'].lower()
@@ -40,16 +41,24 @@ class TrainEval(Train):
         else:
             self.best_perfs = {str(x):float('-inf') for x in np.arange(self.save_top_k)}
             os.system('mkdir -p {}'.format(self.save_dir))
-        
-    def _restore_variables(self, sess, saver):
+    
+    def _restore_variables(self, sess):
         model_path = tf.train.latest_checkpoint(self.train_dir)
-        if model_path != None:
+        if self.pretrained_model_path and not model_path:
+            scope_vars = 'video_model' if 'video' in self.input_type else 'audio_model'
+            visual_vars = slim.get_variables(scope=scope_vars)
+            saver = tf.train.Saver(visual_vars)
+            saver.restore(sess, self.pretrained_model_path)
+            print('Variables restored from [{}]'.format(self.pretrained_model_path))
+        
+        if model_path:
+            saver = tf.train.Saver()
             saver.restore(sess, model_path)
             step = int(model_path.split('-')[1])
             print('Variables restored from [{}]'.format(model_path))
             return step
         
-        return 0
+        return saver, 0
     
     def _save_best_model(self, best_perfs, model_perf):
         model_path = tf.train.latest_checkpoint(self.train_dir)
@@ -144,8 +153,7 @@ class TrainEval(Train):
                                                   self.tfrecords_eval_folder)
             eval_pred, eval_labs, eval_sids, eval_batches = get_eval_once
             
-            saver = tf.train.Saver()
-            step = self._restore_variables(sess, saver)
+            saver, step = self._restore_variables(sess)
             
             sess.run(tf.global_variables_initializer())
             sess.run(tf.local_variables_initializer())

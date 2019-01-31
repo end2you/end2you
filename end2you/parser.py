@@ -25,7 +25,7 @@ def add_train_args(parser):
                              'mse (Mean Squared Error), sce (Softmax Cross Entropy), or '
                              'cewl (Cross Entropy With Logits). (default cewl)',
                         choices=['ccc', 'mse', 'sce', 'cewl'])
-    parser.add_argument('--pretrained_model_checkpoint_path', type=str,
+    parser.add_argument('--pretrained_model_checkpoint_path', type=str, default='',
                         help='If specified, restore this pretrained model'
                              'before beginning any training.')
     parser.add_argument('--num_epochs', type=int, default=50,
@@ -36,7 +36,7 @@ def add_train_args(parser):
     parser.add_argument('--noise', type=float, default=None,
                         help='Only for --input_type=audio. The random gaussian noise to introduce '
                               'to the signal. (default None).')
-
+    
     return parser
 
 def add_gen_args(parser):

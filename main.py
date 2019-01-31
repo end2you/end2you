@@ -164,6 +164,8 @@ class End2You:
         train_params['pretrained_model_checkpoint_path'] = \
             self.kwargs['pretrained_model_checkpoint_path']
         
+        train_params ['input_type'] = self.kwargs['input_type']
+        
         train_params['tfrecords_eval_folder'] = self.kwargs['tfrecords_eval_folder']
         
         return train_params

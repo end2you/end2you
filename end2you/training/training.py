@@ -17,6 +17,7 @@ class Train:
     def __init__(self,
                  predictions: tf.Tensor,
                  data_provider:DataProvider,
+                 input_type:str = 'video',
                  train_dir: Path = 'ckpt/train',
                  log_dir: Path = 'ckpt/log',
                  initial_learning_rate:float = 0.0001,
@@ -34,6 +35,7 @@ class Train:
         self.loss = Losses.__dict__[loss.lower()]
         self.pretrained_model_checkpoint_path = \
                             str(pretrained_model_checkpoint_path)
+        self.input_type = kwargs['input_type']
         
     def _flatten(self, output, i):
         if self.data_provider.seq_length != 0:
