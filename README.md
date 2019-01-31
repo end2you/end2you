@@ -15,7 +15,6 @@ If you are using this toolkit please cite:
 
 `Tzirakis, P.,Zafeiriou, S., & Schuller, B. (2017). End2You -- The Imperial Toolkit for Multimodal Profiling by End-to-End Learning. arXiv preprint arXiv:1802.01115.`
 
-
 ### Dependencies
 Below are listed the required modules to run the code.
 
@@ -25,6 +24,25 @@ Below are listed the required modules to run the code.
   * MoviePy >= 0.2.2.11
   * liac-arff >= 2.0
   * sklearn >= 0.19
+
+### Pretrain Model
+
+We provide a pretrained model of the ResNet-50 here:
+https://www.doc.ic.ac.uk/~pt511/pretrain_model/model.ckpt-33604.zip
+
+The model was trained on a non-publicly dataset from the [RealEyes](https://www.realeyesit.com/) Company.
+Some statistics of the dataset can be found below:
+
+| Attribute | Value |
+| :---: | :---: |
+| # Videos | 4,973 |
+| # Frames | 1,059,505  |
+--------
+| # Subjects | 2,616 |
+| Age variation | [18-69] |
+--------
+| # Emotions | 8 |
+| # Annotators | 7 |
 
 ### Contents
 
