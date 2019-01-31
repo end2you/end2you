@@ -37,10 +37,10 @@ Some statistics of the dataset can be found below:
 | :---: | :---: |
 | # Videos | 4,973 |
 | # Frames | 1,059,505  |
---------
+| --- | --- |
 | # Subjects | 2,616 |
 | Age variation | [18-69] |
---------
+| --- | --- |
 | # Emotions | 8 |
 | # Annotators | 7 |
 
