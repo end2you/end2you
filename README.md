@@ -1,13 +1,13 @@
 # End2You - The Imperial Toolkit for Multimodal Profiling
 
-We introduce End2You the Imperial toolkit for multimodal profiling. This repository provides easy-to-use scripts to train and evaluate either uni-modal or multi-modal models in an end-to-end manner for either regression or classification output. The input to the model can be one of the following:
-- Visual Information : Face of a subject
-- Speech Information : Speech waveform
-- Audio-Visual Information : Face and speech of a subject
+We introduce End2You the Imperial toolkit for multimodal profiling. This repository provides easy-to-use scripts to train and evaluate either unimodal or multimodal models in an end-to-end manner for either regression or classification output. The input to the model can be one of the following:
+- Visual Information : Face of a subject.
+- Speech Information : Speech waveform.
+- Audio-Visual Information : Face and speech of a subject.
 
-We use a ResNet with 50 layers to extract features from the visual information, while from the speech a 2-layer Convolutional Neural Network (CNN) is used. For the multimodal cases, we introduce a fully connected layer to map the features extracted from the different modalities to the same space. Afterwards, we have a 2-layer recurrent neural network and more particularly we utilise a Gated Recurrent Unit (GRU) to take into account the contextual information in the data.
+The main blocks of the unimodal and multimodal models are (i) a Convolutional Neural Network (CNN) that extracts spatial features from the raw data, and (ii) a recurrent neural network (RNN) that captures the temporal information in the data. 
 
-<!--Pre-trained models are also provided for the visual, speech and multimodal cases. The pre-trained models were trained using the AVEC 2016 database (RECOLA).-->
+<!--Pre-trained models will be provided soon for the emotion recognition task.-->
 
 ### Citing
 
