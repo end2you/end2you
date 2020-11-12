@@ -14,12 +14,3 @@ class VisualProvider(BaseProvider):
     
     def process_input(self, data, labels):
         return data[:,0,...]/255., labels
-    
-#     def __getitem__(self, idx):
-#         if is_tensor(idx):
-#             idx = idx.tolist()
-        
-#         data, labels, num_samples_masked = self.data_files[idx].read_hdf5_file(
-#             self.seq_length)
-        
-#         return data, labels, num_samples_masked
