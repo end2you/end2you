@@ -74,7 +74,7 @@ To run End2You, certain number of flags needs to be set. These are the following
 | --seq_length | The sequence length to introduce to the RNN.<br> if `None` the whole sequence will be considered.| int | None |
 | --cuda | Whether to use cuda. | bool | False |
 | --root_dir | Path to save models/results. | str | `./e2u_output` |
-| <b>generate<br>train<br>test<br>test</b> | What process to perform. | string | - |
+| <b>generate<br>train<br>test</b> | What process to perform. | string | - |
 
 ## Generating Data
 
@@ -108,7 +108,7 @@ To create the hdf5 file you need to specify the flag to be `generate`. Two flags
 
 An example is depicted below.
 
-> Creating tf records
+> Creating `.hdf5` files
 ```console
 (end2you)$ python main.py --modality=visual \
                           generate \
