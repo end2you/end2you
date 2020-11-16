@@ -1,12 +1,10 @@
 import argparse
 
-from pathlib import Path
-
 
 def add_eval_args(parser):
     parser.add_argument('--valid_num_workers', type=int, default=1,
                         help='Number of workers to use (default `1`).')
-    parser.add_argument('--valid_dataset_path', type=Path, required=True,
+    parser.add_argument('--valid_dataset_path', type=str, required=True,
                         help='The directory of the .hdf5 files.')
     parser.add_argument('--valid_summarywriter_file', type=Path, default='valid_summarywriter',
                         help='Summary writer during training (default `valid_summarywriter`).')
@@ -31,13 +29,13 @@ def add_train_args(parser):
                         help='The number of epochs to run training (default 50).')
     parser.add_argument('--train_num_workers', type=int, default=1,
                         help='Number of workers to use (default `1`).')
-    parser.add_argument('--train_dataset_path', type=Path, required=True,
+    parser.add_argument('--train_dataset_path', type=str, required=True,
                         help='The directory of the .hdf5 files.')
     parser.add_argument('--save_summary_steps', type=int, default=10,
                         help='Every which step to perform evaluation in training (default `10`).')
-    parser.add_argument('--train_summarywriter_file', type=Path, default='train_summarywriter',
+    parser.add_argument('--train_summarywriter_file', type=str, default='train_summarywriter',
                         help='Summary writer during training (default `train_summarywriter`).')
-    parser.add_argument('--ckpt_path', type=Path, default=None,
+    parser.add_argument('--ckpt_path', type=str, default=None,
                         help='Path to checkpoint file.')
     
     return parser
@@ -95,7 +93,7 @@ def add_parsers():
                         help='Number of GPUs to use (default `1`).')
     parser.add_argument('--root_dir', type=str, default='./e2u_output',
                         help='Path to save models/results (default `./e2u_output`).')
-    parser.add_argument('--log_file', type=Path, default='./out_log.log',
+    parser.add_argument('--log_file', type=str, default='./out_log.log',
                         help='Path to save log file (default `./out_log.log`).')
 
     parser.add_argument('--model_name', type=str, default='resnet18',
