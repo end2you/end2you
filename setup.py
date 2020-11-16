@@ -11,7 +11,8 @@ requirements = [
     'scikit-learn >= 0.23.2',
     'h5py >= 2.10.0',
     'facenet-pytorch >= 2.5',
-    'tqdm >= 4.51.0'
+    'tqdm >= 4.51.0',
+    'tensorboard >= 2.2.1'
 ]
 
 config = {
