@@ -1,7 +1,8 @@
 import torch.optim as optim
 
 
-def get_optimizer(optimizer):
+def get_optimizer(optimizer:str):
+    ''' Provides the optimizer.''' 
     return {
         'adagrad': optim.Adagrad,
         'adam': optim.Adam,
