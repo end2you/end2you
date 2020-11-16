@@ -45,24 +45,15 @@ Below are listed the required modules to run the code.
 
 ## Installation
 We highly recommended to use [conda](http://conda.pydata.org/miniconda.html) as your Python distribution.
-Once downloading and installing [conda](http://conda.pydata.org/miniconda.html), this project can be installed by:
+Once downloading and installing [conda](http://conda.pydata.org/miniconda.html), this project can be installed by using the `conda_setup.yml` file as follows:
 
-**Step 1:** Create a new conda environment and activate it:
 ```console
-$ conda create -n end2you python=3.7
-$ source activate end2you
+$ conda env create -f conda_setup.yml
 ```
 
-**Step 2:** Install [Pytorch v.1.7](https://pytorch.org/) following the 
-official [installation command](https://pytorch.org/get-started/locally/). 
-For example, for 64-bit Linux, the installation of GPU enabled, Python 3.7 PyTorch involves:
+You can now activate the environment and use End2You.
 ```console
-(end2you)$ conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
-```
-
-**Step 3:** Clone and install the `end2you` project as:
-```console
-(end2you)$ git clone git@github.com:end2you/end2you.git
+$ conda activate End2You
 ```
 
 ## Setting the right flags
