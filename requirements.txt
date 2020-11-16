@@ -1,0 +1,6 @@
+NumPy >= 1.19.2
+Pytorch >= 1.7 
+MoviePy >= 1.0.3
+sklearn >= 0.23.2
+h5py >= 2.10.0
+facenet-pytorch >= 2.5
