@@ -11,9 +11,17 @@ The main blocks of the unimodal and multimodal models are (i) a Convolutional Ne
 
 ### Citing
 
-If you are using this toolkit please cite:
+If you use End2you or any code from End2you in your research work, you are kindly asked to acknowledge the use of End2You in your publications.
+> `Tzirakis, P.,Zafeiriou, S., & Schuller, B. (2017). End2You -- The Imperial Toolkit for Multimodal Profiling by End-to-End Learning. arXiv preprint arXiv:1802.01115.`
 
-`Tzirakis, P.,Zafeiriou, S., & Schuller, B. (2017). End2You -- The Imperial Toolkit for Multimodal Profiling by End-to-End Learning. arXiv preprint arXiv:1802.01115.`
+```
+@article{tzirakis2018end2you,
+  title={End2You--The Imperial Toolkit for Multimodal Profiling by End-to-End Learning},
+  author={Tzirakis, Panagiotis and Zafeiriou, Stefanos and Schuller, Bjorn W},
+  journal={arXiv preprint arXiv:1802.01115},
+  year={2018}
+}
+```
 
 ### Dependencies
 Below are listed the required modules to run the code.
