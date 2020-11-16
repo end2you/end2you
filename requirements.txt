@@ -1,6 +1,6 @@
-NumPy >= 1.19.2
-Pytorch >= 1.7 
-MoviePy >= 1.0.3
-sklearn >= 0.23.2
+numPy >= 1.19.2
+torch >= 1.7 
+moviePy >= 1.0.3
+scikit-learn >= 0.23.1
 h5py >= 2.10.0
 facenet-pytorch >= 2.5
