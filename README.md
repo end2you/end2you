@@ -18,8 +18,6 @@ If you are using this toolkit please cite:
 ### Dependencies
 Below are listed the required modules to run the code.
 
-pip install facenet-pytorch
-
   * Python >= 3.7
   * NumPy >= 1.19.2
   * Pytorch >= 1.7 (see ``Installation`` section for installing this module)
