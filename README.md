@@ -107,9 +107,7 @@ To create the hdf5 file you need to specify the flag to be `generate`. Two flags
 | --input_file | Path to the input csv file. | string | - |
 | --delimiter | Delimiter used to read input files. | string | , |
 | --exclude_cols | Columns to exclude of the input files. | string | None |
-| --fieldnames | If no header exists in input files, one needs to specify it. <br>
-                 Header names are comma separated. Value of `None` indicates <br>
-                 that a header exists | string | None |
+| --fieldnames | If no header exists in input files, one needs to specify it. <br> Header names are comma separated. Value of `None` indicates <br> that a header exists | string | None |
 
 An example is depicted below.
 
