@@ -7,7 +7,7 @@ from torch import nn
 from pathlib import Path
 
 
-class BaseProcess:
+class BasePhase:
     '''Base class for train/eval models.'''
     
     def __init__(self,
@@ -25,13 +25,14 @@ class BaseProcess:
         self.ckpt_path = Path(ckpt_path) if ckpt_path else None
     
     def load_checkpoint(self):
-        '''Loads model parameters (state_dict) from file_path. If optimizer is provided, loads state_dict of
-        optimizer assuming it is present in checkpoint.
+        '''Loads model parameters (state_dict) from file_path. 
+           If optimizer is provided, loads state_dict of
+           optimizer assuming it is present in checkpoint.
         
         Args:
-            checkpoint: (string) filename which needs to be loaded
-            model: (torch.nn.Module) model for which the parameters are loaded
-            optimizer: (torch.optim) optional: resume optimizer from checkpoint
+            checkpoint (str): Filename which needs to be loaded
+            model (torch.nn.Module): Model for which the parameters are loaded
+            optimizer (torch.optim): Optional: resume optimizer from checkpoint
         '''
         
         logging.info("Restoring model from {}".format(str(self.ckpt_path)))

@@ -16,12 +16,12 @@ from pathlib import Path
 from tqdm import tqdm
 
 from .losses import Losses
-from end2you.base import BaseProcess
+from end2you.base import BasePhase
 from end2you.utils import Params
 from end2you.evaluation import MetricProvider
 
 
-class Trainer(BaseProcess):
+class Trainer(BasePhase):
     """Train class."""
     
     def __init__(self,

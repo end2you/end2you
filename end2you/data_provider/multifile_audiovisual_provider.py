@@ -24,8 +24,8 @@ class MultiFile_AVProvider(Dataset):
     
     def _get_frame_num_samples(self, idx:int = 0):
         ''' Get total number of sequences.'''
-        return [self.audio_provider._get_frame_num_samples(),
-               self.visual_provider._get_frame_num_samples()]
+        return [self.audio_provider._get_frame_num_samples(idx),
+               self.visual_provider._get_frame_num_samples(idx)]
     
     def _get_label_names(self):
         ''' Get label names.'''

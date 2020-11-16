@@ -13,12 +13,11 @@ class AudioGenerator(Generator):
                  labelfile_reader:FileReader, 
                  fps:int = 16000, 
                  *args, **kwargs):
-        
         super().__init__(*args, **kwargs)
         self.fps = fps
         self.labelfile_reader = labelfile_reader
-        
-    def _get_samples(self, data_file, label_file):
+    
+    def _get_samples(self, data_file:str, label_file:str):
         
         file_data, attrs_name = self.labelfile_reader.read_file(label_file)
         file_data = np.array(file_data).astype(np.float32)
@@ -35,22 +34,17 @@ class AudioGenerator(Generator):
             start_time = timestamps[i]
             end_time = timestamps[i + 1]
             
-#             try: 
             data_frame = np.array(list(clip.subclip(start_time, end_time).iter_frames()))
             data_frame = data_frame.mean(1)[:num_samples]
             
             frames.append(data_frame.astype(np.float32))
-#             except Exception as E:
-#                 print(f'Exception during generating file: [{E}]')
-#                 print('Continuing extracting files')
-#                 labels = np.delete(labels, i, 0)
         
         frames = np.array(frames).astype(np.float32)
         labels = np.array(labels).astype(np.float32)
         
         return frames, labels, seq_num, num_samples, attrs_name
     
-    def serialize_samples(self, writer, data_file, label_file):
+    def serialize_samples(self, writer:h5py.File, data_file:str, label_file:str):
         frames, labels, seq_num, num_samples, names = self._get_samples(data_file, label_file)
         
         # store data
@@ -61,6 +55,6 @@ class AudioGenerator(Generator):
         writer.attrs['data_file'] = str(data_file)
         writer.attrs['label_file'] = str(label_file)
         writer.attrs['seq_num'] = seq_num
-        writer.attrs['num_samples'] = num_samples ####### ******* ########
+        writer.attrs['num_samples'] = num_samples
         writer.attrs['label_names'] = names[1:]
         

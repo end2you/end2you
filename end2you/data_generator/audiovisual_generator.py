@@ -18,12 +18,12 @@ class AudioVisualGenerator(Generator):
                  fps:int = 30, 
                  sr:int = 16000,
                  *args, **kwargs):
+        super().__init__(*args, **kwargs)
         
         self.detector = detector
         self.labelfile_reader = labelfile_reader
         self.fps = fps
         self.sr = sr
-        super().__init__(*args, **kwargs)
     
     def _get_samples(self, data_file:str, label_file:str):
         

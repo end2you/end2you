@@ -9,12 +9,14 @@ from end2you.utils import Params
 from torch.utils.tensorboard import SummaryWriter
 from end2you.evaluation import MetricProvider
 from pathlib import Path
+from end2you.base_process import BaseProcess
 
 
-class TrainingProcess:
+class TrainingProcess(BaseProcess):
     
     def __init__(self, 
-                 params:Params):
+                 params:Params,
+                 *args, **kwargs):
         
         loss_cls = Losses(params.train.loss)
         eval_fn = MetricProvider(params.valid.metric)
@@ -53,6 +55,7 @@ class TrainingProcess:
         
         # Initialize logs
         self.set_logger(params.log_file)
+        logging.info('Starting Training Process')
         logging.info('Number of parameters: {}'.format(sum(num_model_params)))
         logging.info(model)
         
@@ -65,28 +68,6 @@ class TrainingProcess:
                                ckpt_path=params.ckpt_path,
                                optimizer=optimizer,
                                params=params)
-    
-    def set_logger(self, log_file:str):
-        '''Set the logger to log info in terminal and file `log_path`.
-                
-        Args:
-            log_path: (string) path to save log file.
-        '''
-        
-        logger = logging.getLogger()
-        logger.setLevel(logging.INFO)
-        
-        if not logger.handlers:
-            # Logging to a file
-            file_handler = logging.FileHandler(log_file)
-            file_handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s: %(message)s'))
-            logger.addHandler(file_handler)
-            
-            # Logging to console
-            stream_handler = logging.StreamHandler()
-            stream_handler.setFormatter(logging.Formatter('%(message)s'))
-            logger.addHandler(stream_handler)
-        logging.info('**** Starting logging ****')
     
     def start(self):
         self.trainer.start_training()

@@ -16,7 +16,7 @@ class FileProvider:
         self.num_seqs = self._get_num_sequences()
         self.seq_length = self.num_seqs if seq_length == None else seq_length
         self.total_num_calls = np.ceil(self.num_seqs / self.seq_length).astype(int)
-        
+    
     def _get_num_samples(self, key:str = 'num_samples'):
         with h5py.File(self.file_path, 'r') as dataset:
             num_samples = dataset.attrs[key]
@@ -46,18 +46,18 @@ class FileProvider:
             return [np.array(dataset[x][start:end]) for x in self.modality]
         else:
             return np.array(dataset[self.modality][start:end])
-            
+    
     def read_hdf5_file(self):
         '''Returns a numpy array of the data.'''
         
         data, labels = [], []
         with h5py.File(self.file_path, 'r') as dataset:
-                
-            start = self.num_calls*self.seq_length #if self.num_calls*self.seq_length < self.num_seqs else 0
+            
+            start = self.num_calls*self.seq_length # if self.num_calls*self.seq_length < self.num_seqs else 0
             end = start + self.seq_length
             
             data = self.__get_data(dataset, start, end)
             labels = np.array(dataset['labels'][start:end])
-            
+        
         self.num_calls += 1
         return data, labels

@@ -96,7 +96,11 @@ class End2You:
         generator_params = Params(dict_params={
             'save_data_folder': self.kwargs['save_data_folder'],
             'modality': self.kwargs['modality'],
-            'input_file': self.kwargs['input_file']
+            'input_file': self.kwargs['input_file'],
+            'exclude_cols': self.kwargs['exclude_cols'],
+            'delimiter': self.kwargs['delimiter'],
+            'fieldnames': self.kwargs['fieldnames'],
+            'log_file': self.kwargs['log_file']
         })
         
         return generator_params

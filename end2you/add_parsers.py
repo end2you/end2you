@@ -9,21 +9,21 @@ def add_eval_args(parser):
     parser.add_argument('--valid_dataset_path', type=Path, required=True,
                         help='The directory of the .hdf5 files.')
     parser.add_argument('--valid_summarywriter_file', type=Path, default='valid_summarywriter',
-                        help='Summary writer during training (default `train_summarywriter`).')
+                        help='Summary writer during training (default `valid_summarywriter`).')
     parser.add_argument('--metric', type=str, default='mse',
                         help='Which metric to use for evaluation: ccc (Concordance Correlation Coefficient), '
-                             'mse (Mean Squared Error), or uar (Unweighted Average Recall).',
+                             'mse (Mean Squared Error), or uar (Unweighted Average Recall) (default `mse`).',
                         choices=['ccc', 'mse', 'uar'])
     return parser
 
-    
+
 def add_train_args(parser):
     parser.add_argument('--learning_rate', type=float, default=0.0001,
                         help='Learning rate (default `0.0001`).')
     parser.add_argument('--loss', type=str, default='mse',
                         help='Which loss is going to be used: ccc (Concordance Correlation Coefficient), '
                              'mse (Mean Squared Error), sce (Softmax Cross Entropy). '
-                             '(default cewl)',
+                             '(default `mse`)',
                         choices=['ccc', 'mse', 'sce'])
     parser.add_argument('--optimizer', type=str, default='adam',
                         help='Optimizer to use during training (default `adam`).')
@@ -48,6 +48,14 @@ def add_gen_args(parser):
                         help='Path to save `*.hdf5` files.')
     parser.add_argument('--input_file', type=str, required=True,
                         help='Path to input file.')
+    parser.add_argument('--delimiter', type=str, default=',',
+                        help='Delimiter used to read input files (default `,`).')
+    parser.add_argument('--exclude_cols', type=str, default=None,
+                        help='Columns to exclude of the input files (default `None`).')
+    parser.add_argument('--fieldnames', type=str, default=None,
+                        help='''If no header exists in input files, one needs to specify it.
+                                Header names are comma separated. Value of `None` indicates 
+                                that a header exists (default `None`).''')
     
     return parser
 
@@ -94,14 +102,14 @@ def add_parsers():
                         help='Which visual model to use. (default `resnet18`).')
     parser.add_argument('--pretrained', type=str, default='false',
                         help='Whether to use pretrain (on ImageNet) visual model. (default `false`).')
-
+    
     generation_subparser = subparsers.add_parser('generate', help='Generation arguments.')
     generation_subparser = add_gen_args(generation_subparser)
-
+    
     training_subparser = subparsers.add_parser('train', help='Training argument options.')
     training_subparser = add_train_args(training_subparser)
     training_subparser = add_eval_args(training_subparser)
-
+    
     test_subparser = subparsers.add_parser('test', help='Testing argument options.')
     test_subparser = add_test_args(test_subparser)
     

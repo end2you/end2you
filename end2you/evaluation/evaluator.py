@@ -6,12 +6,12 @@ import sys
 sys.path.append("..")
 
 from end2you.data_provider import get_dataloader, BaseProvider
-from end2you.base import BaseProcess
+from end2you.base import BasePhase
 from .metric_provider import MetricProvider
 from tqdm import tqdm
 
 
-class Evaluator(BaseProcess):
+class Evaluator(BasePhase):
     '''Evaluation class.'''
     
     def __init__(self,

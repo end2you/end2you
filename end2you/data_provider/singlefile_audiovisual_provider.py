@@ -17,5 +17,5 @@ class SingleFile_AVProvider(BaseProvider):
         super().__init__(*args, **kwargs)
     
     def process_input(self, data, labels):
-        return [data[0], data[1][:,0,...]/255.], labels
+        return [data[0], data[1]/255.], labels
     

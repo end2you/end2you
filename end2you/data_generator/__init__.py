@@ -1,4 +1,4 @@
-from .get_generator import get_generator
+from .generator_provider import get_generator
 from .audio_generator import AudioGenerator
 from .visual_generator import VisualGenerator
 from .audiovisual_generator import AudioVisualGenerator

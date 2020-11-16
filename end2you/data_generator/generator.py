@@ -1,5 +1,6 @@
 import numpy as np
 import h5py
+import logging
 
 from pathlib import Path
 from .file_reader import FileReader
@@ -20,11 +21,11 @@ class Generator:
     
     def write_data_files(self):
         
-        print('\n Start writing data files \n')
+        logging.info('\n Start writing data files \n')
         
         for i, (data_file, label_file) in enumerate(self.files):
             data_file, label_file = Path(data_file), Path(label_file)
-            print('Writing .hdf5 file for : [{}]'.format(str(data_file)))
+            logging.info('Writing .hdf5 file for : [{}]'.format(str(data_file)))
             
             file_name = self.save_data_folder / '{}.hdf5'.format(data_file.name[:-4])
             if file_name.exists():
@@ -34,10 +35,5 @@ class Generator:
                 self.serialize_samples(
                     writer, data_file, label_file)
     
-    def serialize_samples(self, writer, data_file, label_file):
+    def serialize_samples(self, writer:h5py.File, data_file:str, label_file:str):
         raise NotImplementedError('Method not implemented!')
-    
-    def _create_grp(self, writer, name, data):
-        data = writer.create_group(name)
-        data.create_dataset(name, data=data)
-    

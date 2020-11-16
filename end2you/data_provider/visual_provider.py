@@ -14,3 +14,4 @@ class VisualProvider(BaseProvider):
     
     def process_input(self, data, labels):
         return data[:,0,...]/255., labels
+    

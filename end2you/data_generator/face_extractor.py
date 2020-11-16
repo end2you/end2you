@@ -8,17 +8,17 @@ from PIL import Image
 class FaceExtractor:
     
     def __init__(self,
-                 resize:tuple = (96, 96), 
-                 *args, **kwargs):
+                 resize:tuple = (96, 96)):
         
-        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        device = torch.device(
+            'cuda:0' if torch.cuda.is_available() else 'cpu')
         self.detector = MTCNN(keep_all=True, device=device)
         self.resize = resize
     
-    def resize_frames(self, frames):
-        ''' Resizes images.
+    def resize_frames(self, frames:list):
+        ''' Resizes frames.
         Args:
-            frames (list): list of frames
+            frames (list): list of frames.
         '''
         
         resized_frames = [] 
@@ -28,10 +28,12 @@ class FaceExtractor:
         
         return np.array(resized_frames)
     
-    def extract_face(self, frames):
-        ''' Detects and extract face from image
+    def extract_face(self, frames:np.array):
+        ''' Detects and extract the most visible face from a frame.
         Args:
             frames (np.array) (N x H x W x 3): N frames
+        Returns:
+            The cropped face of the subject.
         '''
         
         # detect faces in the image
@@ -56,7 +58,7 @@ class FaceExtractor:
         
         return cropped_frames
     
-    def extract_and_resize_face(self, frames):
+    def extract_and_resize_face(self, frames:list):
         frames = self.extract_face(frames)
         frames = self.resize_frames(frames)
         return frames
