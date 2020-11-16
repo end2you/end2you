@@ -48,8 +48,8 @@ $ source activate end2you
 ```
 
 **Step 2:** Install [Pytorch v.1.7](https://pytorch.org/) following the 
-official [installation instructions](https://www.tensorflow.org/install/install_linux#InstallingAnaconda). 
-For example, for 64-bit Linux, the installation of GPU enabled, Python 3.5 TensorFlow involves:
+official [installation command](https://pytorch.org/get-started/locally/). 
+For example, for 64-bit Linux, the installation of GPU enabled, Python 3.7 PyTorch involves:
 ```console
 (end2you)$ conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
 ```
@@ -105,6 +105,11 @@ To create the hdf5 file you need to specify the flag to be `generate`. Two flags
 | :---: | :---: | :---: | :---: |
 | --save_data_folder | Path to save `*.hdf5` files. | string | - |
 | --input_file | Path to the input csv file. | string | - |
+| --delimiter | Delimiter used to read input files. | string | , |
+| --exclude_cols | Columns to exclude of the input files. | string | None |
+| --fieldnames | If no header exists in input files, one needs to specify it. <br>
+                 Header names are comma separated. Value of `None` indicates <br>
+                 that a header exists | string | None |
 
 An example is depicted below.
 
