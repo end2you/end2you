@@ -66,14 +66,14 @@ class Trainer(BasePhase):
             logging.info("Epoch {}/{}".format(epoch + 1, self.params.train.num_epochs))
             
             # compute number of batches in one epoch (one full pass over the training set)
-            self._epoch_process(self.params.train.save_summary_steps, True)
+            self._epoch_process(is_training=True)
             
             # Free cuda memory
             torch.cuda.empty_cache()
             
             # Evaluate for one epoch on validation set
             with torch.no_grad():
-                val_score = self._epoch_process(self.params.valid.save_summary_steps, False)
+                val_score = self._epoch_process(is_training=False)
             
             is_best = val_score >= best_score
             
@@ -101,26 +101,26 @@ class Trainer(BasePhase):
                 self._write_bestscore(best_score)
                 
                 # Save best val metrics in a json file in the model directory
-                best_json_path = str(self.root_dir / "best_metrics_evaluation.json")
+                best_json_path = str(self.root_dir / "best_valid_scores.json")
                 self._save_dict_to_json({self.metric:val_score}, str(best_json_path))
             
             # Save latest val metrics in a json file in the model directory
-            last_json_path = str(self.root_dir / "last_metrics_evaluation.json")
+            last_json_path = str(self.root_dir / "last_valid_scores.json")
             self._save_dict_to_json({self.metric:val_score}, str(last_json_path))
     
-    def _write_bestscore(self, best_score):
+    def _write_bestscore(self, best_score:str):
         f = open(str(self.root_dir / "best_score.txt"),"w+")
-        f.write("sss: {}".format(best_score))
+        f.write(f"Best score: {best_score}")
         f.close()
     
-    def save_checkpoint(self, state, is_best, checkpoint):
+    def save_checkpoint(self, state:dict, is_best:bool, checkpoint:str):
         """Saves model and training parameters at checkpoint + 'last.pth.tar'. If is_best==True, also saves
         checkpoint + 'best.pth.tar'
         
         Args:
-            state: (dict) contains model's state_dict, may contain other keys such as epoch, optimizer state_dict
-            is_best: (bool) True if it is the best model seen till now
-            checkpoint: (string) folder where parameters are to be saved
+            state (dict): contains model's state_dict, and some other info of the model.
+            is_best (bool): True if it is the best model seen till now.
+            checkpoint (str): Folder to save model.
         """
         checkpoint = Path(checkpoint)
         checkpoint.mkdir(exist_ok=True)
@@ -131,11 +131,11 @@ class Trainer(BasePhase):
         if is_best:
             shutil.copyfile(filepath, str(checkpoint / 'best.pth.tar'))
     
-    def _epoch_process(self, process_params, is_training):
-        """
+    def _epoch_process(self, is_training:bool):
+        '''
         Perform one epoch of training or evaluation.
         Depends on the argument `is_training`.
-        """
+        '''
         params = self.params.train if is_training else self.params.valid
         process = 'train' if is_training else 'valid'
         
