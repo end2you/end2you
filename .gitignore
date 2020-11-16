@@ -1,0 +1,13 @@
+cache
+*~
+__pycache__
+.coverage
+*.pyd
+*.swp
+*.pyc
+*.so
+End2You.egg-info/
+*.ipynb
+.ipynb_checkpoints
+*.log
+
