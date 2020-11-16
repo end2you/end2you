@@ -21,21 +21,6 @@ class Losses:
     def masked_loss(self, predictions, labels, mask):
         
         num_samples = len(mask)
-        
-#         masked_predictions = torch.Tensor([0])
-#         masked_labels = torch.Tensor([0])
-#         for i in range(num_samples):
-#             m = mask[i]
-#             masked_predictions = torch.cat(
-#                 [masked_predictions, predictions[i,:m].view(-1)])
-#             masked_labels = torch.cat(
-#                 [masked_labels, labels[i,:m].view(-1)])
-        
-#         masked_predictions = masked_predictions[1:]
-#         masked_labels = masked_labels[1:]
-        
-#         return self._loss(masked_predictions, masked_labels)
-        
         batch_loss = 0.0
         for i in range(num_samples):
             m = mask[i]
