@@ -1,0 +1,17 @@
+[I 18:58:37.845 NotebookApp] JupyterLab extension loaded from /vol/deform/pt511/anaconda3/lib/python3.8/site-packages/jupyterlab
+[I 18:58:37.846 NotebookApp] JupyterLab application directory is /vol/deform/pt511/anaconda3/share/jupyter/lab
+[I 18:58:37.855 NotebookApp] Serving notebooks from local directory: /vol/deform/pt511/git_end2you/end2you
+[I 18:58:37.855 NotebookApp] The Jupyter Notebook is running at:
+[I 18:58:37.855 NotebookApp] http://localhost:8072/?token=af447117d6ac17795bbf456a00229e7550337ed659bc103a
+[I 18:58:37.855 NotebookApp]  or http://127.0.0.1:8072/?token=af447117d6ac17795bbf456a00229e7550337ed659bc103a
+[I 18:58:37.855 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 18:58:38.085 NotebookApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///homes/pt511/.local/share/jupyter/runtime/nbserver-19175-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8072/?token=af447117d6ac17795bbf456a00229e7550337ed659bc103a
+     or http://127.0.0.1:8072/?token=af447117d6ac17795bbf456a00229e7550337ed659bc103a
+[I 19:13:05.318 NotebookApp] 302 GET / (127.0.0.1) 1.78ms
+[I 19:34:10.355 NotebookApp] Saving file at /end2you/training_process.py
+[I 19:34:57.918 NotebookApp] Saving file at /end2you/add_parsers.py

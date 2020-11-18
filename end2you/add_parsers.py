@@ -6,8 +6,6 @@ def add_eval_args(parser):
                         help='Number of workers to use (default `1`).')
     parser.add_argument('--valid_dataset_path', type=str, required=True,
                         help='The directory of the .hdf5 files.')
-    parser.add_argument('--valid_summarywriter_file', type=Path, default='valid_summarywriter',
-                        help='Summary writer during training (default `valid_summarywriter`).')
     parser.add_argument('--metric', type=str, default='mse',
                         help='Which metric to use for evaluation: ccc (Concordance Correlation Coefficient), '
                              'mse (Mean Squared Error), or uar (Unweighted Average Recall) (default `mse`).',
@@ -33,8 +31,6 @@ def add_train_args(parser):
                         help='The directory of the .hdf5 files.')
     parser.add_argument('--save_summary_steps', type=int, default=10,
                         help='Every which step to perform evaluation in training (default `10`).')
-    parser.add_argument('--train_summarywriter_file', type=str, default='train_summarywriter',
-                        help='Summary writer during training (default `train_summarywriter`).')
     parser.add_argument('--ckpt_path', type=str, default=None,
                         help='Path to checkpoint file.')
     

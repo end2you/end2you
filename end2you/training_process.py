@@ -47,7 +47,7 @@ class TrainingProcess(BaseProcess):
             
             model.to(device)
         
-        tb_path = Path(params.root_dir) / 'tensorboard' 
+        tb_path = Path(params.root_dir) / 'summarywriters' 
         summary_writers = {
             process: SummaryWriter(str(tb_path / getattr(params, process).summarywriter_file))
                 for process in processes

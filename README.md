@@ -129,8 +129,6 @@ The flags that can be used are the following:
 | --batch_size | The batch size to use. | int | 2 |
 | --train_dataset_path | The directory of the training files. | string | - |
 | --valid_dataset_path | The directory of the training files. | string | - |
-| --train_summarywriter_file | Path to save training summary writer for tensorboard visualisation. | string | - |
-| --valid_summarywriter_file | Path to save validation summary writer for tensorboard visualisation. | string | - |
 | --train_num_workers | Number of workers to use for fetching training data. | int | 1 |
 | --valid_num_workers | Number of workers to use for fetching training data. | int | 1 |
 | --log_file | Path to save log file. | string | - |
