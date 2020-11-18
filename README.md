@@ -66,8 +66,6 @@ To run End2You, certain number of flags needs to be set. These are the following
 | --num_outputs | Number of outputs of the model. | int | 2 |
 | --batch_size | The batch size to use. | int | 2 |
 | --delimiter | The delimiter to use to read the files. | string | \t |
-| --rnn_hidden_units | The number of hidden units in the RNN. | int | 128 |
-| --num_rnn_layers | The number of layers in the RNN model. | int | 2 |
 | --seq_length | The sequence length to introduce to the RNN.<br> if `None` the whole sequence will be considered.| int | None |
 | --cuda | Whether to use cuda. | bool | False |
 | --root_dir | Path to save models/results. | str | `./e2u_output` |
