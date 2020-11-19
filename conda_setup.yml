@@ -1,4 +1,4 @@
-name: End2You
+name: end2you
 channels:
   - defaults
   - pytorch
