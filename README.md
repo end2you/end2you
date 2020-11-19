@@ -71,7 +71,7 @@ To run End2You, certain number of flags needs to be set. These are the following
 | --modality | Modality to use. | audio, visual, or audiovisual | - |
 | --num_outputs | Number of outputs of the model. | int | 2 |
 | --batch_size | The batch size to use. | int | 2 |
-| --delimiter | The delimiter to use to read the files. | string | \t |
+| --delimiter | The delimiter to use to read the files. | str | , |
 | --seq_length | The sequence length to introduce to the RNN.<br> if `None` the whole sequence will be considered.| int | None |
 | --cuda | Whether to use cuda. | bool | False |
 | --root_dir | Path to save models/results. | str | `./e2u_output` |
@@ -101,16 +101,15 @@ time,label1,label2
 
 To create the hdf5 file you need to specify the flag to be `generate`. Two flags are required for 
 
-
 | Flag | Description | Values | Default |
 | :---: | :---: | :---: | :---: |
-| --save_data_folder | Path to save `*.hdf5` files. | string | - |
-| --input_file | Path to the input csv file. | string | - |
-| --delimiter | Delimiter used to read input files. | string | , |
-| --exclude_cols | Columns to exclude of the input files. | string | None |
+| --save_data_folder | Path to save `*.hdf5` files. | str | - |
+| --input_file | Path to the input csv file. | str | - |
+| --delimiter | Delimiter used to read input files. | str | , |
+| --exclude_cols | Columns to exclude of the input files. | str | None |
 | --fieldnames | If no header exists in input files, one needs to specify it. <br> Header names are comma separated. Value of `None` indicates <br> that a header exists | string | None |
 
-An example is depicted below.
+An example is shown below.
 
 > Creating `.hdf5` files
 ```console
@@ -133,12 +132,12 @@ The flags that can be used are the following:
 | --model_path | If specified, restore this pretrained model before beginning any training. | string | - |
 | --num_epochs | The number of epochs to run training. | int | 50 |
 | --batch_size | The batch size to use. | int | 2 |
-| --train_dataset_path | The directory of the training files. | string | - |
-| --valid_dataset_path | The directory of the training files. | string | - |
+| --train_dataset_path | The directory of the training files. | str | - |
+| --valid_dataset_path | The directory of the training files. | str | - |
 | --train_num_workers | Number of workers to use for fetching training data. | int | 1 |
 | --valid_num_workers | Number of workers to use for fetching training data. | int | 1 |
-| --log_file | Path to save log file. | string | - |
-| --metric | Metric to use to evaluate model: <br> Concordance Correlation Coefficient ('ccc') <br> Mean Squared Error ('mse') <br> uar (Unweighted Average Recall) <br> | string | mse |
+| --log_file | Path to save log file. | str | - |
+| --metric | Metric to use to evaluate model: <br> Concordance Correlation Coefficient ('ccc') <br> Mean Squared Error ('mse') <br> Unweighted Average Recall ('uar') <br> | str | mse |
 | --save_summary_steps | Every which step to perform evaluation in training. | int | 10 |
 
 > Example
@@ -166,10 +165,10 @@ Then the following flags needs to be defined.
 
 | Flag | Description | Values | Default |
 | :---: | :---: | :---: | :---: |
-| --dataset_path | Path with hdf5 files to run testing. | string | - |
-| --model_path | The model to test. | string | - |
-| --prediction_file | The file to write predictions (in csv format) | string | predicitons.csv |
-| --metric | Metric to use to evaluate model: <br> Concordance Correlation Coefficient ('ccc') <br> Mean Squared Error ('mse') <br> uar (Unweighted Average Recall) <br> | string | mse |
+| --dataset_path | Path with hdf5 files to run testing. | str | - |
+| --model_path | The model to test. | str | - |
+| --prediction_file | The file to write predictions (in csv format) | str | predicitons.csv |
+| --metric | Metric to use to evaluate model: <br> Concordance Correlation Coefficient ('ccc') <br> Mean Squared Error ('mse') <br> Unweighted Average Recall ('uar') <br> | str | mse |
 | --num_workers | Number of workers to use for fetching the data. | int | 1 |
 
 >  Get predictions - Example
