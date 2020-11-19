@@ -167,7 +167,7 @@ Then the following flags needs to be defined.
 | :---: | :---: | :---: | :---: |
 | --dataset_path | Path with hdf5 files to run testing. | str | - |
 | --model_path | The model to test. | str | - |
-| --prediction_file | The file to write predictions (in csv format) | str | predicitons.csv |
+| --prediction_file | The file to write predictions (in csv format) | str | predictions.csv |
 | --metric | Metric to use to evaluate model: <br> Concordance Correlation Coefficient ('ccc') <br> Mean Squared Error ('mse') <br> Unweighted Average Recall ('uar') <br> | str | mse |
 | --num_workers | Number of workers to use for fetching the data. | int | 1 |
 
