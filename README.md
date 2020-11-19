@@ -39,11 +39,13 @@ Below are listed the required modules to run the code.
 1. [Installation](#installation)<br>
 2. [Generating Data](#generating-data)<br>
 3. [Training](#training)<br>
-4. [Evaluation](#evaluation)<br>
-5. [Testing](#testing)<br>
-6. [Tutorial](#tutorial)<br>
+4. [Testing](#testing)<br>
+5. [Tutorial](#tutorial)<br>
 
 ## Installation
+
+### Conda Installation
+
 We highly recommended to use [conda](http://conda.pydata.org/miniconda.html) as your Python distribution.
 Once downloading and installing [conda](http://conda.pydata.org/miniconda.html), this project can be installed by using the `conda_setup.yml` file as follows:
 
@@ -54,6 +56,11 @@ $ conda env create -f conda_setup.yml
 You can now activate the environment and use End2You.
 ```console
 $ conda activate End2You
+```
+### Pip Installation
+
+```console
+$ pip install git+https://github.com/end2you/end2you.git
 ```
 
 ## Setting the right flags
