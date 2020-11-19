@@ -1,13 +1,11 @@
 # End2You - The Imperial Toolkit for Multimodal Profiling
 
-We introduce End2You the Imperial toolkit for multimodal profiling. This repository provides easy-to-use scripts to train and evaluate either unimodal or multimodal models in an end-to-end manner for either regression or classification output. The input to the model can be one of the following:
-- Visual Information : Face of a subject.
-- Speech Information : Speech waveform.
-- Audio-Visual Information : Face and speech of a subject.
+We introduce End2You the Imperial toolkit for multimodal profiling. This repository provides easy-to-use scripts to train and evaluate either unimodal or multimodal models in an end-to-end manner for either regression or classification output. The input to the model can be of 1D (e.g. audio, eeg, heart rate etc.), 2D (e.g. spectrogram, image etc), or 3D (e.g. video etc). Examples can be one of the following:
+  - Visual Information : Face of a subject in a still image (2D input) or a video (3D input).
+  - Speech Information : Raw speech waveform.
+  - Audio-Visual Information : Face and speech of a subject.
 
-The main blocks of the unimodal and multimodal models are (i) a Convolutional Neural Network (CNN) that extracts spatial features from the raw data, and (ii) a recurrent neural network (RNN) that captures the temporal information in the data. 
-
-<!--Pre-trained models will be provided soon for the emotion recognition task.-->
+The main blocks of the unimodal and multimodal models are (i) a Convolutional Neural Network (CNN) that extracts spatial features from the raw data, and (ii) a recurrent neural network (RNN) that captures the temporal information in the data. The models can be combined in any desirable way, and the user can also define new models and combine with the existing implementations.
 
 ### Citing
 
@@ -40,7 +38,6 @@ Below are listed the required modules to run the code.
 2. [Generating Data](#generating-data)<br>
 3. [Training](#training)<br>
 4. [Testing](#testing)<br>
-5. [Tutorial](#tutorial)<br>
 
 ## Installation
 
@@ -58,6 +55,8 @@ You can now activate the environment and use End2You.
 $ conda activate End2You
 ```
 ### Pip Installation
+
+Another way to install End2You is via `pip` as shown below:
 
 ```console
 $ pip install git+https://github.com/end2you/end2you.git
@@ -180,7 +179,3 @@ Then the following flags needs to be defined.
                           --model_path='/path/to/model.pth.tar' \
                           --dataset_path='/path/to/test/folder' 
 ```
-
-## Tutorial
-Tutorial files can be found in the tutorial folder.
-
