@@ -34,7 +34,8 @@ class GenerationProcess(BaseProcess):
                                  reader=filereader,
                                  labelfile_reader=labelfile_reader)
         
-        self.set_logger(params.log_file)
+        log_file = Path(params.root_dir) / params.log_file
+        self.set_logger(str(log_file))
         logging.info('Starting Generation Process')
     
     def start(self):

@@ -54,7 +54,8 @@ class TrainingProcess(BaseProcess):
         }
         
         # Initialize logs
-        self.set_logger(params.log_file)
+        log_file = Path(params.root_dir) / params.log_file
+        self.set_logger(str(log_file))
         logging.info('Starting Training Process')
         logging.info('Number of parameters: {}'.format(sum(num_model_params)))
         logging.info(model)

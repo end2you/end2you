@@ -57,7 +57,6 @@ class End2You:
                                         'metric':self.kwargs['metric'],
                                         'dataset_path':self.kwargs['valid_dataset_path'],
                                         'num_workers':self.kwargs['valid_num_workers'],
-                                        'metric2track':None,
                                         'cuda':cuda,
                                         'modality':self.kwargs['modality'],
                                         'batch_size':1,
