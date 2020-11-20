@@ -45,8 +45,8 @@ class AudioModel(nn.Module):
         return audio_model, num_out_features
     
     def forward(self, x):
-        """
+        '''
         Args:
             x (BS x 1 x T)
-        """
+        '''
         return self.network(x)
