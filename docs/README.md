@@ -27,3 +27,40 @@ The second one was published in 2018 and its architecture is shown below:
 
 
 ### Visual
+
+For the visual modality we use the models from `torchvision.models` and provide the following ones:
+{
+            'resnet18': 512,
+            'resnet34': 512,
+            'resnet50': 2048,
+            'resnet101': 2048,
+            'resnet152': 2048,
+            
+            'vgg11': 25088,
+            'vgg13': 25088,
+            'vgg16': 25088,
+            'vgg19': 25088,
+            
+            'vgg11_bn': 25088,
+            'vgg13_bn': 25088,
+            'vgg16_bn': 25088,
+            'vgg19_bn': 25088,
+            
+            'densenet121': 9216,
+            'densenet169': 14976,
+            'densenet161': 19872,
+            'densenet201': 17280,
+            
+            'mobilenet_v2': 11520,
+            
+            'resnext50_32x4d': 2048,
+            'resnext101_32x8d': 2048,
+            
+            'wide_resnet50_2': 2048,
+            'wide_resnet101_2': 2048,
+            
+            'shufflenet_v2_x0_5': 9216,
+            'shufflenet_v2_x1_0': 9216,
+            'shufflenet_v2_x1_5': 9216,
+            'shufflenet_v2_x2_0': 18432
+}
