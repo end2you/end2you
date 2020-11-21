@@ -31,7 +31,13 @@ Below are listed the required modules to run the code.
   * sklearn >= 0.23.2
   * h5py >= 2.10.0
   * facenet-pytorch >= 2.5
-  
+
+### Workflow
+
+The End2You workflow (shown below) is comprised of the data generator, that transforms the raw file format to hdf5, the data provider that feeds the data to the models, and finally, the prediction. We provide a number of audio/visual/multimodal models (see [tutorials](docs/tutorials) or [cli](docs/tutorials)). One can easily use its own models to train or use our pre-train models on their dataset.
+
+![alt text](docs/figures/workflow.png "End2You - Workflow")
+
 ### Contents
 
 1. [Installation](#installation)<br>
@@ -64,7 +70,8 @@ $ pip install git+https://github.com/end2you/end2you.git
 
 ## Setting the right flags
 
-To run End2You, certain number of flags needs to be set. These are the following.
+We provide a script file that can either `generate` the hdf5 files, `train` one of our defined models, or `test` a model on new data.
+To run it, certain number of flags needs to be set. These are the following.
 
 | Flag | Description | Values | Default |
 | :---: | :---: | :---: | :---: |
