@@ -52,7 +52,7 @@ $ conda env create -f conda_setup.yml
 
 You can now activate the environment and use End2You.
 ```console
-$ conda activate End2You
+$ conda activate end2you
 ```
 ### Pip Installation
 
