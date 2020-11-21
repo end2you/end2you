@@ -28,7 +28,7 @@ The second one was published in 2018 and its architecture is shown below:
 
 ### Visual
 
-For the visual modality we use the models from `torchvision.models(https://pytorch.org/docs/stable/torchvision/models.html)` and provide the following ones:
+For the visual modality we use the models from [`torchvision.models`](https://pytorch.org/docs/stable/torchvision/models.html) and provide the following ones:
 
 1. ResNet - [18,34,50,101,152]
 2. VGG - [11,13,16,19]
