@@ -28,39 +28,19 @@ The second one was published in 2018 and its architecture is shown below:
 
 ### Visual
 
-For the visual modality we use the models from `torchvision.models` and provide the following ones:
-{
-            'resnet18': 512,
-            'resnet34': 512,
-            'resnet50': 2048,
-            'resnet101': 2048,
-            'resnet152': 2048,
-            
-            'vgg11': 25088,
-            'vgg13': 25088,
-            'vgg16': 25088,
-            'vgg19': 25088,
-            
-            'vgg11_bn': 25088,
-            'vgg13_bn': 25088,
-            'vgg16_bn': 25088,
-            'vgg19_bn': 25088,
-            
-            'densenet121': 9216,
-            'densenet169': 14976,
-            'densenet161': 19872,
-            'densenet201': 17280,
-            
-            'mobilenet_v2': 11520,
-            
-            'resnext50_32x4d': 2048,
-            'resnext101_32x8d': 2048,
-            
-            'wide_resnet50_2': 2048,
-            'wide_resnet101_2': 2048,
-            
-            'shufflenet_v2_x0_5': 9216,
-            'shufflenet_v2_x1_0': 9216,
-            'shufflenet_v2_x1_5': 9216,
-            'shufflenet_v2_x2_0': 18432
-}
+For the visual modality we use the models from `torchvision.models`(https://pytorch.org/docs/stable/torchvision/models.html) and provide the following ones:
+
+1. ResNet - [18,34,50,101,152]
+2. VGG - [11,13,16,19]
+3. VGG_BN - [11,13,16,19]
+4. DenseNet - [121,161,169,201]
+5. MobileNet
+6. ResNeXt - [32x4d, 32x8d]
+7. Wide ResNet - [50, 101]
+8. ShuffleNet - x[0.5, 1.0, 1.5, 2.0]
+
+The input to the models should be of the size (96x96).
+
+### Multimodal
+
+We combine the audio and visual models in a multimodal one
