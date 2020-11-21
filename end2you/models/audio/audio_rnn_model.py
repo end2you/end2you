@@ -20,8 +20,8 @@ class AudioRNNModel(nn.Module):
             num_outs (int): number of output values of the model.
         '''
         super(AudioRNNModel, self).__init__()
-        audio_network = AudioModel(input_size)
-        self.audio_model = audio_network.audio_model
+        audio_network = AudioModel(model_name=model_name, input_size=input_size)
+        self.audio_model = audio_network.model
         num_out_features = audio_network.num_features
         self.rnn, num_out_features = self._get_rnn_model(num_out_features)
         self.linear = nn.Linear(num_out_features, num_outs)

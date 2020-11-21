@@ -1,52 +1,36 @@
 import torch
 import torch.nn as nn
-import numpy as np
 
-from .base import Base
+from .emo16 import Emo16
+from .emo18 import Emo18
 
 
 class AudioModel(nn.Module):
     
-    def __init__(self, input_size:int):
+    def __init__(self, 
+                 model_name:str,
+                 pretrained:bool = False,
+                 *args, **kwargs):
+        ''' Network model.
+        
+        Args:
+            model_name: Name of audio model to use.
+        '''
         super(AudioModel, self).__init__()
-        self.audio_model, self.num_features = self.build_audio_model(input_size)
         
-    def build_audio_model(self, input_size):
-        '''Build the audio model: 3 blocks of convolution + max-pooling.'''
-        out_channels = [64, 128, 256]
-        in_channels = [1, 64, 128]
-        kernel_size = [8, 6, 6]
-        stride = [1, 1, 1]
-        padding = ((np.array(kernel_size)-1)//2).tolist()
+        self.model = self._get_model(model_name)
+        self.model = self.model(*args, **kwargs)
+        self.num_features = self.model.num_features
         
-        num_layers = len(in_channels)
-        conv_args = {f'layer{i}': {
-                        'in_channels': in_channels[i],
-                        'out_channels': out_channels[i],
-                        'kernel_size': kernel_size[i],
-                        'stride': stride[i],
-                        'padding': padding[i],
-                    } for i in range(num_layers)
-                 }
-        
-        kernel_size = [10, 8, 8]
-        stride = [5, 4, 4]
-        maxpool_args = {f'layer{i}': {
-                        'kernel_size': kernel_size[i],
-                        'stride': stride[i]
-                    } for i in range(num_layers)
-                 }
-        
-        audio_model = Base(conv_args, maxpool_args)
-        conv_red_size = Base._num_out_features(input_size, conv_args, maxpool_args)
-        num_layers = len(in_channels) - 1
-        num_out_features = conv_red_size*conv_args[f'layer{num_layers}']['out_channels']
-        
-        return audio_model, num_out_features
+    def _get_model(self, model_name):
+        return {
+            'emo16': Emo16,
+            'emo18': Emo18
+        }[model_name]
     
     def forward(self, x):
         '''
         Args:
-            x (BS x 1 x T)
+            x (BS x S x 1 x T)
         '''
-        return self.network(x)
+        return self.model(x)
