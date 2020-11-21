@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from .base_audio_model import BaseAudioModel
+from .base import Base
 
 
 class AudioModel(nn.Module):
@@ -37,8 +37,8 @@ class AudioModel(nn.Module):
                     } for i in range(num_layers)
                  }
         
-        audio_model = BaseAudioModel(conv_args, maxpool_args)
-        conv_red_size = BaseAudioModel._num_out_features(input_size, conv_args, maxpool_args)
+        audio_model = Base(conv_args, maxpool_args)
+        conv_red_size = Base._num_out_features(input_size, conv_args, maxpool_args)
         num_layers = len(in_channels) - 1
         num_out_features = conv_red_size*conv_args[f'layer{num_layers}']['out_channels']
         

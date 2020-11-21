@@ -3,7 +3,7 @@ import torch.nn as nn
 import numpy as np
 
 
-class BaseAudioModel(nn.Module):
+class Base(nn.Module):
     
     def __init__(self, 
                  conv_layers_args:dict,
@@ -22,7 +22,7 @@ class BaseAudioModel(nn.Module):
             activ_fn (nn) : Activation function to use (default `nn.Relu()`).
             normalize (bool): Use batch normalization after convolution operation (default `False`).
         """
-        super(BaseAudioModel, self).__init__()
+        super(Base, self).__init__()
         
         self.conv_op = conv_op
         network_layers = nn.ModuleList()

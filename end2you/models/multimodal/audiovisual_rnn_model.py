@@ -2,9 +2,9 @@ import numpy as np
 import torch.nn as nn
 import torch
 
-from .base.visual_model import VisualModel
-from .base.audio_model import AudioModel
-from .base.rnn import RNN
+from end2you.models.visual import VisualModel
+from end2you.models.audio import AudioModel
+from end2you.models.rnn import RNN
 
 
 class AudioVisualRNNModel(nn.Module):

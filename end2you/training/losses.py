@@ -3,6 +3,7 @@ import torch.nn as nn
 
 from functools import partial
 
+
 class Losses:
     
     def __init__(self,

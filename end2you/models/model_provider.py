@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 
-from .audio_rnn_model import AudioRNNModel
-from .visual_rnn_model import VisualRNNModel
-from .audiovisual_rnn_model import AudioVisualRNNModel
+from .audio import AudioRNNModel
+from .visual import VisualRNNModel
+from .multimodal import AudioVisualRNNModel
 
 
 def get_model(model:str = 'audio', *args, **kwargs):

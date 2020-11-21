@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from .base.audio_model import AudioModel
-from .base.rnn import RNN
+from .audio_model import AudioModel
+from end2you.models.rnn import RNN
 
 
 class AudioRNNModel(nn.Module):

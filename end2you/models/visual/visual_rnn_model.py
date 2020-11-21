@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from .base.visual_model import VisualModel
-from .base.rnn import RNN
+from .visual_model import VisualModel
+from end2you.models.rnn import RNN
 
 
 class VisualRNNModel(nn.Module):
