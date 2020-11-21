@@ -17,13 +17,13 @@ The first one was published in 2018 and its architecture is shown below:
 
 > `Tzirakis, P., Zhang, J., & Schuller, B. W. (2018, April). End-to-end speech emotion recognition using deep neural networks. In 2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5089-5093). IEEE.`
 
-![alt text](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/figures/emo18.png "Speech Emotion Recognition - Emo18 model")
+![alt text](figures/emo18.png "Speech Emotion Recognition - Emo18 model")
 
 The second one was published in 2018 and its architecture is shown below:
 
 > `Trigeorgis, G., Ringeval, F., Brueckner, R., Marchi, E., Nicolaou, M. A., Schuller, B., & Zafeiriou, S. (2016, March). Adieu features? end-to-end speech emotion recognition using a deep convolutional recurrent network. In 2016 IEEE international conference on acoustics, speech and signal processing (ICASSP) (pp. 5200-5204). IEEE..`
 
-![alt text](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/figures/emo16.png "Speech Emotion Recognition - Emo16 model")
+![alt text](figures/emo16.png "Speech Emotion Recognition - Emo16 model")
 
 
 ### Visual
