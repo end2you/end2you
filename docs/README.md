@@ -48,5 +48,5 @@ An example of this type of model can be found in the following paper.
 
 > `Tzirakis, P., Trigeorgis, G., Nicolaou, M. A., Schuller, B. W., & Zafeiriou, S. (2017). End-to-end multimodal emotion recognition using deep neural networks. IEEE Journal of Selected Topics in Signal Processing, 11(8), 1301-1309.`
 
-![alt text](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/figures/multimodal.png "Multimodal Emotion Recognition model")
+![alt text](figures/multimodal.png "Multimodal Emotion Recognition model")
 
