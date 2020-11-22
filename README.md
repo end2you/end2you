@@ -2,7 +2,7 @@
 
 We introduce End2You the Imperial toolkit for multimodal profiling. This repository provides easy-to-use scripts to train and evaluate either unimodal or multimodal models in an end-to-end manner for either regression or classification output. The input to the model can be of 1D (e.g. audio, eeg, heart rate etc.), 2D (e.g. spectrogram, image etc), or 3D (e.g. video etc). The main blocks of the unimodal and multimodal models are (i) a Convolutional Neural Network (CNN) that extracts spatial features from the raw data, and (ii) a recurrent neural network (RNN) that captures the temporal information in the data. The models can be combined in any desirable way, and the user can also define new models and combine with the existing implementations.
 
-The End2You workflow (shown below) is comprised of the data generator, that transforms the raw file format to hdf5, the data provider that feeds the data to the models, and finally, the prediction. We provide a number of audio/visual/multimodal models (see [tutorials](docs/tutorials) or [cli](docs/tutorials)). One can easily use its own models to train or use our pre-train models on their dataset.
+The End2You workflow (shown below) is comprised of the data generator, that transforms the raw file format to hdf5, the data provider that feeds the data to the models, and finally, the prediction. We provide a number of audio/visual/multimodal models (see [tutorials](docs/tutorials) or [cli](docs/cli)). One can easily use its own models to train or use our pre-train models on their dataset.
 
 ![alt text](docs/figures/workflow.png "End2You - Workflow")
 
