@@ -27,7 +27,7 @@ The first one was published in 2018 and its architecture is shown below:
 
 #### Emo16
 
-The second one was published in 2018 and its architecture is shown below:
+The second one was published in 2016 and its architecture is shown below:
 
 > `Trigeorgis, G., Ringeval, F., Brueckner, R., Marchi, E., Nicolaou, M. A., Schuller, B., & Zafeiriou, S. (2016, March). Adieu features? end-to-end speech emotion recognition using a deep convolutional recurrent network. In 2016 IEEE international conference on acoustics, speech and signal processing (ICASSP) (pp. 5200-5204). IEEE..`
 
@@ -57,4 +57,3 @@ An example of this type of model can be found in the following paper.
 > `Tzirakis, P., Trigeorgis, G., Nicolaou, M. A., Schuller, B. W., & Zafeiriou, S. (2017). End-to-end multimodal emotion recognition using deep neural networks. IEEE Journal of Selected Topics in Signal Processing, 11(8), 1301-1309.`
 
 ![alt text](figures/multimodal.png "Multimodal Emotion Recognition model")
-
