@@ -10,14 +10,22 @@ We provide tutorials to get you started with End2You. In particular we provide t
 
 ## Models
 
+We provide a number of models depending on the modality. Here we describe the audio, visual and multimodal modalities.
+
 ### Audio
 
 We provide two models that can handle the audio modality. Both of them are papers published in ICASSP.
+
+#### Emo18
+
 The first one was published in 2018 and its architecture is shown below:
 
 > `Tzirakis, P., Zhang, J., & Schuller, B. W. (2018, April). End-to-end speech emotion recognition using deep neural networks. In 2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5089-5093). IEEE.`
 
 ![alt text](figures/emo18.png "Speech Emotion Recognition - Emo18 model")
+
+
+#### Emo16
 
 The second one was published in 2018 and its architecture is shown below:
 
