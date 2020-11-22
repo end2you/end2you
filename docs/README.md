@@ -10,7 +10,9 @@ We provide tutorials and a script [file](cli) to get you started with End2You. I
 
 ## Models
 
-We provide a number of audio, visual and multimodal models.
+We provide a number of audio, visual and multimodal models. To get the models you need to define the `model_name` argument to be one of the modality names.
+For example, for audio modality and using Emo18 one can define the model as follows:
+```Params(dict_params={'model_name':'emo18', 'num_outs':3})```
 
 ### Audio
 
@@ -38,6 +40,18 @@ The second one was published in 2016 and its architecture is shown below:
 
 For the visual modality we use the models from [`torchvision.models`](https://pytorch.org/docs/stable/torchvision/models.html) and provide the following ones:
 
+| Model Name | Number of layers |
+| :---: | :---: |
+| ResNet | [18,34,50,101,152] |
+| VGG | [11,13,16,19] |
+| VGG_BN | [11,13,16,19] |
+| DenseNet | [121,161,169,201] |
+| MobileNet | - |
+| ResNeXt | [32x4d, 32x8d] |
+| Wide ResNet | [50, 101] |
+| ShuffleNet | x[0.5, 1.0, 1.5, 2.0] |
+
+<!--
 1. ResNet - [18,34,50,101,152]
 2. VGG - [11,13,16,19]
 3. VGG_BN - [11,13,16,19]
@@ -46,8 +60,10 @@ For the visual modality we use the models from [`torchvision.models`](https://py
 6. ResNeXt - [32x4d, 32x8d]
 7. Wide ResNet - [50, 101]
 8. ShuffleNet - x[0.5, 1.0, 1.5, 2.0]
+-->
 
-The input to the models should be of the size (96x96).
+The input to the models should be of the size (96x96). To get one of the aforementioned models one needs to define the `model_name` to be the name of the model with the number of layers. For example, using resnet with 18 layers one can define the model as follows:
+```Params(dict_params={'model_name':'resnet18', 'num_outs':3})```
 
 ### Multimodal
 
