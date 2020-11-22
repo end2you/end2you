@@ -10,7 +10,7 @@ We provide tutorials and a script [file](cli) to get you started with End2You. I
 
 ## Models
 
-We provide a number of models depending on the modality. Here we describe the audio, visual and multimodal modalities.
+We provide a number of audio, visual and multimodal models.
 
 ### Audio
 
