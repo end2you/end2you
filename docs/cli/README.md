@@ -76,6 +76,7 @@ The flags that can be used are the following:
 | --log_file | Path to save log file. | str | - |
 | --metric | Metric to use to evaluate model: <br> Concordance Correlation Coefficient ('ccc') <br> Mean Squared Error ('mse') <br> Unweighted Average Recall ('uar') <br> | str | mse |
 | --save_summary_steps | Every which step to perform evaluation in training. | int | 10 |
+| --optimizer | Optimizer to use. One of ['adagrad','adam','adamw','sparseadam','adamax','asgd','rmsprop','sgd','adadelta'] | str | adam |
 
 > Example
 ```console
