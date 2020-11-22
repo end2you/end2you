@@ -7,6 +7,7 @@ sys.path.append("..")
 
 from end2you.data_provider import get_dataloader, BaseProvider
 from end2you.base import BasePhase
+from end2you.base_process import BaseProcess
 from .metric_provider import MetricProvider
 from tqdm import tqdm
 
@@ -35,7 +36,8 @@ class Evaluator(BasePhase):
         self.data_provider = data_provider
         self.model = model
         self.cuda = cuda
-    
+        BaseProcess.set_logger('evaluation.log')
+
     def start_evaluation(self):
         '''
         Perform one epoch of training or evaluation.

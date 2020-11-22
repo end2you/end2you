@@ -23,7 +23,7 @@ class BasePhase:
         self.optimizer = optimizer
         self.model = model
         self.ckpt_path = Path(ckpt_path) if ckpt_path else None
-    
+        
     def load_checkpoint(self):
         '''Loads model parameters (state_dict) from file_path. 
            If optimizer is provided, loads state_dict of

@@ -4,6 +4,7 @@ import logging
 
 from pathlib import Path
 from .file_reader import FileReader
+from end2you.base_process import BaseProcess
 
 
 class Generator:
@@ -18,7 +19,8 @@ class Generator:
             self.files, self.attr_names = reader.read_file(input_file, *args, **kwargs)
         self.save_data_folder = Path(save_data_folder)
         self.save_data_folder.mkdir(parents=True, exist_ok=True)
-    
+        BaseProcess.set_logger('generator.log')
+        
     def write_data_files(self):
         
         logging.info('\n Start writing data files \n')

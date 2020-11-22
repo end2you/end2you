@@ -19,6 +19,7 @@ from .losses import Losses
 from end2you.base import BasePhase
 from end2you.utils import Params
 from end2you.evaluation import MetricProvider
+from end2you.base_process import BaseProcess
 
 
 class Trainer(BasePhase):
@@ -48,7 +49,7 @@ class Trainer(BasePhase):
         
         self.provider = data_providers
         self.summary_writer = summary_writers
-        
+        BaseProcess.set_logger('training.log')
         super().__init__(model, ckpt_path, optimizer)
     
     def start_training(self):

@@ -28,7 +28,7 @@ class BaseProcess:
             stream_handler = logging.StreamHandler()
             stream_handler.setFormatter(logging.Formatter('%(message)s'))
             logger.addHandler(stream_handler)
-        logging.info('**** Starting logging ****')
+        logging.info('**** Start logging ****')
     
     def start(self):
         raise NotImplementedError('Method not implemented!')
