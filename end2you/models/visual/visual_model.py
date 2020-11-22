@@ -21,7 +21,11 @@ class VisualModel(nn.Module):
         
         self.num_features = self._get_out_feats(model_name)
         network = list(network.children())[:-1]
-        
+        self.pretrained = pretrained
+        if pretrained:
+            self.normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+            
         self.model = nn.Sequential(*network)
     
     @classmethod
@@ -73,4 +77,6 @@ class VisualModel(nn.Module):
         Args:
             x (BS x 3 x H x W)
         '''
+        if self.pretrained:
+            x = self.normalize(x)
         return self.model(x)
