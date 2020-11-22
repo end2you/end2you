@@ -17,7 +17,7 @@ For example, for audio modality and using Emo18 one can define the model as foll
 from end2you.models.model_provider import get_model
 
 model_params = {'model_name':'emo18', 'input_size':640, 'num_outs':3}
-audio_provider = get_model('audio', **k)
+audio_provider = get_model('audio', **model_params)
 ```
 
 ### Audio
