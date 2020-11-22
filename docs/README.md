@@ -10,10 +10,15 @@ We provide tutorials and a script [file](cli) to get you started with End2You. I
 
 ## Models
 
-We provide a number of audio, visual and multimodal models. To get the models you need to define the `model_name` argument to be one of the modality names.
+We provide a number of audio, visual and multimodal models. To get the models you need to define the `model_name` argument to be one of the modality names (See [Training Process](tutorials/3.%20Training%20Process.ipynb)).
 For example, for audio modality and using Emo18 one can define the model as follows:
 
-```Params(dict_params={'model_name':'emo18', 'num_outs':3})```
+```
+from end2you.models.model_provider import get_model
+
+model_params = {'model_name':'emo18', 'input_size':640, 'num_outs':3}
+audio_provider = get_model('audio', **k)
+```
 
 ### Audio
 
@@ -65,11 +70,11 @@ For the visual modality we use the models from [`torchvision.models`](https://py
 
 The input to the models should be of the size (96x96). To get one of the aforementioned models one needs to define the `model_name` to be the name of the model with the number of layers. For example, using ResNet with 18 layers one can define the model as follows:
 
-```Params(dict_params={'model_name':'resnet18', 'num_outs':3})```
+```model_params = {'model_name':'resnet18', 'num_outs':3}```
 
 The user can use a pretrain model on ImageNet. For example, using DenseNet with 121 layers one can define the model as follows:
 
-```Params(dict_params={'model_name':'densenet121', 'num_outs':3, 'pretrained':True})```
+```model_params = {'model_name':'resnet18', 'num_outs':3, 'pretrained':True}```
 
 ### Multimodal
 
