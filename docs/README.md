@@ -12,6 +12,7 @@ We provide tutorials and a script [file](cli) to get you started with End2You. I
 
 We provide a number of audio, visual and multimodal models. To get the models you need to define the `model_name` argument to be one of the modality names.
 For example, for audio modality and using Emo18 one can define the model as follows:
+
 ```Params(dict_params={'model_name':'emo18', 'num_outs':3})```
 
 ### Audio
@@ -62,8 +63,13 @@ For the visual modality we use the models from [`torchvision.models`](https://py
 8. ShuffleNet - x[0.5, 1.0, 1.5, 2.0]
 -->
 
-The input to the models should be of the size (96x96). To get one of the aforementioned models one needs to define the `model_name` to be the name of the model with the number of layers. For example, using resnet with 18 layers one can define the model as follows:
+The input to the models should be of the size (96x96). To get one of the aforementioned models one needs to define the `model_name` to be the name of the model with the number of layers. For example, using ResNet with 18 layers one can define the model as follows:
+
 ```Params(dict_params={'model_name':'resnet18', 'num_outs':3})```
+
+The user can use a pretrain model on ImageNet. For example, using DenseNet with 121 layers one can define the model as follows:
+
+```Params(dict_params={'model_name':'densenet121', 'num_outs':3, 'pretrained':True})```
 
 ### Multimodal
 
