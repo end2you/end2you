@@ -13,7 +13,7 @@ We provide tutorials and a script [file](cli) to get you started with End2You. I
 We provide a number of audio, visual and multimodal models. To get the models you need to define the `model_name` argument to be one of the modality names (See [Training Process](tutorials/3.%20Training%20Process.ipynb)).
 For example, for audio modality and using Emo18 one can define the model as follows:
 
-```
+```python
 from end2you.models.model_provider import get_model
 
 model_params = {'model_name':'emo18', 'input_size':640, 'num_outs':3}
