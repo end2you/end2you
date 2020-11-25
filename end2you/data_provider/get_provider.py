@@ -18,7 +18,7 @@ def get_provider(modality):
 
 
 def pad_collate(batch):
-    data, labels = zip(*batch)
+    data, labels, data_file = zip(*batch)
     
     number_of_modalities = len(data[0]) if isinstance(data[0], list) else 1
     if number_of_modalities > 1:
@@ -37,7 +37,7 @@ def pad_collate(batch):
     if number_of_modalities == 1:
         modality_tensors = modality_tensors[0]
     
-    return modality_tensors, labels, num_seqs_per_sample
+    return modality_tensors, labels, num_seqs_per_sample, data_file
 
 
 def get_dataloader(params, **kwargs):

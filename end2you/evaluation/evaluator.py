@@ -10,6 +10,7 @@ from end2you.base import BasePhase
 from end2you.base_process import BaseProcess
 from .metric_provider import MetricProvider
 from tqdm import tqdm
+from pathlib import Path
 
 
 class Evaluator(BasePhase):
@@ -20,7 +21,8 @@ class Evaluator(BasePhase):
                  data_provider:BaseProvider,
                  model:nn.Module,
                  model_path:str,
-                 cuda:bool):
+                 cuda:bool,
+                 root_dir = './'):
         '''
         Args:
             metric (MetricProvider): Metric to use for evaluation.
@@ -36,12 +38,13 @@ class Evaluator(BasePhase):
         self.data_provider = data_provider
         self.model = model
         self.cuda = cuda
-        BaseProcess.set_logger('evaluation.log')
-
+        self.root_dir = Path(root_dir)
+        BaseProcess.set_logger(str(self.root_dir / 'evaluation.log'))
+    
     def start_evaluation(self):
         '''
-        Perform one epoch of training or evaluation.
-        Depends on the argument `is_training`.
+           Perform one epoch of training or evaluation.
+           Depends on the argument `is_training`.
         '''
         logging.info("Starting Evaluation!")
         
@@ -54,10 +57,11 @@ class Evaluator(BasePhase):
         self.model.eval()
         
         summary_scores = []
+        file_preds = {str(x.file_path.name):[] for x in provider.dataset.data_files}
         # Use tqdm for progress bar
         with tqdm(total=len(provider)) as bar:
             bar.set_description('Evaluating model')
-            for n_iter, (model_input, labels, masked_samples) in enumerate(provider):
+            for n_iter, (model_input, labels, masked_samples, file_names) in enumerate(provider):
                 
                 # move to GPU if available
                 if self.cuda:
@@ -65,6 +69,8 @@ class Evaluator(BasePhase):
                     labels = labels.cuda()
                 
                 output = self.model(model_input)
+                for f in file_names:
+                    file_preds[str(f.name)].extend(output.data.cpu().numpy())
                 
                 # compute all metrics on this batch
                 scores = {}
@@ -86,4 +92,8 @@ class Evaluator(BasePhase):
         str_scores = ' - '.join(str_list_scores)
         logging.info(f'* Evaluation results (wrt {self.metric_name}): {str_scores}\n')
         
-        return mean_scores
+        file_preds = {k:np.vstack(v).tolist() for k,v in file_preds.items()}
+        file_preds.update({'label_names': provider.dataset.label_names.tolist()})
+        self._save_dict_to_json(file_preds, str(self.root_dir / 'predictions.json'))
+
+        return mean_scores, file_preds

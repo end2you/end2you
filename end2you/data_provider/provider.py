@@ -38,14 +38,14 @@ class BaseProvider(Dataset):
     def reset(self):
         for f in self.data_files:
             f.reset()
-        
+    
     def _get_file(self, idx):
         i = idx % self.num_files 
         file = self.data_files[i]
         while file.total_calls_reached():
             i = (i + 1) if (i+1) < self.num_files else 0
             file = self.data_files[i]
-            
+        
         return file
     
     def process_input(self, data, labels):
@@ -58,5 +58,5 @@ class BaseProvider(Dataset):
         data_file = self._get_file(idx)
         data, labels = data_file.read_hdf5_file()
         data, labels = self.process_input(data, labels)
-        return data, labels 
+        return data, labels, data_file.file_path
     

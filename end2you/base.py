@@ -38,7 +38,7 @@ class BasePhase:
         logging.info("Restoring model from {}".format(str(self.ckpt_path)))
         
         if not Path(self.ckpt_path).exists():
-            raise("File doesn't exist [{}]".format(str(self.ckpt_path)))
+            raise Exception("File doesn't exist [{}]".format(str(self.ckpt_path)))
         checkpoint = torch.load(str(self.ckpt_path))
         self.model.load_state_dict(checkpoint['state_dict'])
         
@@ -57,6 +57,5 @@ class BasePhase:
             json_path: (string) path to json file
         '''
         with open(json_path, 'w') as f:
-            d = {k: float(v) for k, v in dictionary.items()}
-            json.dump(d, f, indent=4)
+            json.dump(dictionary, f, indent=4)
     

@@ -7,6 +7,7 @@ from end2you.data_provider import get_dataloader
 from end2you.utils import Params
 from end2you.evaluation import MetricProvider, Evaluator
 from end2you.base_process import BaseProcess
+from pathlib import Path
 
 
 class EvaluationProcess(BaseProcess):
@@ -49,7 +50,8 @@ class EvaluationProcess(BaseProcess):
                                    data_provider=data_provider,
                                    model=model,
                                    model_path=params.model_path,
-                                   cuda=params.cuda)
+                                   cuda=params.cuda,
+                                   root_dir=params.root_dir)
     
     def start(self):
         return self.evaluator.start_evaluation()

@@ -154,7 +154,7 @@ class Trainer(BasePhase):
         # Use tqdm for progress bar
         with tqdm(total=len(provider)) as bar:
             bar.set_description(f'{bar_string} model')
-            for n_iter, (model_input, labels, masked_samples) in enumerate(provider):
+            for n_iter, (model_input, labels, masked_samples, _) in enumerate(provider):
                 
                 if is_training:
                     self.optimizer.zero_grad()
