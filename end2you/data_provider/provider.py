@@ -60,4 +60,3 @@ class BaseProvider(Dataset):
         data, labels = self.process_input(data, labels)
         return data, labels 
     
-    
