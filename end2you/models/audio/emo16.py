@@ -20,12 +20,12 @@ class Emo16(nn.Module):
         super(Emo16, self).__init__()
         
         self.conv1 = nn.Conv1d(in_channels=1, out_channels=40, kernel_size=20, stride=1, padding=9)
-        self.max_pool1 = nn.MaxPool1d(2, 2)
+        self.max_pool1 = nn.MaxPool1d(2, 2, padding=1)
         
         self.conv2 = nn.Conv1d(in_channels=40, out_channels=40, kernel_size=40, stride=1, padding=19)
-        self.max_pool2 = nn.MaxPool1d(10, 10)
+        self.max_pool2 = nn.MaxPool1d(10, 10, padding=4)
         
-        self.num_features = int(np.ceil(input_size/2 - 2)) * 4
+        self.num_features = int(np.ceil(input_size/2)) * 4
     
     def forward(self, x:torch.Tensor):
         '''
