@@ -19,16 +19,22 @@ class Losses:
             'ce': partial(self.cross_entropy_loss, nn.CrossEntropyLoss())
         }[loss]
     
-    def masked_loss(self, predictions, labels, mask):
+    def masked_loss(self, predictions:torch.Tensor, labels:torch.Tensor, mask:torch.Tensor):
         
-        num_samples = len(mask)
-        batch_loss = 0.0
-        for i in range(num_samples):
-            m = mask[i]
-            batch_loss += self._loss(
-                predictions[i,:m].view(-1), labels[i,:m].view(-1))
+        tensor_device = predictions.get_device()
+        tensor_dtype = predictions.dtype
         
-        return batch_loss/num_samples
+        batch_preds = torch.tensor([0.0], dtype=tensor_dtype).to(tensor_device)
+        batch_labs = torch.tensor([0.0], dtype=tensor_dtype).to(tensor_device)
+        for i, m in enumerate(mask):
+            batch_preds = torch.cat((batch_preds, predictions[i,:m].view(-1,)), 0)
+            batch_labs = torch.cat((batch_labs, labels[i,:m].view(-1,)), 0)
+        
+        batch_preds = batch_preds[1:].view(-1,)
+        batch_labs = batch_labs[1:].view(-1,)
+        
+        total_loss = self._loss(batch_preds.view(-1,), batch_labs.view(-1,))
+        return total_loss
     
     def ccc(self, predictions, labels):
         
