@@ -69,9 +69,6 @@ class Trainer(BasePhase):
             # compute number of batches in one epoch (one full pass over the training set)
             self._epoch_process(is_training=True)
             
-            # Free cuda memory
-            torch.cuda.empty_cache()
-            
             # Evaluate for one epoch on validation set
             with torch.no_grad():
                 val_score = self._epoch_process(is_training=False)
@@ -142,12 +139,19 @@ class Trainer(BasePhase):
         
         writer = self.summary_writer[process]
         provider = self.provider[process]
+        
         label_names = provider.dataset._get_label_names()
+        num_outs = self.params.model.num_outs
+        
         self.model.train(is_training)
         
         # summary for current training loop and a running average object for loss
-        epoch_summaries = []
         mean_loss = 0.0
+        
+        # Store all labels/predictions 
+        batch_labels = {str(x):[] for x in provider.dataset.label_names}
+        batch_preds = {str(x):[] for x in provider.dataset.label_names}
+        batch_masks = []
         
         bar_string = 'Training' if process == 'train' else 'Validating'
         
@@ -161,14 +165,28 @@ class Trainer(BasePhase):
                 
                 # move to GPU if available
                 if params.cuda:
-                    model_input = [x.cuda() for x in model_input] if isinstance(model_input, list) else model_input.cuda()
+                    model_input = [
+                        x.cuda() for x in model_input] if isinstance(model_input, list) else model_input.cuda()
                     labels = labels.cuda()
                 
-                output = self.model(model_input)
+                predictions = self.model(model_input)
                 
-                total_loss = torch.tensor(0.0, requires_grad=is_training)
-                for o in range(self.params.model.num_outs):
-                    total_loss = total_loss + self.loss_fn(output[...,o], labels[...,o], masked_samples)
+                total_loss = nn.Parameter(
+                    torch.tensor(0.0, dtype=model_input.dtype), 
+                    requires_grad=is_training)
+                for o, name in enumerate(label_names):
+                    sl = o
+                    el = o + 1 if len(label_names) > 1 else o + num_outs
+                    
+                    label_loss = self.loss_fn(
+                        predictions[...,sl:el], labels[...,sl:el], masked_samples)
+                    
+                    total_loss = total_loss + label_loss
+                    
+                    # Write label summary
+                    if n_iter % params.save_summary_steps == 0:
+                        writer.add_scalar(f'{self.loss_name}_loss_{name}/', label_loss)
+                
                 total_loss /= self.params.model.num_outs
                 mean_loss += total_loss
                 
@@ -180,24 +198,35 @@ class Trainer(BasePhase):
                 if n_iter % params.save_summary_steps == 0:
                     
                     batch_loss = total_loss.item()
+                    np_preds = predictions.data.cpu().numpy()
+                    np_labels = labels.data.cpu().numpy()
                     
-                    # compute all metrics on this batch
-                    scores = {}
-                    for i, name in enumerate(label_names):
-                        scores[name] = self.eval_fn(output[...,i], labels[...,i], masked_samples)
-                    
-                    scores[f'{self.loss_name}_loss'] = batch_loss
-                    epoch_summaries.append(scores)
+                    batch_masks.extend(masked_samples)
+                    for o, name in enumerate(label_names):
+                        sl = o
+                        el = o + 1 if len(label_names) > 1 else o + num_outs
+                        batch_preds[name].extend(np_preds[...,sl:el])
+                        batch_labels[name].extend(np_labels[...,sl:el])
                 
                 bar.set_postfix({self.loss_name+' loss':'{:05.3f}'.format(total_loss.item())}) 
                 bar.update()
+        
+        scores = {}
+        for i, name in enumerate(label_names):
+            scores[name] = self.eval_fn(batch_preds[name], batch_labels[name], batch_masks)
+        epoch_summaries = [scores]
         
         # Reseting parameters of the data provider
         provider.dataset.reset()
         
         # compute mean of all metrics in summary
-        mean_scores = {label_name:np.mean([batch_sum[label_name] for batch_sum in epoch_summaries]) 
-                             for label_name in scores.keys()}
+        mean_scores = {
+            label_name: np.mean([
+                batch_sum[label_name] for batch_sum in epoch_summaries
+            ]) 
+            for label_name in scores.keys()
+        }
+        
         mean_loss /= (n_iter + 1)
         
         str_list_scores = [f'{label_name}: {mean_scores[label_name]:05.3f}' 

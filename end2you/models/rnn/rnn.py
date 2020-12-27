@@ -28,5 +28,6 @@ class RNN(nn.Module):
         Args:
             x (BS x C x T)
         '''
+        self.rnn.flatten_parameters()
         return self.rnn(x)
     

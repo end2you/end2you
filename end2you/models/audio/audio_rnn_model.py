@@ -25,15 +25,29 @@ class AudioRNNModel(nn.Module):
         num_out_features = audio_network.num_features
         self.rnn, num_out_features = self._get_rnn_model(num_out_features)
         self.linear = nn.Linear(num_out_features, num_outs)
+        self.reset_parameters()
+        
+    def reset_parameters(self):
+        for m in list(self.modules()):
+            self._init_weights(m)
+    
+    def _init_weights(self, m):
+        if type(m) == nn.GRU:
+            for name, param in m.named_parameters():
+                if 'bias' in name:
+                    nn.init.zeros_(param)
+                elif 'weight' in name:
+                    nn.init.kaiming_uniform_(param)
     
     def _get_rnn_model(self, input_size:int):
         '''Get RNN instace.'''
         rnn_args = {
             'input_size':input_size,
             'hidden_size':256,
-            'num_layers':2
+            'num_layers':2,
+            'batch_first':True
         }
-        return RNN(rnn_args, 'lstm'), rnn_args['hidden_size']
+        return RNN(rnn_args, 'gru'), rnn_args['hidden_size']
     
     def forward(self, x:torch.Tensor):
         '''
