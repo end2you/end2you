@@ -15,7 +15,7 @@ class Emo18(nn.Module):
         '''Build the audio model: 3 blocks of convolution + max-pooling.'''
         out_channels = [64, 128, 256]
         in_channels = [1, 64, 128]
-        kernel_size = [8, 6, 6]
+        kernel_size = [6, 4, 4]
         stride = [1, 1, 1]
         padding = ((np.array(kernel_size)-1)//2).tolist()
         
@@ -29,15 +29,15 @@ class Emo18(nn.Module):
                     } for i in range(num_layers)
                  }
         
-        kernel_size = [10, 8, 8]
-        stride = [5, 4, 4]
+        kernel_size = [8, 6, 6]
+        stride = [8, 6, 6]
         maxpool_args = {f'layer{i}': {
                         'kernel_size': kernel_size[i],
                         'stride': stride[i]
                     } for i in range(num_layers)
                  }
         
-        audio_model = Base(conv_args, maxpool_args)
+        audio_model = Base(conv_args, maxpool_args, normalize=False)
         conv_red_size = Base._num_out_features(input_size, conv_args, maxpool_args)
         num_layers = len(in_channels) - 1
         num_out_features = conv_red_size*conv_args[f'layer{num_layers}']['out_channels']

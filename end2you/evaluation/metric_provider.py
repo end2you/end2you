@@ -37,8 +37,8 @@ class MetricProvider:
         return self._metric(batch_preds, batch_labs)
     
     def CCC(self, predictions:np.array, labels:np.array):
-        predictions = np.stack(predictions).reshape(-1,)
-        labels = np.stack(labels).reshape(-1,)
+        predictions = np.concatenate(predictions).reshape(-1,)
+        labels = np.concatenate(labels).reshape(-1,)
         
         mean_cent_prod = ((predictions - predictions.mean()) * (labels - labels.mean())).mean()
         return (2 * mean_cent_prod) / (predictions.var() + labels.var() + (predictions.mean() - labels.mean()) ** 2)

@@ -43,8 +43,8 @@ class AudioRNNModel(nn.Module):
         '''Get RNN instace.'''
         rnn_args = {
             'input_size':input_size,
-            'hidden_size':256,
-            'num_layers':2,
+            'hidden_size':512,
+            'num_layers':1,
             'batch_first':True
         }
         return RNN(rnn_args, 'gru'), rnn_args['hidden_size']
@@ -60,7 +60,7 @@ class AudioRNNModel(nn.Module):
         audio_out = self.audio_model(x)        
         audio_out = audio_out.view(batch_size, seq_length, -1)
         
-        rnn_out, (h_n, c_n) = self.rnn(audio_out)
+        rnn_out, _ = self.rnn(audio_out)
         
         output = self.linear(rnn_out)
         return output

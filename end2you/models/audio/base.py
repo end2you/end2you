@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
+import torch.nn.functional as F
 
 
 class Base(nn.Module):
@@ -62,7 +63,7 @@ class Base(nn.Module):
         layer = nn.ModuleList([self.conv_op(**conv_args)])
         
         if normalize:
-            layer.append(nn.BatchNorm1d(num_features=conv_opts['out_channels']))
+            layer.append(nn.BatchNorm1d(num_features=conv_args['out_channels']))
         
         layer.append(activ_fn)
         return nn.Sequential(*layer)
@@ -72,4 +73,5 @@ class Base(nn.Module):
         Args:
             x (BS x 1 x T)
         '''
+        x = F.dropout(x)
         return self.network(x)
