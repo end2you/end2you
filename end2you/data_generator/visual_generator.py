@@ -32,6 +32,9 @@ class VisualGenerator(Generator):
         
         clip = VideoFileClip(str(data_file))
         
+        if not self.fps:
+            self.fps = int(clip.fps)
+            
         seq_num = labels.shape[0] - 1
         num_samples = int(self.fps * (timestamps[1] - timestamps[0]))
         
@@ -44,7 +47,11 @@ class VisualGenerator(Generator):
             data_frame = data_frame[:num_samples]
             
             if self.detector:
-                data_frame = self.detector.extract_and_resize_face(data_frame)
+                try:
+                    data_frame = self.detector.extract_and_resize_face(data_frame)
+                except:
+                    data_frame = np.zeros(
+                        (1, self.detector.resize[0], self.detector.resize[0], 3), dtype=np.float32)
             data_frame = data_frame.transpose(0, 3, 1, 2)
             
             frames.append(data_frame.astype(np.float32))
