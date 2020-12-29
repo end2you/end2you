@@ -31,11 +31,12 @@ class VisualRNNModel(nn.Module):
     
     def _get_rnn_model(self, input_size:int):
         rnn_args = {
-            'input_size':input_size,
-            'hidden_size':256,
-            'num_layers':2
+            'input_size': input_size,
+            'hidden_size': 512,
+            'num_layers': 1,
+            'batch_first': True
         }
-        return RNN(rnn_args, 'lstm'), rnn_args['hidden_size']
+        return RNN(rnn_args, 'gru'), rnn_args['hidden_size']
     
     def forward(self, x):
         '''
