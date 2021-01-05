@@ -12,16 +12,20 @@ class BaseProvider(Dataset):
     
     def __init__(self,
                  dataset_path:str,
-                 seq_length:int = None):
+                 seq_length:int = None,
+                 augment:bool = False):
         
         self.dataset_path = dataset_path
         self.seq_length = seq_length if seq_length else 0
         self.data_files = sorted(list(Path(dataset_path).glob('**/*.hdf5')))
-        assert len(self.data_files) > 0, f'No files found in [{dataset_path}]. Check `dataset_path` flag.'
+        assert len(self.data_files) > 0, f'No files found in [{dataset_path}]. Check `dataset_path`.'
         self.data_files = [FileProvider(x, self.modality, seq_length) for x in self.data_files]
         self.num_files = len(self.data_files)
         self.total_num_seqs = np.ceil(self._get_total_num_seqs())
         self.label_names = self._get_label_names()
+        self.augment = augment
+        if augment:
+            self.data_transform = self._init_augment()
     
     def _get_total_num_seqs(self):
         ''' Get total number of sequences.'''
@@ -34,6 +38,9 @@ class BaseProvider(Dataset):
     def _get_label_names(self, idx:int = 0):
         ''' Get label names.'''
         return self.data_files[idx]._get_label_names()
+    
+    def _init_augment(self):
+        return lambda x: x
     
     def reset(self):
         for f in self.data_files:
@@ -58,5 +65,4 @@ class BaseProvider(Dataset):
         data_file = self._get_file(idx)
         data, labels = data_file.read_hdf5_file()
         data, labels = self.process_input(data, labels)
-        return data, labels, data_file.file_path
-    
+        return data, labels, str(data_file.file_path)

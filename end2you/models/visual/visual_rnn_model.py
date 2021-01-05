@@ -32,8 +32,8 @@ class VisualRNNModel(nn.Module):
     def _get_rnn_model(self, input_size:int):
         rnn_args = {
             'input_size': input_size,
-            'hidden_size': 512,
-            'num_layers': 1,
+            'hidden_size': 256,
+            'num_layers': 2,
             'batch_first': True
         }
         return RNN(rnn_args, 'gru'), rnn_args['hidden_size']
@@ -50,7 +50,7 @@ class VisualRNNModel(nn.Module):
         
         visual_out = visual_out.view(batch_size, seq_length, -1)
         
-        rnn_out, (h_n, c_n) = self.rnn(visual_out)
+        rnn_out, _ = self.rnn(visual_out)
         
         output = self.linear(rnn_out)
         
