@@ -20,6 +20,15 @@ If you use End2you or any code from End2you in your research work, you are kindl
 }
 ```
 
+### Challenges
+
+End2You has been used with great success, providing strong baselines in the following challenges:
+
+* [Interspeech Computational Paralinguistics ChallengE (ComParE) 2017, 2018](http://www.compare.openaudio.eu/)
+* [EAT: Eating Analysis & Tracking Challenge 2018](https://icmi-eat.ihearu-play.eu/)
+* [Multimodal Sentiment Analysis Challenge and Workshop (MuSe 2020)](https://www.muse-challenge.org/home)
+
+
 ## Installation
 
 ### Conda Installation
