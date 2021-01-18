@@ -26,18 +26,15 @@ class Losses:
             tensor_device = torch.device('cpu')
         tensor_dtype = predictions.dtype
         
-        batch_preds = []#torch.tensor([0.0], dtype=tensor_dtype).to(tensor_device)
-        batch_labs = []#torch.tensor([0.0], dtype=tensor_dtype).to(tensor_device)
+        batch_preds = []
+        batch_labs = []
         for i, m in enumerate(mask):
-            batch_preds.extend(predictions[i,:m]) #= torch.cat((batch_preds, predictions[i,:m].view(-1,)), 0)
-            batch_labs.extend(labels[i,:m]) #= torch.cat((batch_labs, labels[i,:m].view(-1,)), 0)
+            batch_preds.extend(predictions[i,:m]) 
+            batch_labs.extend(labels[i,:m]) 
         
-#         batch_preds = batch_preds[1:].view(-1,)
-#         batch_labs = batch_labs[1:].view(-1,)
         batch_preds = torch.stack(batch_preds)
         batch_labs = torch.stack(batch_labs)
         
-#         total_loss = self._loss(batch_preds, batch_labs)
         return self._loss(batch_preds, batch_labs)
     
     def ccc(self, predictions, labels):
@@ -58,6 +55,5 @@ class Losses:
         return batch_ccc
     
     def cross_entropy_loss(self, instance_cross_entropy_loss, predictions, labels):
-#         predictions = predictions.unsqueeze(0)
         labels = labels.view(-1).type(torch.long)
         return instance_cross_entropy_loss(predictions, labels)
