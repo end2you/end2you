@@ -22,7 +22,7 @@ class GenerationProcess(BaseProcess):
             exclude_cols = [
                 int(x) for x in params.exclude_cols.split(',')]
         else:
-            exclude_cols = None
+            exclude_cols = []
         
         filereader = FileReader(',')
         labelfile_reader = FileReader(delimiter=params.delimiter, 

@@ -18,9 +18,9 @@ def add_train_args(parser):
                         help='Learning rate (default `0.0001`).')
     parser.add_argument('--loss', type=str, default='mse',
                         help='Which loss is going to be used: ccc (Concordance Correlation Coefficient), '
-                             'mse (Mean Squared Error), sce (Softmax Cross Entropy). '
+                             'mse (Mean Squared Error), ce (Cross Entropy). '
                              '(default `mse`)',
-                        choices=['ccc', 'mse', 'sce'])
+                        choices=['ccc', 'mse', 'ce'])
     parser.add_argument('--optimizer', type=str, default='adam',
                         help='Optimizer to use during training (default `adam`).')
     parser.add_argument('--num_epochs', type=int, default=50,

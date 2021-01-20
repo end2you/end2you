@@ -49,7 +49,7 @@ class TrainingProcess(BaseProcess):
         
         tb_path = Path(params.root_dir) / 'summarywriters' 
         summary_writers = {
-            process: SummaryWriter(str(tb_path / getattr(params, process).summarywriter_file))
+            process: SummaryWriter(str(tb_path / process))
                 for process in processes
         }
         
