@@ -57,7 +57,13 @@ class Evaluator(BasePhase):
         self.model.eval()
         
         summary_scores = []
+        num_outs = self.model.num_outs
         file_preds = {str(x.file_path.name):[] for x in provider.dataset.data_files}
+        label_names = provider.dataset._get_label_names()
+        batch_preds = {str(x):[] for x in provider.dataset.label_names}
+        batch_labels = {str(x):[] for x in provider.dataset.label_names}
+        batch_masks = []
+        
         # Use tqdm for progress bar
         with tqdm(total=len(provider)) as bar:
             bar.set_description('Evaluating model')
@@ -68,32 +74,51 @@ class Evaluator(BasePhase):
                     model_input = [x.cuda() for x in model_input] if isinstance(model_input, list) else model_input.cuda()
                     labels = labels.cuda()
                 
-                output = self.model(model_input)
+                predictions = self.model(model_input)
                 for f in file_names:
-                    file_preds[str(f.name)].extend(output.data.cpu().numpy())
+                    file_preds[str(Path(f).name)].extend(predictions.data.cpu().numpy())
                 
-                # compute all metrics on this batch
-                scores = {}
-                for i, name in enumerate(provider.dataset.label_names):
-                    scores[name] = self.eval_fn(output[...,i], labels[...,i], masked_samples)
+                np_preds = predictions.data.cpu().numpy()
+                np_labels = labels.data.cpu().numpy()
+                batch_masks.extend(masked_samples)
+                for o, name in enumerate(label_names):
+                    sl = o
+                    el = o + 1 if len(label_names) > 1 else o + num_outs
+                    batch_preds[name].extend(np_preds[...,sl:el])
+                    batch_labels[name].extend(np_labels[...,sl:el])
                 
-                summary_scores.append(scores)
                 bar.update()
+        
+        scores = {}
+        for i, name in enumerate(label_names):
+            scores[name] = self.eval_fn(batch_preds[name], batch_labels[name], batch_masks)
+        epoch_summaries = [scores]
         
         # Reseting parameters of the data provider
         provider.dataset.reset()
         
         # compute mean of all metrics in summary
-        mean_scores = {label_name:np.mean([batch_sum[label_name] for batch_sum in summary_scores]) 
-                             for label_name in scores.keys()}
+        mean_scores = {
+            label_name: np.mean([
+                batch_sum[label_name] for batch_sum in epoch_summaries
+            ]) 
+            for label_name in scores.keys()
+        }
         
         str_list_scores = [f'{label_name}: {mean_scores[label_name]:05.3f}' 
-                           for label_name in provider.dataset.label_names]
-        str_scores = ' - '.join(str_list_scores)
+                           for label_name in label_names]
+        str_scores = ' - '.join(str_list_scores) 
+        label_scores_mean = np.mean([
+            mean_scores[label_name]  for label_name in label_names])
+        
         logging.info(f'* Evaluation results (wrt {self.metric_name}): {str_scores}\n')
         
-        file_preds = {k:np.vstack(v).tolist() for k,v in file_preds.items()}
+        if len(label_names) > 1:
+            file_preds = {k:np.vstack(v).tolist() for k,v in file_preds.items()}
+        else:
+            file_preds = {k:np.argmax(v[0][-1]).tolist() for k,v in file_preds.items()}
+        
         file_preds.update({'label_names': provider.dataset.label_names.tolist()})
         self._save_dict_to_json(file_preds, str(self.root_dir / 'predictions.json'))
-
-        return mean_scores, file_preds
+        
+        return label_scores_mean, file_preds

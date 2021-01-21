@@ -28,7 +28,8 @@ class VisualRNNModel(nn.Module):
         
         self.rnn, num_out_features = self._get_rnn_model(num_out_features)
         self.linear = nn.Linear(num_out_features, num_outs)
-    
+        self.num_outs = num_outs
+        
     def _get_rnn_model(self, input_size:int):
         rnn_args = {
             'input_size': input_size,

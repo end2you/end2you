@@ -43,7 +43,6 @@ class End2You:
                                         'dataset_path':self.kwargs['train_dataset_path'],
                                         'optimizer':self.kwargs['optimizer'],
                                         'learning_rate':self.kwargs['learning_rate'],
-                                        'summarywriter_file':self.kwargs['train_summarywriter_file'],
                                         'num_epochs':self.kwargs['num_epochs'],
                                         'num_workers':self.kwargs['train_num_workers'],
                                         'cuda': cuda,
@@ -53,8 +52,7 @@ class End2You:
                                         'save_summary_steps':self.kwargs['save_summary_steps'],
                                         'seq_length': self.kwargs['seq_length']
                                        }),
-            'valid':Params(dict_params={'summarywriter_file':self.kwargs['valid_summarywriter_file'],
-                                        'metric':self.kwargs['metric'],
+            'valid':Params(dict_params={'metric':self.kwargs['metric'],
                                         'dataset_path':self.kwargs['valid_dataset_path'],
                                         'num_workers':self.kwargs['valid_num_workers'],
                                         'cuda':cuda,
@@ -85,6 +83,7 @@ class End2You:
             'num_gpus': self.kwargs['num_gpus'],
             'modality': self.kwargs['modality'],
             'log_file': self.kwargs['log_file'],
+            'root_dir': self.kwargs['root_dir'],
             'model':Params(dict_params={'model_name':self.kwargs['model_name'],
                                         'num_outs':self.kwargs['num_outputs']})
         })
@@ -99,7 +98,8 @@ class End2You:
             'exclude_cols': self.kwargs['exclude_cols'],
             'delimiter': self.kwargs['delimiter'],
             'fieldnames': self.kwargs['fieldnames'],
-            'log_file': self.kwargs['log_file']
+            'log_file': self.kwargs['log_file'],
+            'root_dir': self.kwargs['root_dir']
         })
         
         return generator_params

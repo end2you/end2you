@@ -25,6 +25,7 @@ class AudioRNNModel(nn.Module):
         num_out_features = audio_network.num_features
         self.rnn, num_out_features = self._get_rnn_model(num_out_features)
         self.linear = nn.Linear(num_out_features, num_outs)
+        self.num_outs = num_outs
         self.reset_parameters()
         
     def reset_parameters(self):
