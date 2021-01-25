@@ -29,7 +29,7 @@ class Generator:
             data_file, label_file = Path(data_file), Path(label_file)
             logging.info('Writing .hdf5 file for : [{}]'.format(str(data_file)))
             
-            file_name = self.save_data_folder / '{}.hdf5'.format(data_file.name[:-4])
+            file_name = self.save_data_folder / '{}.hdf5'.format(label_file.name[:-4])
             if file_name.exists():
                 continue
             
