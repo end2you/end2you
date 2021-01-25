@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import numpy as np
-import torch.nn.functional as F
 
 
 class Base(nn.Module):
@@ -11,7 +10,7 @@ class Base(nn.Module):
                  maxpool_layers_args:dict,
                  conv_op:nn = nn.Conv1d,
                  max_pool_op:nn = nn.MaxPool1d,
-                 activ_fn:nn = nn.ReLU(),
+                 activ_fn:nn = nn.LeakyReLU(),
                  normalize:bool = False):
         """ Audio model.
         
@@ -32,10 +31,27 @@ class Base(nn.Module):
             network_layers.extend([max_pool_op(**mp_args)])
         
         self.network = nn.Sequential(*network_layers)
+        self.reset_parameters()
+    
+    def reset_parameters(self):
+        for m in list(self.modules()):
+            self._init_weights(m)
+    
+    def _init_weights(self, m):
+        if type(m) == nn.Conv1d or type(m) == nn.Linear:
+            nn.init.kaiming_uniform_(m.weight)
+            nn.init.zeros_(m.bias)
+        if type(m) == nn.LSTM:
+            for name, param in m.named_parameters():
+                if 'bias' in name:
+                    nn.init.zeros_(param)
+                elif 'weight' in name:
+                    nn.init.kaiming_uniform_(param)
     
     @classmethod
     def _num_out_features(cls, input_size:int, conv_args:dict, mp_args:dict):
         ''' Number of features extracted from Convolution Neural Network.
+        
         Args:
             input_size (int): Number of samples of the frame.
             conv_args (dict): parameters of convolutions layers.
@@ -63,7 +79,7 @@ class Base(nn.Module):
         layer = nn.ModuleList([self.conv_op(**conv_args)])
         
         if normalize:
-            layer.append(nn.BatchNorm1d(num_features=conv_args['out_channels']))
+            layer.append(nn.BatchNorm1d(conv_args['out_channels']))
         
         layer.append(activ_fn)
         return nn.Sequential(*layer)
@@ -73,5 +89,4 @@ class Base(nn.Module):
         Args:
             x (BS x 1 x T)
         '''
-        x = F.dropout(x)
         return self.network(x)

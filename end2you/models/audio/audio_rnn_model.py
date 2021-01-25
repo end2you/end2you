@@ -8,8 +8,8 @@ from end2you.models.rnn import RNN
 
 class AudioRNNModel(nn.Module):
     
-    def __init__(self, 
-                 input_size:int, 
+    def __init__(self,
+                 input_size:int,
                  num_outs:int,
                  pretrained:bool = False,
                  model_name:str = None):
@@ -26,26 +26,13 @@ class AudioRNNModel(nn.Module):
         self.rnn, num_out_features = self._get_rnn_model(num_out_features)
         self.linear = nn.Linear(num_out_features, num_outs)
         self.num_outs = num_outs
-        self.reset_parameters()
-        
-    def reset_parameters(self):
-        for m in list(self.modules()):
-            self._init_weights(m)
-    
-    def _init_weights(self, m):
-        if type(m) == nn.GRU:
-            for name, param in m.named_parameters():
-                if 'bias' in name:
-                    nn.init.zeros_(param)
-                elif 'weight' in name:
-                    nn.init.kaiming_uniform_(param)
-    
+
     def _get_rnn_model(self, input_size:int):
         '''Get RNN instace.'''
         rnn_args = {
-            'input_size':input_size,
-            'hidden_size':512,
-            'num_layers':1,
+            'input_size': input_size,
+            'hidden_size': 64,
+            'num_layers': 2,
             'batch_first':True
         }
         return RNN(rnn_args, 'gru'), rnn_args['hidden_size']
@@ -58,10 +45,12 @@ class AudioRNNModel(nn.Module):
         batch_size, seq_length, t = x.shape
         x = x.view(batch_size*seq_length, 1, t)
         
-        audio_out = self.audio_model(x)        
+        audio_out = self.audio_model(x)
         audio_out = audio_out.view(batch_size, seq_length, -1)
         
         rnn_out, _ = self.rnn(audio_out)
-        
+
         output = self.linear(rnn_out)
+        
         return output
+    
