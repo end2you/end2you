@@ -19,7 +19,7 @@ def get_provider(modality):
 
 def pad_collate(batch):
     data, labels, data_file = zip(*batch)
-    
+
     number_of_modalities = len(data[0]) if isinstance(data[0], list) else 1
     if number_of_modalities > 1:
         data = data.unsqueeze(1)

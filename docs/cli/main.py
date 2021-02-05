@@ -2,6 +2,8 @@ import argparse
 import numpy as np
 import math
 import sys
+import torch
+torch.multiprocessing.set_sharing_strategy('file_system')
 
 from end2you.add_parsers import add_parsers
 from end2you.utils import Params

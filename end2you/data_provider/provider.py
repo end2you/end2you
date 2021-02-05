@@ -59,7 +59,7 @@ class BaseProvider(Dataset):
         return data, labels
     
     def __len__(self):
-        return sum([x.total_num_calls for x in self.data_files])    
+        return sum([x.total_num_calls for x in self.data_files])
     
     def __getitem__(self, idx):
         data_file = self._get_file(idx)
