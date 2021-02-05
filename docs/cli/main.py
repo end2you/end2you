@@ -74,6 +74,7 @@ class End2You:
         return train_params
     
     def _get_eval_params(self):
+        cuda = True if 'true' == self.kwargs['cuda'].lower() else False
         eval_params = Params(dict_params={
             'prediction_file': self.kwargs['prediction_file'],
             'seq_length': self.kwargs['seq_length'],
@@ -81,7 +82,7 @@ class End2You:
             'model_path': self.kwargs['model_path'],
             'metric': self.kwargs['metric'],
             'num_workers': self.kwargs['num_workers'],
-            'cuda': self.kwargs['cuda'],
+            'cuda': cuda,
             'num_gpus': self.kwargs['num_gpus'],
             'modality': self.kwargs['modality'],
             'log_file': self.kwargs['log_file'],
