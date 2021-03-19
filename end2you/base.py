@@ -8,32 +8,34 @@ from pathlib import Path
 
 
 class BasePhase:
-    '''Base class for train/eval models.'''
+    """ Base class for train/eval models."""
     
     def __init__(self,
                  model:nn.Module,
                  ckpt_path:str = None,
                  optimizer:optim = None):
-        '''
+        """ Initialize object class.
+        
         Args:
             model (torch.nn.Module): Model for training/evaluation.
             ckpt_path (str): Path to the pretrain model.
             optimizer (torch.optim): Optimizer to use for training.
-        '''
+        """
+        
         self.optimizer = optimizer
         self.model = model
         self.ckpt_path = Path(ckpt_path) if ckpt_path else None
         
     def load_checkpoint(self):
-        '''Loads model parameters (state_dict) from file_path. 
-           If optimizer is provided, loads state_dict of
-           optimizer assuming it is present in checkpoint.
+        """ Loads model parameters (state_dict) from file_path. 
+            If optimizer is provided, loads state_dict of
+            optimizer assuming it is present in checkpoint.
         
         Args:
             checkpoint (str): Filename which needs to be loaded
             model (torch.nn.Module): Model for which the parameters are loaded
             optimizer (torch.optim): Optional: resume optimizer from checkpoint
-        '''
+        """
         
         logging.info("Restoring model from {}".format(str(self.ckpt_path)))
         
@@ -50,12 +52,13 @@ class BasePhase:
     def _save_dict_to_json(self, 
                            dictionary:dict, 
                            json_path:str):
-        '''Saves dict of floats in json file
+        """ Saves dict of floats in json file
         
         Args:
-            d: (dict) of float-castable values (np.float, int, float, etc.)
-            json_path: (string) path to json file
-        '''
+            dictionary (dict): of float-castable values (np.float, int, float, etc.)
+            json_path (string): path to json file
+        """
+        
         with open(json_path, 'w') as f:
             json.dump(dictionary, f, indent=4)
     

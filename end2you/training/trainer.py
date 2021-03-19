@@ -23,7 +23,6 @@ from end2you.base_process import BaseProcess
 
 
 class Trainer(BasePhase):
-    """Train class."""
     
     def __init__(self,
                  loss:Losses,
@@ -33,8 +32,21 @@ class Trainer(BasePhase):
                  root_dir:str,
                  model:nn.Module,
                  ckpt_path:str,
-                 optimizer:optim,
+                 optimizer:torch.optim,
                  params:Params):
+        """ Initialize trainer object class.
+        
+        Args:
+          loss (Losses): The loss function to use.
+          evaluator (MetricProvider): The evaluation function to use.
+          data_providers (dict): The training/evaluation data providers.
+          summary_writers (dict): The training/evaluation summary writers.
+          root_dir (str): Directory path to save output files (e.g. models)
+          model (nn.Module): Instance of a model to train.
+          ckpt_path (str): Path to pre-train model.
+          optimizer (torch.optim): Instance of an optimizer to use.
+          params (Params): Rest of training parameters.
+        """
         
         self.params = params
         
@@ -53,6 +65,9 @@ class Trainer(BasePhase):
         super().__init__(model, ckpt_path, optimizer)
     
     def start_training(self):
+        """ Method that performs the training of the model.
+        """
+        
         logging.info("Starting training!")
         
         best_score = float('-inf')
@@ -107,19 +122,26 @@ class Trainer(BasePhase):
             self._save_dict_to_json({self.metric:val_score}, str(last_json_path))
     
     def _write_bestscore(self, best_score:str):
+        """ Method to write best current score to a file.
+        
+        Args:
+          best_score (str): Best score to save to `best_score.txt` file.
+        """
+        
         f = open(str(self.root_dir / "best_score.txt"),"w+")
         f.write(f"Best score: {best_score}")
         f.close()
     
     def save_checkpoint(self, state:dict, is_best:bool, checkpoint:str):
-        """Saves model and training parameters at checkpoint + 'last.pth.tar'. If is_best==True, also saves
-        checkpoint + 'best.pth.tar'
+        """ Saves model and training parameters at checkpoint + 'last.pth.tar'. 
+            If is_best==True, also saves checkpoint + 'best.pth.tar'
         
         Args:
             state (dict): contains model's state_dict, and some other info of the model.
             is_best (bool): True if it is the best model seen till now.
             checkpoint (str): Folder to save model.
         """
+        
         checkpoint = Path(checkpoint)
         checkpoint.mkdir(exist_ok=True)
         
@@ -130,10 +152,10 @@ class Trainer(BasePhase):
             shutil.copyfile(filepath, str(checkpoint / 'best.pth.tar'))
     
     def _epoch_process(self, is_training:bool):
-        '''
-        Perform one epoch of training or evaluation.
-        Depends on the argument `is_training`.
-        '''
+        """ Perform one epoch of training or evaluation.
+            Depends on the argument `is_training`.
+        """
+        
         params = self.params.train if is_training else self.params.valid
         process = 'train' if is_training else 'valid'
         

@@ -10,6 +10,12 @@ from .singlefile_audiovisual_provider import SingleFile_AVProvider
 
 
 def get_provider(modality):
+    """ Factory method to get the appropriate provider.
+        
+    Args:
+      modality (str): Which modality provider to return.
+    """
+    
     return {
         'audio': AudioProvider,
         'visual': VisualProvider,
@@ -18,6 +24,18 @@ def get_provider(modality):
 
 
 def pad_collate(batch):
+    """ Pad batch tensors to have equal length.
+    
+    Args:
+        batch (list): Data to pad.
+
+    Returns:
+        modality_tensors (torch.Tensor): Batched data tensors. 
+        labels (torch.Tensor): Batched label tensors.
+        num_seqs_per_sample (list): Number of sequences of each batch tensor.
+        data_file (str): File name.
+    """
+    
     data, labels, data_file = zip(*batch)
 
     number_of_modalities = len(data[0]) if isinstance(data[0], list) else 1
@@ -41,13 +59,23 @@ def pad_collate(batch):
 
 
 def get_dataloader(params, **kwargs):
-    """
-    Gets the DataLoader object for each type in split_dirs keys.
+    """ Gets the DataLoader object for each type in split_dirs keys.
+    
     Args:
-        params (Params)  : contains `num_workers` and `cuda` parameters
+      params (Params) : Parameters needed to load data.
+        `modality` (str): Modality to provide data from.
+        `dataset_path` (str): Path to `hdf5` data files.
+        `seq_length` (int): Number of consecuvite frames to load.
+        `batch_size` (int): Batch size.
+        `cuda` (int): Whether to use cuda
+        `num_workers` (int): Number of workers to use.
+        `is_training` (bool): Whether to provide data for training/evaluation.
+
     Returns:
-        dataloaders (dict): contains the DataLoader object for each type in `split_dirs` keys
+      dataloaders (dict): contains the DataLoader object for each type 
+                          in `split_dirs` keys.
     """
+    
     Provider = get_provider(params.modality)
     return  DataLoader(Provider(params.dataset_path, seq_length=params.seq_length),
                        batch_size=params.batch_size,

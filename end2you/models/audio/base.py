@@ -4,6 +4,7 @@ import numpy as np
 
 
 class Base(nn.Module):
+    """ Base class to build convolutional neural network model."""
     
     def __init__(self, 
                  conv_layers_args:dict,
@@ -22,6 +23,7 @@ class Base(nn.Module):
             activ_fn (nn) : Activation function to use (default `nn.Relu()`).
             normalize (bool): Use batch normalization after convolution operation (default `False`).
         """
+        
         super(Base, self).__init__()
         
         self.conv_op = conv_op
@@ -34,10 +36,15 @@ class Base(nn.Module):
         self.reset_parameters()
     
     def reset_parameters(self):
+        """ Initialize parameters of the model."""
         for m in list(self.modules()):
             self._init_weights(m)
     
     def _init_weights(self, m):
+        """ Helper method to initialize the parameters of the model 
+            with Kaiming uniform initialization.
+        """
+        
         if type(m) == nn.Conv1d or type(m) == nn.Linear:
             nn.init.kaiming_uniform_(m.weight)
             nn.init.zeros_(m.bias)
@@ -50,13 +57,14 @@ class Base(nn.Module):
     
     @classmethod
     def _num_out_features(cls, input_size:int, conv_args:dict, mp_args:dict):
-        ''' Number of features extracted from Convolution Neural Network.
+        """ Number of features extracted from Convolution Neural Network.
         
         Args:
             input_size (int): Number of samples of the frame.
             conv_args (dict): parameters of convolutions layers.
             mp_args (dict): parameters of max pool layer layers.
-        '''
+        """
+        
         layer_input = input_size
         num_layers = len(conv_args)
         for i, (conv_arg, mp_arg) in enumerate(zip(*[conv_args.values(), mp_args.values()])):
@@ -70,12 +78,15 @@ class Base(nn.Module):
         return int(layer_input)
     
     def _conv_block(self, conv_args:dict, activ_fn:nn, normalize:bool = False):
-        '''
+        """ Convolution block.
+        
         Args:
             conv_args (dict): parameters of convolution layer.
             activ_fn (nn): Activation function to use (default `nn.Relu()`).
-            normalize (bool): Use batch normalization after convolution operation (default `False`).
-        '''
+            normalize (bool): Use batch normalization after convolution 
+                              operation (default `False`).
+        """
+        
         layer = nn.ModuleList([self.conv_op(**conv_args)])
         
         if normalize:
@@ -85,8 +96,9 @@ class Base(nn.Module):
         return nn.Sequential(*layer)
     
     def forward(self, x):
-        '''
+        """ Forwards pass.
+        
         Args:
             x (BS x 1 x T)
-        '''
+        """
         return self.network(x)

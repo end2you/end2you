@@ -2,8 +2,8 @@ import json
 
 
 class Params:
-    """Helper class for the hyper-parameters.
-    It can either take a dictionary or read from json file.
+    """ Helper class for the hyper-parameters.
+        It can either take a dictionary or read from json file.
     """
     
     def __init__(self, 

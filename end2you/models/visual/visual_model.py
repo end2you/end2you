@@ -10,12 +10,13 @@ class VisualModel(nn.Module):
     def __init__(self, 
                  model_name:str,
                  pretrained:bool = False):
-        ''' Network model.
+        """ Network model.
         
         Args:
             model_name: Name of visual model to use.
                 model names: https://pytorch.org/docs/stable/torchvision/models.html
-        '''
+        """
+        
         super(VisualModel, self).__init__()
         
         network = getattr(models, model_name)
@@ -32,9 +33,9 @@ class VisualModel(nn.Module):
     
     @classmethod
     def _get_out_feats(cls, name):
-        '''Returns the number of features extracted by different visual models
-           with image input size (3 x 96 x 96).
-        '''
+        """ Returns the number of features extracted by different visual models
+            with image input size (3 x 96 x 96).
+        """
         return {
             'resnet18': 512,
             'resnet34': 512,
@@ -75,10 +76,12 @@ class VisualModel(nn.Module):
         }[name]
     
     def forward(self, x):
-        '''
+        """ Forward pass
+        
         Args:
             x (BS x 3 x H x W)
-        '''
+        """
+        
         if self.pretrained:
             x = self.normalize(x)
         return self.model(x)

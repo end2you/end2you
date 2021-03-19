@@ -14,7 +14,6 @@ from pathlib import Path
 
 
 class Evaluator(BasePhase):
-    '''Evaluation class.'''
     
     def __init__(self,
                  metric:MetricProvider,
@@ -23,7 +22,8 @@ class Evaluator(BasePhase):
                  model_path:str,
                  cuda:bool,
                  root_dir = './'):
-        '''
+        """ Initialize object class to perform evaluation.
+        
         Args:
             metric (MetricProvider): Metric to use for evaluation.
             data_provider (BaseProvider): Data provider.
@@ -31,7 +31,8 @@ class Evaluator(BasePhase):
             model (torch.nn.Module): Model to use for evaluation.
             model_path (str): Path to restore model.
             cuda (bool): Use GPU.
-        '''
+        """
+        
         super().__init__(model, model_path)
         self.eval_fn = metric.eval_fn
         self.metric_name = metric.metric_name
@@ -42,10 +43,10 @@ class Evaluator(BasePhase):
         BaseProcess.set_logger(str(self.root_dir / 'evaluation.log'))
     
     def start_evaluation(self):
-        '''
-           Perform one epoch of training or evaluation.
-           Depends on the argument `is_training`.
-        '''
+        """ Perform one epoch of training or evaluation.
+            Depends on the argument `is_training`.
+        """
+        
         logging.info("Starting Evaluation!")
         
         provider = self.data_provider

@@ -9,6 +9,11 @@ class FaceExtractor:
     
     def __init__(self,
                  resize:tuple = (96, 96)):
+        """ Initialize face extractor object.
+        
+        Args:
+          resize (tuple): Size to resize frames (default `(96,96)`).
+        """
         
         device = torch.device(
             'cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -17,8 +22,9 @@ class FaceExtractor:
     
     def resize_frames(self, frames:list):
         ''' Resizes frames.
+        
         Args:
-            frames (list): list of frames.
+            frames (list): List of frames.
         '''
         
         resized_frames = [] 
@@ -30,8 +36,10 @@ class FaceExtractor:
     
     def extract_face(self, frames:np.array):
         ''' Detects and extract the most visible face from a frame.
+        
         Args:
             frames (np.array) (N x H x W x 3): N frames
+        
         Returns:
             The cropped face of the subject.
         '''

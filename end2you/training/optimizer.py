@@ -2,7 +2,12 @@ import torch.optim as optim
 
 
 def get_optimizer(optimizer:str):
-    ''' Provides the optimizer.''' 
+    """ Factory method to provide the optimizer. 
+    
+    Args:
+      optimizer (str): The optimizer to use.
+    """
+    
     return {
         'adagrad': optim.Adagrad,
         'adam': optim.Adam,

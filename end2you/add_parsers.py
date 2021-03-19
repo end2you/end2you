@@ -82,7 +82,8 @@ def add_parsers():
     parser.add_argument('--batch_size', type=int, default=2,
                         help='The batch size to use. (default 2)')
     parser.add_argument('--seq_length', type=int, default=None,
-                        help='The sequence length to introduce to the RNN. If `None` it uses whole sequence as input (default `None`)')
+                        help="""The sequence length to introduce to the RNN. 
+                        If `None` it uses whole sequence as input (default `None`)""")
     parser.add_argument('--cuda', type=str, default='false',
                         help='Whether to use GPU or not (default `false`).')
     parser.add_argument('--num_gpus', type=int, default=1,

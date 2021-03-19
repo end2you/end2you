@@ -8,11 +8,26 @@ from .base import Base
 class Emo18(nn.Module):
     
     def __init__(self, input_size:int):
+        """ Speech emotion recognition model proposed in:
+        
+        `Tzirakis, P., Zhang, J., and Schuller, BW. "End-to-end speech emotion recognition 
+        using deep neural networks." In 2018 IEEE international conference on acoustics, speech 
+        and signal processing (ICASSP), (pp. 5089-5093). IEEE.`
+        
+        Args:
+            input_size (int): Input size to the model. 
+        """
+        
         super(Emo18, self).__init__()
         self.model, self.num_features = self.build_audio_model(input_size)
     
-    def build_audio_model(self, input_size):
-        '''Build the audio model: 3 blocks of convolution + max-pooling.'''
+    def build_audio_model(self, input_size:int):
+        """ Build the audio model: 3 blocks of convolution + max-pooling.
+        
+        Args:
+          input_size (int): Input size of frame.
+        """
+        
         out_channels = [16,32,64]
         in_channels = [1]
         in_channels.extend([x for x in out_channels[:-1]])

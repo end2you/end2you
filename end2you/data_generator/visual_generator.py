@@ -17,6 +17,13 @@ class VisualGenerator(Generator):
                  detector:FaceExtractor = FaceExtractor(),
                  fps:int = 30, 
                  *args, **kwargs):
+        """ Initialize object class.
+        
+        Args:
+          labelfile_reader (FileReader): Class to read label files.
+          detector (FaceExtractor): Instance of face detector (default FaceExtractor()).
+          fps (int): The frames per second to use for the visual modality.
+        """
         
         self.labelfile_reader = labelfile_reader
         self.fps = fps
@@ -24,7 +31,20 @@ class VisualGenerator(Generator):
         super().__init__(*args, **kwargs)
     
     def _get_samples(self, data_file, label_file):
+        """ Read samples from file.
         
+        Args:
+          data_file (str): File to read the data from.
+          label_file (str): File to read the labels from.
+        
+        Returns:
+          frames (np.array): Frames of each file.
+          labels (np.array): Labels for each frame.
+          seq_num (int): Number of samples in file.
+          num_samples (int): Number of samples per frame.
+          attrs_name (str): Label names.
+        """
+
         file_data, attrs_name = self.labelfile_reader.read_file(label_file)
         file_data = np.array(file_data).astype(np.float32)
         timestamps = file_data[:,0]
@@ -62,6 +82,14 @@ class VisualGenerator(Generator):
         return frames, labels, seq_num, num_samples, attrs_name
     
     def serialize_samples(self, writer, data_file, label_file):
+        """ Write data to `hdf5` file.
+        
+        Args:
+          writer (h5py.File): Open file to write data.
+          data_file (str): Data file name.
+          label_file (str): Label file name.
+        """
+        
         frames, labels, seq_num, num_samples, names = self._get_samples(data_file, label_file)
         
         # store data

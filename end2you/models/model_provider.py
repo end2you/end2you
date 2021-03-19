@@ -7,10 +7,13 @@ from .multimodal import AudioVisualRNNModel
 
 
 def get_model(model:str = 'audio', *args, **kwargs):
-    ''' Returns one of `audio`, `visual`, `audiovisual`.
+    """ Factory method to provide a model of choice 
+        (`audio`, `visual`, `audiovisual`).
+    
     Args:
-        model (str): Choice of model.
-    '''
+        model (str): Model to use.
+    """
+    
     return {
         'audio': AudioRNNModel,
         'visual': VisualRNNModel,

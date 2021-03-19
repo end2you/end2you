@@ -6,7 +6,7 @@ from torch import is_tensor
 
 
 class AudioProvider(BaseProvider):
-    """AudioProvider dataset."""
+    """Provides the data for the audio modality."""
     
     def __init__(self, *args, **kwargs):
         self.modality = 'audio'

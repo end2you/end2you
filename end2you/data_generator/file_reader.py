@@ -10,11 +10,28 @@ class FileReader:
                  delimiter:str = ',', 
                  exclude_cols:list = [],
                  fieldnames:list = None):
+        """ Initialize object class to read a file.
+        
+        Args:
+          delimiter (str): Delimiter used in the file (default `,`).
+          exclude_cols (list): Exclude column in the file (default `None`).
+          fieldnames (list): Names of the column in the file (default `None`).
+        """
+        
         self.delimiter = delimiter
         self.exclude_cols = exclude_cols
         self.fieldnames = fieldnames
     
     def read_file(self, file:str):
+        """ Reads a file.
+        
+        Args:
+          file (str): File path to read.
+        
+        Returns:
+          data (np.array): The data contained in the file.
+          attributes_name (list): List with the column names.
+        """
         
         with open(file, 'r') as f:
             reader = csv.DictReader(f, 

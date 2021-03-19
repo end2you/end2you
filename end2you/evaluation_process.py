@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 class EvaluationProcess(BaseProcess):
+    """ Process evaluation class."""
     
     def __init__(self, 
                  params:Params,

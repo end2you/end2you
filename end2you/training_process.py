@@ -13,6 +13,7 @@ from end2you.base_process import BaseProcess
 
 
 class TrainingProcess(BaseProcess):
+    """ Training process class. """
     
     def __init__(self, 
                  params:Params,

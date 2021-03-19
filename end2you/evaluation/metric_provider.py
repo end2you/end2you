@@ -8,22 +8,40 @@ class MetricProvider:
     
     def __init__(self,
                  metric:str = 'mse'):
-        ''' Helper class to use metric.
+        """ Helper class to use metric.
+        
         Args:
             metric (str): Metric to use for evaluation.
-        '''
+        """
+        
         self._metric = self._get_metric(metric)
         self.eval_fn = self.masked_eval_fn
         self.metric_name = metric
     
     def _get_metric(self, metric:str):
+        """ Factory method to return metric.
+        
+        Args:
+            metric (str): Metric to use for evaluation.
+        """
+        
         return {
             'mse': self.MSE,
             'ccc': self.CCC,
             'uar': self.UAR
         }[metric.lower()]
     
-    def masked_eval_fn(self, predictions:np.array, labels:np.array, masks:list):
+    def masked_eval_fn(self, 
+                       predictions:np.array, 
+                       labels:np.array, 
+                       masks:list):
+        """ Factory method to return metric.
+        
+        Args:
+            predictions (np.array): Model predictions.
+            labels (np.array): Data labels.
+            masks (list): List of the frames to consider in each batch.
+        """
         
         dtype = predictions[0].dtype
         
@@ -37,6 +55,13 @@ class MetricProvider:
         return self._metric(batch_preds, batch_labs)
     
     def CCC(self, predictions:np.array, labels:np.array):
+        """ Concordance Correlation Coefficient (CCC) metric.
+        
+        Args:
+            predictions (np.array): Model predictions.
+            labels (np.array): Data labels.
+        """
+        
         predictions = np.concatenate(predictions).reshape(-1,)
         labels = np.concatenate(labels).reshape(-1,)
         
@@ -44,6 +69,13 @@ class MetricProvider:
         return (2 * mean_cent_prod) / (predictions.var() + labels.var() + (predictions.mean() - labels.mean()) ** 2)
     
     def UAR(self, predictions:np.array, labels:np.array):
+        """ Unweighted Average Recall (UAR) metric.
+        
+        Args:
+            predictions (np.array): Model predictions.
+            labels (np.array): Data labels.
+        """
+        
         predictions = np.stack([x[...,-1,:] for x in predictions])
         labels = np.stack([x[...,-1,:] for x in labels])
         
@@ -55,5 +87,12 @@ class MetricProvider:
         return recall_score(labels, predictions, average="macro")
     
     def MSE(self, predictions:np.array, labels:np.array):
+        """ Mean Squared Error (MSE) metric.
+        
+        Args:
+            predictions (np.array): Model predictions.
+            labels (np.array): Data labels.
+        """
+            
         return np.mean((predictions - labels)**2)
     

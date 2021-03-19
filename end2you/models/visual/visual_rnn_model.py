@@ -13,14 +13,15 @@ class VisualRNNModel(nn.Module):
                  input_size:int = 1, 
                  pretrained:bool = False,
                  num_outs:int = 2):
-        ''' Visual model with RNN on top.
+        """ Visual model with an RNN on top.
         
         Args:
             model_name (str): Which visual model to use.
-            input_size (int): input size to the model. 
-            pretrained (bool): Use pretrained (on ImageNet) model.
-            num_outs (int): number of output values of the model.
-        '''
+            input_size (int): input size to the model (default `1`). 
+            pretrained (bool): Use pretrained (on ImageNet) model (default `False`).
+            num_outs (int): number of output values of the model (default `2`).
+        """
+        
         super(VisualRNNModel, self).__init__()
         
         self.visual_model = VisualModel(model_name, pretrained)
@@ -31,6 +32,8 @@ class VisualRNNModel(nn.Module):
         self.num_outs = num_outs
         
     def _get_rnn_model(self, input_size:int):
+        """ Builder method to instantiate an RNN object."""
+        
         rnn_args = {
             'input_size': input_size,
             'hidden_size': 256,
@@ -40,10 +43,12 @@ class VisualRNNModel(nn.Module):
         return RNN(rnn_args, 'gru'), rnn_args['hidden_size']
     
     def forward(self, x):
-        '''
+        """ Forward pass.
+        
         Args:
             x (BS x S x C x H x W)
-        '''
+        """
+        
         batch_size, seq_length, c, h, w = x.shape
         x = x.view(batch_size*seq_length, c, h, w)
         

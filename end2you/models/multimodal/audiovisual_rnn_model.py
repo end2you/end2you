@@ -14,14 +14,16 @@ class AudioVisualRNNModel(nn.Module):
                  model_name:str,
                  num_outs:int,
                  pretrained:bool = False):
-        ''' Audiovisual model.
+        """ Audiovisual model.
         
         Args:
             input_size (list): List with the input size of both modalities.
                                First the audio size and then visual.
             model_name (str): Which visual network to use.
-            num_outs (int): number of output values of the model.
-        '''
+            num_outs (int): Number of output values of the model.
+            pretrained (bool): Whether to use pretrain model (default `False`).
+        """
+        
         super(AudioVisualRNNModel, self).__init__()
         
         audio_num_samples = input_size[0]
@@ -37,6 +39,8 @@ class AudioVisualRNNModel(nn.Module):
         self.linear = nn.Linear(num_out_features, num_outs)
     
     def _get_rnn_model(self, input_size:int):
+        """ Builder method to get RNN instace."""
+
         rnn_args = {
             'input_size':input_size,
             'hidden_size':512,
@@ -45,14 +49,16 @@ class AudioVisualRNNModel(nn.Module):
         return RNN(rnn_args, 'lstm'), rnn_args['hidden_size']
     
     def forward(self, model_input:list):
-        '''
+        """ Forward pass.
+        
         Args:
             model_input (list): List with audio and visual tensor, respectively.
                 visual_input (BS x S x C x H x W) : Visual tensor.
                 audio_input (BS x S x 1 x T) : Audio tensor.
         Returns:
             Output of the model with dimension (BS x S x num_outs).
-        '''
+        """
+        
         audio_input, visual_input = model_input
         
         batch_size, seq_length, cv, h, w = visual_input.shape

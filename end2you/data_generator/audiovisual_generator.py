@@ -11,13 +11,23 @@ from .face_extractor import FaceExtractor
 
 
 class AudioVisualGenerator(Generator):
-    
+    """Generates the audiovisual data."""
+
     def __init__(self,
                  labelfile_reader:FileReader, 
                  detector:FaceExtractor = FaceExtractor(),
                  fps:int = 30, 
                  sr:int = 16000,
                  *args, **kwargs):
+        """ Initialize object class.
+        
+        Args:
+          labelfile_reader (FileReader): Class to read label files.
+          detector (FaceExtractor): Instance of face detector (default FaceExtractor()).
+          fps (int): The frames per second to use for the visual modality.
+          sr (int): The sampling rate to use for the visual modality.
+        """
+        
         super().__init__(*args, **kwargs)
         
         self.detector = detector
@@ -26,6 +36,19 @@ class AudioVisualGenerator(Generator):
         self.sr = sr
     
     def _get_samples(self, data_file:str, label_file:str):
+        """ Read audiovisual data from file.
+        
+        Args:
+          data_file (str): File to read the data from.
+          label_file (str): File to read the labels from.
+        
+        Returns:
+          frames (np.array): Frames of each file.
+          labels (np.array): Labels for each frame.
+          seq_num (int): Number of samples in file.
+          num_samples (int): Number of samples per frame.
+          attrs_name (str): Label names.
+        """
         
         file_data, attrs_name = self.labelfile_reader.read_file(label_file)
         file_data = np.array(file_data).astype(np.float32)
@@ -69,6 +92,14 @@ class AudioVisualGenerator(Generator):
         return data, labels, seq_num, num_samples, attrs_name
     
     def serialize_samples(self, writer:h5py.File, data_file:str, label_file:str):
+        """ Write data to `hdf5` file.
+        
+        Args:
+          writer (h5py.File): Open file to write data.
+          data_file (str): Data file name.
+          label_file (str): Label file name.
+        """
+
         frames, labels, seq_num, num_samples, names = self._get_samples(data_file, label_file)
         audio_frames, visual_frames = frames
         

@@ -8,7 +8,7 @@ from end2you.base_process import BaseProcess
 
 
 class GenerationProcess(BaseProcess):
-    '''Data generation process.'''
+    """ Data generation process."""
     
     def __init__(self,
                  params:Params,

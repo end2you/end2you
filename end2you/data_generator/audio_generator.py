@@ -8,17 +8,38 @@ from .file_reader import FileReader
 
 
 class AudioGenerator(Generator):
-    
+    """Generates the data for the audio modality."""
+
     def __init__(self, 
                  labelfile_reader:FileReader, 
                  fps:int = 16000, 
                  *args, **kwargs):
+        """ Initialize object class.
+        
+        Args:
+          labelfile_reader (FileReader): Class to read label files.
+          fps (int): The sampling rate to use.
+        """
+        
         super().__init__(*args, **kwargs)
         self.fps = fps
         self.labelfile_reader = labelfile_reader
     
     def _get_samples(self, data_file:str, label_file:str):
+        """ Read samples from file.
         
+        Args:
+          data_file (str): File to read the data from.
+          label_file (str): File to read the labels from.
+        
+        Returns:
+          frames (np.array): Frames of each file.
+          labels (np.array): Labels for each frame.
+          seq_num (int): Number of samples in file.
+          num_samples (int): Number of samples per frame.
+          attrs_name (str): Label names.
+        """
+
         file_data, attrs_name = self.labelfile_reader.read_file(label_file)
         file_data = np.array(file_data).astype(np.float32)
         timestamps = file_data[:,0]
@@ -45,6 +66,14 @@ class AudioGenerator(Generator):
         return frames, labels, seq_num, num_samples, attrs_name
     
     def serialize_samples(self, writer:h5py.File, data_file:str, label_file:str):
+        """ Write data to `hdf5` file.
+        
+        Args:
+          writer (h5py.File): Open file to write data.
+          data_file (str): Data file name.
+          label_file (str): Label file name.
+        """
+
         frames, labels, seq_num, num_samples, names = self._get_samples(data_file, label_file)
         
         # store data
