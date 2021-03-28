@@ -65,7 +65,7 @@ class BaseProvider(Dataset):
     
     def _get_file(self, idx):
         """ File to read data from next. 
-
+        
         Args:
           idx (int): Index of file to read.
         """

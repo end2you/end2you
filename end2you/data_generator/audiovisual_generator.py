@@ -43,7 +43,7 @@ class AudioVisualGenerator(Generator):
           label_file (str): File to read the labels from.
         
         Returns:
-          frames (np.array): Frames of each file.
+          frames (list): Audio and visual frames of each file.
           labels (np.array): Labels for each frame.
           seq_num (int): Number of samples in file.
           num_samples (int): Number of samples per frame.
@@ -72,8 +72,11 @@ class AudioVisualGenerator(Generator):
             visual_frame = visual_frame[:visual_num_samples]
             
             if self.detector:
-                # Detect, extract, and resize face
-                visual_frame = self.detector.extract_and_resize_face(visual_frame)
+                try:
+                    visual_frame = self.detector.extract_and_resize_face(visual_frame)
+                except:
+                    visual_frame = np.zeros(
+                        (1, self.detector.resize[0], self.detector.resize[0], 3), dtype=np.float32)
             
             visual_frame = visual_frame.transpose(0, 3, 1, 2)
             visual_frames.append(visual_frame.astype(np.float32))
@@ -82,7 +85,7 @@ class AudioVisualGenerator(Generator):
             audio_frame = audio_frame.mean(1)[:audio_num_samples]
             
             audio_frames.append(audio_frame.astype(np.float32))
-            
+                
         visual_frames = np.array(visual_frames).astype(np.float32)
         audio_frames = np.array(audio_frames).astype(np.float32)
         labels = np.array(labels).astype(np.float32)

@@ -35,5 +35,5 @@ class SingleFile_AVProvider(BaseProvider):
           data (list): List of audio and visual frames. 
           labels (np.array): Labels. 
         """
-        return [data[0], data[1]/255.], labels
+        return [data[0], data[1][:,0,...]/255.], labels
     

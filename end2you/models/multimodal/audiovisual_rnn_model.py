@@ -5,15 +5,18 @@ import torch
 from end2you.models.visual import VisualModel
 from end2you.models.audio import AudioModel
 from end2you.models.rnn import RNN
+from end2you.models.multimodal.fusion import FusionLayer
 
 
 class AudioVisualRNNModel(nn.Module):
     
     def __init__(self, 
                  input_size:list, 
-                 model_name:str,
                  num_outs:int,
-                 pretrained:bool = False):
+                 model_name:list = ['emo16', 'resnet18'],
+                 fusion_method:str = 'concat',
+                 pretrained:bool = False,
+                 *args, **kwargs):
         """ Audiovisual model.
         
         Args:
@@ -26,21 +29,27 @@ class AudioVisualRNNModel(nn.Module):
         
         super(AudioVisualRNNModel, self).__init__()
         
+        # Initialize Visual model
         audio_num_samples = input_size[0]
-        self.visual_model = VisualModel(model_name)
+        self.visual_model = VisualModel(model_name[1])
         num_visual_features = self.visual_model.num_features
         
-        audio_network = AudioModel(audio_num_samples)
-        self.audio_model = audio_network.audio_model
-        num_audio_features = audio_network.num_features
+        # Initialize Audio model
+        self.audio_model = AudioModel(model_name[0], input_size=audio_num_samples)
+        num_audio_features = self.audio_model.num_features
         
-        rnn_input_features = num_visual_features + num_audio_features
+        # Initialize Fusion layer
+        self.fusion_layer = FusionLayer(fusion_method, 
+                                        num_feats_modality=[num_audio_features, num_visual_features]) 
+        
+        # Initialize RNN layer
+        rnn_input_features = self.fusion_layer.num_features
         self.rnn, num_out_features = self._get_rnn_model(rnn_input_features)
         self.linear = nn.Linear(num_out_features, num_outs)
     
     def _get_rnn_model(self, input_size:int):
         """ Builder method to get RNN instace."""
-
+        
         rnn_args = {
             'input_size':input_size,
             'hidden_size':512,
@@ -73,7 +82,7 @@ class AudioVisualRNNModel(nn.Module):
         audio_out = audio_out.view(batch_size, seq_length, -1)
         visual_out = visual_out.view(batch_size, seq_length, -1)
         
-        multimodal_input = torch.cat([audio_out, visual_out], -1)
+        multimodal_input = self.fusion_layer([audio_out, visual_out])
         
         rnn_out, (h_n, c_n) = self.rnn(multimodal_input)
         
