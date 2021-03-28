@@ -54,7 +54,7 @@ class VisualGenerator(Generator):
         
         if not self.fps:
             self.fps = int(clip.fps)
-            
+        
         seq_num = labels.shape[0] - 1
         num_samples = int(self.fps * (timestamps[1] - timestamps[0]))
         

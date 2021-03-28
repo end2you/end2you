@@ -55,8 +55,13 @@ class AudioGenerator(Generator):
             start_time = timestamps[i]
             end_time = timestamps[i + 1]
             
-            data_frame = np.array(list(clip.subclip(start_time, end_time).iter_frames()))
+            data_frame = np.array(
+                list(clip.subclip(start_time, end_time).iter_frames()))
             data_frame = data_frame.mean(1)[:num_samples]
+            
+            if data_frame.shape[0] < num_samples:
+                data_frame = np.pad(data_frame, 
+                    (0, num_samples - data_frame.shape[0] % num_samples), 'constant')
             
             frames.append(data_frame.astype(np.float32))
         
