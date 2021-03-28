@@ -28,7 +28,7 @@ def pad_collate(batch):
     
     Args:
         batch (list): Data to pad.
-
+    
     Returns:
         modality_tensors (torch.Tensor): Batched data tensors. 
         labels (torch.Tensor): Batched label tensors.
@@ -37,14 +37,14 @@ def pad_collate(batch):
     """
     
     data, labels, data_file = zip(*batch)
-
-    number_of_modalities = len(data[0]) if isinstance(data[0], list) else 1
-    if number_of_modalities > 1:
-        data = data.unsqueeze(1)
     
+    number_of_modalities = len(data[0]) if isinstance(data[0], list) else 1
+    if number_of_modalities == 1:
+        data = [[x] for x in data]
+
     modality_tensors = []
     for i in range(number_of_modalities):
-        modality_i = [torch.Tensor(x) for x in data]
+        modality_i = [torch.Tensor(x[i]) for x in data]
         padded_modality = pad_sequence(modality_i, batch_first=True)
         modality_tensors.append(padded_modality)
     
@@ -70,7 +70,7 @@ def get_dataloader(params, **kwargs):
         `cuda` (int): Whether to use cuda
         `num_workers` (int): Number of workers to use.
         `is_training` (bool): Whether to provide data for training/evaluation.
-
+    
     Returns:
       dataloaders (dict): contains the DataLoader object for each type 
                           in `split_dirs` keys.

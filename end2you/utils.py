@@ -30,6 +30,9 @@ class Params:
     def __getitem__(self, key:str):
         return self.__dict__[key]
     
+    def __str__(self):
+        return str(self.dict)
+
     @property
     def dict(self):
         return self.__dict__

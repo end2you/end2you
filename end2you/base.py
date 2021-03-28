@@ -17,7 +17,7 @@ class BasePhase:
         """ Initialize object class.
         
         Args:
-            model (torch.nn.Module): Model for training/evaluation.
+            model (torch.nn.Module): Model to train/evaluate.
             ckpt_path (str): Path to the pretrain model.
             optimizer (torch.optim): Optimizer to use for training.
         """
@@ -25,7 +25,7 @@ class BasePhase:
         self.optimizer = optimizer
         self.model = model
         self.ckpt_path = Path(ckpt_path) if ckpt_path else None
-        
+    
     def load_checkpoint(self):
         """ Loads model parameters (state_dict) from file_path. 
             If optimizer is provided, loads state_dict of
@@ -37,7 +37,7 @@ class BasePhase:
             optimizer (torch.optim): Optional: resume optimizer from checkpoint
         """
         
-        logging.info("Restoring model from {}".format(str(self.ckpt_path)))
+        logging.info("Restoring model from [{}]".format(str(self.ckpt_path)))
         
         if not Path(self.ckpt_path).exists():
             raise Exception("File doesn't exist [{}]".format(str(self.ckpt_path)))

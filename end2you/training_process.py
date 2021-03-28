@@ -73,4 +73,3 @@ class TrainingProcess(BaseProcess):
     
     def start(self):
         self.trainer.start_training()
-    

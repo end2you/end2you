@@ -182,19 +182,23 @@ class Trainer(BasePhase):
             bar.set_description(f'{bar_string} model')
             for n_iter, (model_input, labels, masked_samples, _) in enumerate(provider):
                 
+                input_dtype = model_input[0].dtype if isinstance(model_input, list) \
+                                                   else model_input.dtype 
+                
                 if is_training:
                     self.optimizer.zero_grad()
                 
                 # move to GPU if available
                 if params.cuda:
                     model_input = [
-                        x.cuda() for x in model_input] if isinstance(model_input, list) else model_input.cuda()
+                        x.cuda() for x in model_input] if isinstance(model_input, list) \
+                                                       else model_input.cuda()
                     labels = labels.cuda()
                 
                 predictions = self.model(model_input)
                 
                 total_loss = nn.Parameter(
-                    torch.tensor(0.0, dtype=model_input.dtype), 
+                    torch.tensor(0.0, dtype=input_dtype), 
                     requires_grad=is_training)
                 for o, name in enumerate(label_names):
                     sl = o
