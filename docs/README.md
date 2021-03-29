@@ -4,8 +4,14 @@ We provide the following [basic](tutorials/basic) tutorials to get you started w
 
 1. [Data Generation](tutorials/basic/1.%20Data%20Generation.ipynb): Show how to generate `hdf5` files from a dataset.<br>
 2. [Data Provider](tutorials/basic/2.%20Data%20Provider.ipynb): Show how to read the `hdf5` files.<br>
-3. [Training Process](tutorials/basic/3.%20Training%20Process.ipynb): Show how to train a model.<br>
-4. [Evaluation Process](tutorials/basic/4.%20Evaluation%20Process.ipynb)
+3. [Training Process](tutorials/basic/3.%20Training%20Process.ipynb): Show how to train a model using training/validation data.<br>
+4. [Evaluation Process](tutorials/basic/4.%20Evaluation%20Process.ipynb): Show how to evaluate a model on a test set.
+
+In addition, we provide a more [advanced example](advanced/Training.ipynb) and show how to: 
+(i) pre-process your data using a custom method.
+(ii) use a custom network architecture.
+(iii) use a custom loss function for training or evaluation of a model.
+(iv) use a custom metric function for training or evaluation of a model.
 
 
 ## Models
