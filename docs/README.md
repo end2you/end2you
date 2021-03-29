@@ -1,12 +1,27 @@
 ## Tutorials
 
-We provide tutorials and a script [file](cli) to get you started with End2You. In particular we provide the following:
+We provide the following [basic](tutorials/basic) tutorials to get you started with End2You
 
-1. [Data Generation](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/1.%20Data%20Generation.ipynb)<br>
-2. [Data Provider](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/2.%20Data%20Provider.ipynb)<br>
-3. [Training Process](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/3.%20Training%20Process.ipynb)<br>
-4. [Evaluation Process](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/4.%20Evaluation%20Process.ipynb)
+1. [Data Generation](tutorials/basic/1.%20Data%20Generation.ipynb): Show how to generate `hdf5` files from a dataset.<br>
+2. [Data Provider](tutorials/basic/2.%20Data%20Provider.ipynb): Show how to read the `hdf5` files.<br>
+3. [Training Process](tutorials/basic/3.%20Training%20Process.ipynb): Show how to train a model using training/validation data.<br>
+4. [Evaluation Process](tutorials/basic/4.%20Evaluation%20Process.ipynb): Show how to evaluate a model on a test set.
 
+In addition, we provide a more [advanced example](advanced/Training.ipynb) and show how to: 
+* pre-process your data using a custom method.
+* use a custom network architecture.
+* use a custom loss function for training or evaluation of a model.
+* use a custom metric function for training or evaluation of a model.
+
+Finally, we provide a script [file](cli) to use the command line interface.
+
+## Use Cases
+
+We provide [notebooks](use_cases) to train/evaluate models using standard emotion recognition databases:
+
+* [AffWild](use_cases/AffWild)
+* [RECOLA](use_cases/RECOLA)
+* [SEWA](use_cases/SEWA)
 
 ## Models
 
