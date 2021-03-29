@@ -14,7 +14,7 @@ class Losses:
           loss (str): Loss function to use
         """
         
-        self._loss = self._get_loss(loss)
+        self._loss = self._get_loss(loss) if loss else None
         self.loss_fn = self.masked_loss
         self.loss_name = loss
     
@@ -29,7 +29,7 @@ class Losses:
             'mse': nn.MSELoss(),
             'ccc': self.ccc,
             'ce': partial(self.cross_entropy_loss, nn.CrossEntropyLoss())
-        }[loss]
+        }[loss.lower()]
     
     def masked_loss(self, 
                     predictions:torch.Tensor, 
@@ -93,7 +93,7 @@ class Losses:
         """ Cross Entropy loss. 
         
         Args:
-          instance_cross_entropy_loss: Instance of cross entropy loss, i.e., nn.CrossEntropyLoss())
+          instance_cross_entropy_loss: Instance of cross entropy loss, i.e., nn.CrossEntropyLoss()
           predictions (torch.Tensor): Predictions of the model.
           labels (torch.Tensor): Labels of the data.
         """

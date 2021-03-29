@@ -48,6 +48,7 @@ class Trainer(BasePhase):
           params (Params): Rest of training parameters.
         """
         
+        params.valid.dict['save_summary_steps'] = 1
         self.params = params
         
         self.root_dir = Path(params.root_dir)
@@ -163,7 +164,7 @@ class Trainer(BasePhase):
         provider = self.provider[process]
         
         label_names = provider.dataset._get_label_names()
-        num_outs = self.params.model.num_outs
+        num_outs = self.model.num_outs
         
         self.model.train(is_training)
         
@@ -213,7 +214,7 @@ class Trainer(BasePhase):
                     if n_iter % params.save_summary_steps == 0:
                         writer.add_scalar(f'{self.loss_name}_loss_{name}/', label_loss)
                 
-                total_loss /= self.params.model.num_outs
+                total_loss /= num_outs
                 mean_loss += total_loss
                 
                 if is_training:
