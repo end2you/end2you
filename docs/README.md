@@ -8,10 +8,10 @@ We provide the following [basic](tutorials/basic) tutorials to get you started w
 4. [Evaluation Process](tutorials/basic/4.%20Evaluation%20Process.ipynb): Show how to evaluate a model on a test set.
 
 In addition, we provide a more [advanced example](advanced/Training.ipynb) and show how to: 
-(i) pre-process your data using a custom method.
-(ii) use a custom network architecture.
-(iii) use a custom loss function for training or evaluation of a model.
-(iv) use a custom metric function for training or evaluation of a model.
+* pre-process your data using a custom method.
+* use a custom network architecture.
+* use a custom loss function for training or evaluation of a model.
+* use a custom metric function for training or evaluation of a model.
 
 
 ## Models
