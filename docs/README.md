@@ -7,7 +7,7 @@ We provide the following [basic](tutorials/basic) tutorials to get you started w
 3. [Training Process](tutorials/basic/3.%20Training%20Process.ipynb): Show how to train a model using training/validation data.<br>
 4. [Evaluation Process](tutorials/basic/4.%20Evaluation%20Process.ipynb): Show how to evaluate a model on a test set.
 
-In addition, we provide a more [advanced example](advanced/Training.ipynb) and show how to: 
+In addition, we provide a more [advanced example](tutorials/advanced/Training.ipynb) and show how to: 
 * pre-process your data using a custom method.
 * use a custom network architecture.
 * use a custom loss function for training or evaluation of a model.
