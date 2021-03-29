@@ -13,6 +13,15 @@ In addition, we provide a more [advanced example](advanced/Training.ipynb) and s
 * use a custom loss function for training or evaluation of a model.
 * use a custom metric function for training or evaluation of a model.
 
+Finally, we provide a script [file](cli) to use the command line interface.
+
+## Use Cases
+
+We provide [notebooks](use_cases) to train/evaluate models using standard emotion recognition databases:
+
+* [AffWild](use_cases/AffWild)
+* [RECOLA](use_cases/RECOLA)
+* [SEWA](use_cases/SEWA)
 
 ## Models
 
