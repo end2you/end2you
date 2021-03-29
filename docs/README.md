@@ -1,11 +1,11 @@
 ## Tutorials
 
-We provide tutorials and a script [file](cli) to get you started with End2You. In particular we provide the following:
+We provide the following [basic](tutorials/basic) tutorials to get you started with End2You
 
-1. [Data Generation](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/1.%20Data%20Generation.ipynb)<br>
-2. [Data Provider](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/2.%20Data%20Provider.ipynb)<br>
-3. [Training Process](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/3.%20Training%20Process.ipynb)<br>
-4. [Evaluation Process](https://github.com/end2you/end2you/blob/end2you_pytorch/docs/tutorials/4.%20Evaluation%20Process.ipynb)
+1. [Data Generation](tutorials/basic/1.%20Data%20Generation.ipynb): Show how to generate `hdf5` files from a dataset.<br>
+2. [Data Provider](tutorials/basic/2.%20Data%20Provider.ipynb): Show how to read the `hdf5` files.<br>
+3. [Training Process](tutorials/basic/3.%20Training%20Process.ipynb): Show how to train a model.<br>
+4. [Evaluation Process](tutorials/basic/4.%20Evaluation%20Process.ipynb)
 
 
 ## Models
