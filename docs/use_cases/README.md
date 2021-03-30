@@ -1,6 +1,6 @@
 # Pretrained Models (constantly updating)
 
-We provide pretrain models in a number of datasets and modalities. Currently, the following databases are provided:
+We provide pretrain models in a number of databases and modalities. Currently, the following databases are provided:
 
 * [AffWild](AffWild)
 * [RECOLA](RECOLA)
