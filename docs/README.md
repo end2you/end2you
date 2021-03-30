@@ -1,4 +1,4 @@
-## Tutorials
+# Tutorials
 
 We provide the following [basic](tutorials/basic) tutorials to get you started with End2You
 
@@ -7,7 +7,7 @@ We provide the following [basic](tutorials/basic) tutorials to get you started w
 3. [Training Process](tutorials/basic/3.%20Training%20Process.ipynb): Show how to train a model using training/validation data.<br>
 4. [Evaluation Process](tutorials/basic/4.%20Evaluation%20Process.ipynb): Show how to evaluate a model on a test set.
 
-In addition, we provide a more [advanced example](tutorials/advanced/Training.ipynb) and show how to: 
+In addition, we provide a more [advanced example](advanced/Training.ipynb) and show how to: 
 * pre-process your data using a custom method.
 * use a custom network architecture.
 * use a custom loss function for training or evaluation of a model.
@@ -15,13 +15,15 @@ In addition, we provide a more [advanced example](tutorials/advanced/Training.ip
 
 Finally, we provide a script [file](cli) to use the command line interface.
 
-## Use Cases
+# Pretrained Models
 
-We provide [notebooks](use_cases) to train/evaluate models using standard emotion recognition databases:
+We provide [notebooks](pretrained_models) to train/evaluate models using standard emotion recognition databases:
 
-* [AffWild](use_cases/AffWild)
-* [RECOLA](use_cases/RECOLA)
-* [SEWA](use_cases/SEWA)
+* [AffWild](pretrained_models/AffWild)
+* [RECOLA](pretrained_models/RECOLA)
+* [SEWA](pretrained_models/SEWA)
+
+Pre-trained unimodal/multimodal models are also provided using the networks provided in End2You (constantly updating).
 
 ## Models
 
