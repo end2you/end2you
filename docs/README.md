@@ -23,7 +23,7 @@ We provide [notebooks](pretrained_models) to train/evaluate models using standar
 * [RECOLA](pretrained_models/RECOLA)
 * [SEWA](pretrained_models/SEWA)
 
-Pre-trained models are also provided using the unimodal/multimodal models in End2You (constantly updating).
+Pre-trained unimodal/multimodal models are also provided using the networks provided in End2You (constantly updating).
 
 ## Models
 
