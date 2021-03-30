@@ -25,7 +25,7 @@ We provide [notebooks](pretrained_models) to train/evaluate models using standar
 
 Pre-trained models are also provided using the unimodal/multimodal models in End2You (constantly updating).
 
-## Models
+### Models
 
 We provide a number of audio, visual and multimodal models. To get the models you need to define the `model_name` argument to be one of the modality names (See [Training Process](tutorials/3.%20Training%20Process.ipynb)).
 For example, for audio modality and using Emo18 one can define the model as follows:
