@@ -164,7 +164,9 @@ class Trainer(BasePhase):
         provider = self.provider[process]
         
         label_names = provider.dataset._get_label_names()
-        num_outs = self.model.num_outs
+        
+        num_outs = self.model.num_outs if not isinstance(
+            self.model, nn.DataParallel) else self.model.module.num_outs
         
         self.model.train(is_training)
         

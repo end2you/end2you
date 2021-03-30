@@ -1,6 +1,7 @@
 import end2you.models as models
 import logging
 import torch
+import torch.nn as nn
 import end2you.training.optimizer as optim
 
 from end2you.training import Losses, Trainer
