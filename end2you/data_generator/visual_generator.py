@@ -71,7 +71,14 @@ class VisualGenerator(Generator):
                     data_frame = self.detector.extract_and_resize_face(data_frame)
                 except:
                     data_frame = np.zeros(
-                        (1, self.detector.resize[0], self.detector.resize[0], 3), dtype=np.float32)
+                        (1, self.detector.resize[0], self.detector.resize[0], 3), 
+                        dtype=np.float32)
+            
+            if data_frame.shape[0] < num_samples:
+                data_frame = np.pad(data_frame, (
+                        (0,num_samples - data_frame.shape[0] % num_samples),
+                        (0,0),(0,0),(0,0)), 'reflect')
+            
             data_frame = data_frame.transpose(0, 3, 1, 2)
             
             frames.append(data_frame.astype(np.float32))
