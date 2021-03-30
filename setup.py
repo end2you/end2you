@@ -24,7 +24,7 @@ config = {
     'url': 'https://github.com/end2you/end2you',
     'packages': find_packages(),
     'install_requires': requirements,
-    'license': 'Modified BSD',
+    'license': 'BSD 3-Clause License',
     'entry_points':{
         "console_scripts": [
             "e2u = end2you.main:main"
