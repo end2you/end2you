@@ -8,7 +8,7 @@ We provide pretrain models in a number of datasets and modalities. Currently, th
 
 ## SEWA
 
-The following table provides results on the SEWA dataset (in terms of CCC) for the visual, and for the prediction of arousal and valence. In parenthesis are the performances obtained on the development set. Also the link to the pretrain models is provided.
+The following tables provide results on the SEWA dataset (in terms of CCC) for the prediction of arousal and valence. In parenthesis are the performances obtained on the development set. Also the link to the pretrain models is provided.
 
 ### Visual modality
 
