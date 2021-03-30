@@ -15,37 +15,15 @@ In addition, we provide a more [advanced example](advanced/Training.ipynb) and s
 
 Finally, we provide a script [file](cli) to use the command line interface.
 
-## Use Cases
-
-We provide [notebooks](use_cases) to train/evaluate models using standard emotion recognition databases:
-
-* [AffWild](use_cases/AffWild)
-* [RECOLA](use_cases/RECOLA)
-* [SEWA](use_cases/SEWA)
-
 ## Pretrained Models
 
-We provide pretrain models in a number of datasets. These can be found [here](pretrained) (continuously updating).
+We provide [notebooks](pretrained_models) to train/evaluate models using standard emotion recognition databases:
 
-### SEWA
+* [AffWild](pretrained_models/AffWild)
+* [RECOLA](pretrained_models/RECOLA)
+* [SEWA](pretrained_models/SEWA)
 
-The following table provides results on the SEWA dataset (in terms of CCC) for the visual and audio modalities, and for the prediction of arousal and valence. In parenthesis are the performances obtained on the development set. Also the link to the pretrain models is provided.
-
-#### Visual modality
-
-| Model | Arousal | Valence | link |
-| :---: | :---: | :---: | :---: |
-| ResNet18  | 0.484 (0.544) | 0.591 (0.655) | download |
-| ResNet34  | 0.567 (0.584) | 0.612 (0.657) | download |
-| MobileNet | 0.433 (0.622) | 0.628 (0.639) | download |
-
-#### Audio modality
-
-| Model | Arousal | Valence | link |
-| :---: | :---: | :---: | :---: |
-| emo16  | 0.484 (0.544) | 0.591 (0.655) | download |
-| emo18  | 0.567 (0.584) | 0.612 (0.657) | download |
-
+Pre-trained models are also provided using the models in End2You (constantly updating).
 
 ## Models
 
