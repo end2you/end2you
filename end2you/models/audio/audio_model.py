@@ -3,6 +3,7 @@ import torch.nn as nn
 
 from .emo16 import Emo16
 from .emo18 import Emo18
+from .zhao19 import Zhao19
 
 
 class AudioModel(nn.Module):
@@ -29,7 +30,8 @@ class AudioModel(nn.Module):
         
         return {
             'emo16': Emo16,
-            'emo18': Emo18
+            'emo18': Emo18,
+            'zhao19': Zhao19
         }[model_name]
     
     def forward(self, x):
