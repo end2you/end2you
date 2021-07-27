@@ -25,7 +25,7 @@ The following tables provide results on the SEWA dataset (in terms of CCC) for t
 
 ### Audio modality
 
-The following tables provide results on the SEWA dataset (in terms of CCC) for the prediction of arousal and valence. In parenthesis are the performances obtained on the development set. Also the link to the pretrain models is provided.
+The following tables provide results on the RECOLA dataset (in terms of CCC) for the prediction of arousal and valence. In parenthesis are the performances obtained on the development set. Also the link to the pretrain models is provided.
 
 | Model | Arousal | Valence | link |
 | :---: | :---: | :---: | :---: |
