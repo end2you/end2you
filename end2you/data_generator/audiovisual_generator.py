@@ -15,7 +15,7 @@ class AudioVisualGenerator(Generator):
 
     def __init__(self,
                  labelfile_reader:FileReader, 
-                 detector:FaceExtractor = FaceExtractor(),
+                 detector:FaceExtractor = None,
                  fps:int = 30, 
                  sr:int = 16000,
                  *args, **kwargs):
@@ -27,6 +27,8 @@ class AudioVisualGenerator(Generator):
           fps (int): The frames per second to use for the visual modality.
           sr (int): The sampling rate to use for the visual modality.
         """
+        if not detector:
+            detector = FaceExtractor()
         
         super().__init__(*args, **kwargs)
         

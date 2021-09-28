@@ -14,7 +14,7 @@ class VisualGenerator(Generator):
     
     def __init__(self,
                  labelfile_reader:FileReader, 
-                 detector:FaceExtractor = FaceExtractor(),
+                 detector:FaceExtractor = None,
                  fps:int = 30, 
                  *args, **kwargs):
         """ Initialize object class.
@@ -24,6 +24,8 @@ class VisualGenerator(Generator):
           detector (FaceExtractor): Instance of face detector (default FaceExtractor()).
           fps (int): The frames per second to use for the visual modality.
         """
+        if not detector:
+            detector = FaceExtractor()
         
         self.labelfile_reader = labelfile_reader
         self.fps = fps
