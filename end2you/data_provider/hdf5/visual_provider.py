@@ -1,6 +1,6 @@
 import torch
 
-from .provider import BaseProvider
+from .base_provider import BaseProvider
 from torchvision import transforms
 
 

@@ -5,7 +5,7 @@ from pathlib import Path
 from torch.utils.data import Dataset
 from .audio_provider import AudioProvider
 from .visual_provider import VisualProvider
-from .provider import BaseProvider
+from .base_provider import BaseProvider
 
 
 class SingleFile_AVProvider(BaseProvider):

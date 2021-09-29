@@ -1,10 +1,12 @@
 import numpy as np
 import h5py
 import logging
+import sys
+sys.path.append("..") 
 
 from pathlib import Path
 from .file_reader import FileReader
-from end2you.base_process import BaseProcess
+from base_process import BaseProcess
 
 
 class Generator:

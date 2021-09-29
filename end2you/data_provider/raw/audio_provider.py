@@ -1,6 +1,6 @@
 import numpy as np
 
-from .provider import BaseProvider
+from .base_provider import BaseProvider
 from pathlib import Path
 from torch import is_tensor
 
@@ -14,4 +14,3 @@ class AudioProvider(BaseProvider):
     
     def process_input(self, data, labels):
         return data, labels
-    
