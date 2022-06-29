@@ -34,7 +34,8 @@ class Losses:
     def masked_loss(self, 
                     predictions:torch.Tensor, 
                     labels:torch.Tensor, 
-                    mask:torch.Tensor):
+                    mask:torch.Tensor,
+                    take_last_frame:bool = True):
         """ Method that computes a masked loss, meaning that it does not
             include the all samples in the predictions/labels tensor. 
         
@@ -52,14 +53,15 @@ class Losses:
         batch_preds = []
         batch_labs = []
         for i, m in enumerate(mask):
-            batch_preds.extend(predictions[i,:m]) 
-            batch_labs.extend(labels[i,:m]) 
+            nframes = m - 1 if take_last_frame else range(m)
+            batch_preds.extend(predictions[i,nframes]) 
+            batch_labs.extend(labels[i,nframes]) 
         
         batch_preds = torch.stack(batch_preds)
         batch_labs = torch.stack(batch_labs)
         
         return self._loss(batch_preds, batch_labs)
-    
+
     def ccc(self, 
             predictions:torch.Tensor, 
             labels:torch.Tensor):
@@ -74,8 +76,8 @@ class Losses:
         labels = labels.view(-1,)
         
         def _get_moments(data_tensor):
-            mean_t = torch.mean(data_tensor)#, 0)
-            var_t = torch.var(data_tensor)#, 0, unbiased=False)
+            mean_t = torch.mean(data_tensor)
+            var_t = torch.var(data_tensor)
             return mean_t, var_t
         
         labels_mean, labels_var = _get_moments(labels)

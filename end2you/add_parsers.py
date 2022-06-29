@@ -16,6 +16,8 @@ def add_eval_args(parser):
 def add_train_args(parser):
     parser.add_argument('--learning_rate', type=float, default=0.0001,
                         help='Learning rate (default `0.0001`).')
+    parser.add_argument('--take_last_frame', type=str, default='false',
+                        help='Consider the last frame of the signal to compute loss/metric (default `False`).')
     parser.add_argument('--loss', type=str, default='mse',
                         help='Which loss is going to be used: ccc (Concordance Correlation Coefficient), '
                              'mse (Mean Squared Error), ce (Cross Entropy). '
@@ -84,7 +86,7 @@ def add_parsers():
     parser.add_argument('--seq_length', type=int, default=None,
                         help="""The sequence length to introduce to the RNN. 
                         If `None` it uses whole sequence as input (default `None`)""")
-    parser.add_argument('--cuda', type=str, default='false',
+    parser.add_argument('--cuda', type=str, default='True',
                         help='Whether to use GPU or not (default `false`).')
     parser.add_argument('--num_gpus', type=int, default=1,
                         help='Number of GPUs to use (default `1`).')

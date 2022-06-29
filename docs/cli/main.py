@@ -39,6 +39,7 @@ class End2You:
     def _get_train_params(self):
         cuda = True if 'true' == self.kwargs['cuda'].lower() else False
         pretrained = True if 'true' == self.kwargs['pretrained'].lower() else False
+        take_last_frame = True if 'true' == self.kwargs['take_last_frame'].lower() else False
         
         train_params = Params(dict_params={
             'train':Params(dict_params={'loss':self.kwargs['loss'],
@@ -70,6 +71,7 @@ class End2You:
             'root_dir': self.kwargs['root_dir'],
             'log_file': self.kwargs['log_file'],
             'ckpt_path': self.kwargs['ckpt_path'],
+            'take_last_frame':take_last_frame
         })
         return train_params
     
