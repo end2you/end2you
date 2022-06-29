@@ -6,7 +6,7 @@ sys.path.append("..")
 
 from pathlib import Path
 from .file_reader import FileReader
-from base_process import BaseProcess
+from ..base_process import BaseProcess
 
 
 class Generator:

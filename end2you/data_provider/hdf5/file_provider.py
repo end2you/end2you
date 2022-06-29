@@ -29,7 +29,6 @@ class FileProvider:
         """ Returns the number of samples in the file.
             Stored in file as attribute with name `num_samples`.
         """
-        
         with h5py.File(self.file_path, 'r') as dataset:
             num_samples = dataset.attrs[key]
         

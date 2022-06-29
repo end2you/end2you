@@ -28,7 +28,7 @@ class Emo18(nn.Module):
           input_size (int): Input size of frame.
         """
         
-        out_channels = [16,32,64]
+        out_channels = [64, 128, 256]
         in_channels = [1]
         in_channels.extend([x for x in out_channels[:-1]])
         kernel_size = [8, 6, 6]

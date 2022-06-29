@@ -34,7 +34,8 @@ class MetricProvider:
     def masked_eval_fn(self, 
                        predictions:np.array, 
                        labels:np.array, 
-                       masks:list):
+                       masks:list,
+                       take_last_frame:bool = True):
         """ Method to compute the masked metric evaluation.
         
         Args:
@@ -49,8 +50,9 @@ class MetricProvider:
         batch_labs = [] 
         
         for i, m in enumerate(masks):
-            batch_preds.append(predictions[i][:m])
-            batch_labs.append(labels[i][:m])
+            nframes = m - 1 if take_last_frame else range(m)
+            batch_preds.append(predictions[i][nframes])
+            batch_labs.append(labels[i][nframes])
         
         return self._metric(batch_preds, batch_labs)
     

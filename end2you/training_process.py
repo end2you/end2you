@@ -45,14 +45,14 @@ class TrainingProcess(BaseProcess):
         optimizer = optimizer(model.parameters(), lr=params.train.learning_rate)
         
         # Set device
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda:0" if params.train.cuda else "cpu")
         
         # Use Multiple GPUs
         if params.train.cuda:
             if torch.cuda.device_count() > 1:
                 logging.info('Using', torch.cuda.device_count(), 'GPUs!')
                 model = nn.DataParallel(model)
-            
+        
         model.to(device)
         
         # Get training/validation Summary writers for tensorboard visualization

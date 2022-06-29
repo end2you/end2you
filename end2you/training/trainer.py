@@ -208,7 +208,7 @@ class Trainer(BasePhase):
                     el = o + 1 if len(label_names) > 1 else o + num_outs
                     
                     label_loss = self.loss_fn(
-                        predictions[...,sl:el], labels[...,sl:el], masked_samples)
+                        predictions[...,sl:el], labels[...,sl:el], masked_samples, self.params.take_last_frame)
                     
                     total_loss = total_loss + label_loss
                     
@@ -242,7 +242,7 @@ class Trainer(BasePhase):
         
         scores = {}
         for i, name in enumerate(label_names):
-            scores[name] = self.eval_fn(batch_preds[name], batch_labels[name], batch_masks)
+            scores[name] = self.eval_fn(batch_preds[name], batch_labels[name], batch_masks, self.params.take_last_frame)
         epoch_summaries = [scores]
         
         # Reseting parameters of the data provider

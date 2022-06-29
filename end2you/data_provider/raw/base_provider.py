@@ -6,7 +6,7 @@ sys.path.append("..")
 from pathlib import Path
 from torch.utils.data import Dataset
 from torch import is_tensor
-from data_generator.file_reader import FileReader
+from end2you.data_generator.file_reader import FileReader
 
 
 class BaseProvider(Dataset):

@@ -5,7 +5,8 @@ import numpy as np
 import sys
 sys.path.append("..")
 
-from end2you.data_provider import get_dataloader, BaseProvider
+from end2you.data_provider import get_dataloader
+from end2you.data_provider.hdf5 import BaseProvider
 from end2you.base import BasePhase
 from end2you.base_process import BaseProcess
 from .metric_provider import MetricProvider

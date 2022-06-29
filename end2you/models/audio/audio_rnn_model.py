@@ -35,11 +35,11 @@ class AudioRNNModel(nn.Module):
         
         rnn_args = {
             'input_size': input_size,
-            'hidden_size': 64,
+            'hidden_size': 256,
             'num_layers': 2,
             'batch_first':True
         }
-        return RNN(rnn_args, 'gru'), rnn_args['hidden_size']
+        return RNN(rnn_args, 'lstm'), rnn_args['hidden_size']
     
     def forward(self, x:torch.Tensor):
         """
