@@ -77,9 +77,11 @@ class MetricProvider:
             predictions (list): Model predictions.
             labels (list): Data labels.
         """
+        predictions = np.stack(predictions)
+        labels = np.stack(labels)
         
-        predictions = np.stack([x[...,-1,:] for x in predictions])
-        labels = np.stack([x[...,-1,:] for x in labels])
+#         predictions = np.stack([x[...,-1,:] for x in predictions])
+#         labels = np.stack([x[...,-1,:] for x in labels])
         
         predictions = np.argmax(predictions, axis = 1)
         

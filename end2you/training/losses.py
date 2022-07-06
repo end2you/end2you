@@ -71,7 +71,7 @@ class Losses:
           predictions (torch.Tensor): Predictions of the model.
           labels (torch.Tensor): Labels of the data.
         """
-        
+
         predictions = predictions.view(-1,)
         labels = labels.view(-1,)
         
@@ -101,4 +101,6 @@ class Losses:
         """
         
         labels = labels.view(-1).type(torch.long)
+        bs = len(labels)
+        predictions = predictions.view(bs, -1)        
         return instance_cross_entropy_loss(predictions, labels)
