@@ -22,7 +22,8 @@ class Evaluator(BasePhase):
                  model:nn.Module,
                  model_path:str,
                  cuda:bool,
-                 root_dir = './'):
+                 root_dir = './',
+                 take_last_frame:bool = True):
         """ Initialize object class to perform evaluation.
         
         Args:
@@ -41,6 +42,7 @@ class Evaluator(BasePhase):
         self.model = model
         self.cuda = cuda
         self.root_dir = Path(root_dir)
+        self.take_last_frame = take_last_frame
         BaseProcess.set_logger(str(self.root_dir / 'evaluation.log'))
     
     def start_evaluation(self):
@@ -93,7 +95,7 @@ class Evaluator(BasePhase):
         
         scores = {}
         for i, name in enumerate(label_names):
-            scores[name] = self.eval_fn(batch_preds[name], batch_labels[name], batch_masks)
+            scores[name] = self.eval_fn(batch_preds[name], batch_labels[name], batch_masks, self.take_last_frame)
         epoch_summaries = [scores]
         
         # Reseting parameters of the data provider

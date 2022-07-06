@@ -52,7 +52,8 @@ class EvaluationProcess(BaseProcess):
                                    model=model,
                                    model_path=params.model_path,
                                    cuda=params.cuda,
-                                   root_dir=params.root_dir)
+                                   root_dir=params.root_dir,
+                                   take_last_frame=params.take_last_frame)
     
     def start(self):
         return self.evaluator.start_evaluation()

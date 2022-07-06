@@ -77,6 +77,8 @@ class End2You:
     
     def _get_eval_params(self):
         cuda = True if 'true' == self.kwargs['cuda'].lower() else False
+        take_last_frame = True if 'true' == self.kwargs['take_last_frame'].lower() else False
+        
         eval_params = Params(dict_params={
             'prediction_file': self.kwargs['prediction_file'],
             'seq_length': self.kwargs['seq_length'],
@@ -89,6 +91,7 @@ class End2You:
             'modality': self.kwargs['modality'],
             'log_file': self.kwargs['log_file'],
             'root_dir': self.kwargs['root_dir'],
+            'take_last_frame':take_last_frame,
             'model':Params(dict_params={'model_name':self.kwargs['model_name'],
                                         'num_outs':self.kwargs['num_outputs']})
         })

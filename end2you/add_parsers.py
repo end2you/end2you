@@ -16,8 +16,6 @@ def add_eval_args(parser):
 def add_train_args(parser):
     parser.add_argument('--learning_rate', type=float, default=0.0001,
                         help='Learning rate (default `0.0001`).')
-    parser.add_argument('--take_last_frame', type=str, default='false',
-                        help='Consider the last frame of the signal to compute loss/metric (default `False`).')
     parser.add_argument('--loss', type=str, default='mse',
                         help='Which loss is going to be used: ccc (Concordance Correlation Coefficient), '
                              'mse (Mean Squared Error), ce (Cross Entropy). '
@@ -94,6 +92,8 @@ def add_parsers():
                         help='Path to save models/results (default `./e2u_output`).')
     parser.add_argument('--log_file', type=str, default='./out_log.log',
                         help='Path to save log file (default `./out_log.log`).')
+    parser.add_argument('--take_last_frame', type=str, default='false',
+                        help='Consider the last frame of the signal to compute loss/metric (default `False`).')
 
     parser.add_argument('--model_name', type=str, default='resnet18',
                         help='Which visual model to use. (default `resnet18`).')
