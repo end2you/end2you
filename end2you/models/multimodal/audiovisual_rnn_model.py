@@ -46,6 +46,7 @@ class AudioVisualRNNModel(nn.Module):
         rnn_input_features = self.fusion_layer.num_features
         self.rnn, num_out_features = self._get_rnn_model(rnn_input_features)
         self.linear = nn.Linear(num_out_features, num_outs)
+        self.num_outs = num_outs
     
     def _get_rnn_model(self, input_size:int):
         """ Builder method to get RNN instace."""
